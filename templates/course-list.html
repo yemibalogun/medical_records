@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}Nigerian Defence Academy{% endblock %}
+
+{% block content %}
+
+      <div class="container">
+        <h3 style="color: rgb(0, 68, 171);"> {{ course_no.course_no }} RC | <span style="font-weight: normal; font-size: small; color: grey;">Postal Strenght: {{ course_cadets_count }}</span></h3>
+   
+        <!-- <h1>{{ course }} RC</h1> -->
+        <div style="margin: 0 auto;" class="container" style="font-size: 1rem;">
+          
+            
+      <div style="width: fit-content; margin: 0 auto;" class="container">
+        <div style="margin: auto;" id="autocomplete-suggestions" class="autocomplete-suggestions custom-container">
+        <table class="custom-table table-sm table-hover">
+          <thead>
+            <tr>
+              <th style="width: 5%;" scope="col">Serial</th>
+              <th style="width: 10%;" scope="col">Cadet Number</th>
+              <th style="width: 30%;" scope="col">Name</th>
+              <th style="width: 10%;" scope="col">Service</th>
+              <th style="width: 10%;" scope="col">Battalion</th>
+              <th style="width: 30%;" scope="col">Department</th>
+            </tr>
+          </thead>
+
+          <tbody id="cadet-table-body">
+          {% for row in rows %}
+            <tr class="active-row">
+              <th class="card-heading-text" scope="row"> {{ (page - 1) * per_page + loop.index }} </th>
+              
+                <td data-cell="Cadet No">{{ row.cadet_no }}</td>
+                <td data-cell="Name"><a style="text-decoration: none; color: rgb(0, 68, 171);" href="{{ url_for('student_info', id=row.id) }}">{{ row.first_name }} {{ row.middle_name }} {{ row.last_name }}</a></td>
+                <td data-cell="Service">{{ row.service.service_type.capitalize() }} </td>
+                <td data-cell="Battalion">{{ row.bn.bn.capitalize() }} </td>
+                <td data-cell="Department">{{ row.department.department_name.title() }} </td>
+                
+            </tr>
+          
+          {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+      </div>
+
+        <!-- Your pagination controls -->
+        <div class="pagination pagination-sm justify-content-center">
+            
+          {% if page > 1 %}
+          <a href="{{ url_for('select_course', page=page-1, id=course_no.id) }}" class="btn btn-primary btn-sm" aria-label="previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+          {% endif %}
+
+          <span class="badge bg-secondary">Page {{ page }} of {{ (total // per_page) + 1 }}</span>
+
+          {% if page * per_page < total %}
+          <a href="{{ url_for('select_course', page=page+1, id=course_no.id) }}" class="btn btn-primary btn-sm" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+        
+    </div>
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+{% endblock %}
+    
+{% endblock %}

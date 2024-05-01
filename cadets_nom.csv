@@ -1,0 +1,541 @@
+1,12309F,Ian,Wallace,Julian,Islam,Abia,Nasarawa,17/09/2020,01/01/2000,1,1,2,1,1
+2,12882,Dan,Alsop,Michael,Islam,Abia,Jere,17/09/2020,01/02/2000,2,2,1,1,2
+3,12975,Richard,Morrison,Jake,Islam,Abia,Burutu,17/09/2020,01/03/2000,3,3,1,1,3
+4,13092,Luke,Peters,Alexander,Islam,Abia,Moba,17/09/2019,01/04/2000,4,4,1,1,4
+5,13148,Nicholas,Carr,Kevin,Islam,Abia,Ihitte/Uboma,17/09/2019,01/05/2000,5,1,1,1,5
+6,13273,Phil,Clarkson,Joshua,Islam,Abia,Kaugama,17/09/2019,01/06/2000,6,2,1,1,1
+7,13356,Audrey,White,Colin,Christianity,Abia,Zaria,17/09/2021,01/07/2000,7,3,1,1,2
+8,12899,Trevor,White,Owen,Christianity,Abia,Jere,17/09/2021,01/08/2000,8,4,1,2,3
+9,13018,Harry,Martin,Eric,Christianity,Abia,Burutu,17/09/2021,01/09/2000,9,1,1,2,4
+10,13278,Owen,Duncan,Joe,Christianity,Abia,Moba,17/09/2022,01/10/2000,10,2,1,2,5
+11,13224,Colin,Henderson,Matt,Christianity,Abia,Ihitte/Uboma,17/09/2022,01/11/2000,11,3,1,2,1
+12,12430,Dominic,Mackenzie,Benjamin,Christianity,Abia,Kaugama,17/09/2022,01/12/2000,12,4,1,3,2
+13,12959,Andrew,Scott,Keith,Christianity,Abia,Ethiope West,17/09/2019,01/01/2001,13,1,1,3,3
+14,13119,Evan,Knox,Sebastian,Christianity,Abia,Aninri,17/09/2019,01/02/2001,14,2,1,3,4
+15,13261,William,Cameron,Andrew,Christianity,Abia,Isiala Mbano,17/09/2023,01/03/2001,15,3,1,3,5
+16,12347,Austin,Hart,Charles,Islam,Adamawa,Ado,17/09/2020,01/04/2001,16,4,1,1,1
+17,12884,Sebastian,Young,Eric,Islam,Adamawa,Kaga,17/09/2020,01/05/2001,17,1,1,1,2
+18,12980,Leonard,Rutherford,Dominic,Islam,Adamawa,Ethiope East,17/09/2020,01/06/2001,18,2,1,1,3
+19,13094,Owen,Kerr,Warren,Islam,Adamawa,Oye,17/09/2019,01/07/2001,19,3,1,1,4
+20,13149,Owen,Metcalfe,Alexander,Islam,Adamawa,Ikeduru,17/09/2019,01/08/2001,20,4,1,1,5
+21,13274,Jonathan,Kelly,James,Islam,Adamawa,Kazaure,17/09/2019,01/09/2001,21,1,1,1,1
+22,13357,Karen,Oliver,Simon,Christianity,Adamawa,Ado,17/09/2021,01/10/2001,22,2,1,1,2
+23,12901,Sebastian,Terry,Steven,Christianity,Adamawa,Kaga,17/09/2021,01/11/2001,23,3,1,2,3
+24,13019,Gordon,Rees,Piers,Christianity,Adamawa,Ethiope East,17/09/2021,01/12/2001,1,4,1,2,4
+25,13282,Christian,Brown,Edward,Christianity,Adamawa,Oye,17/09/2022,01/01/2002,2,1,1,2,5
+26,13225,Charles,Knox,Christian,Christianity,Adamawa,Ikeduru,17/09/2022,01/02/2002,3,2,1,2,1
+27,12477,Richard,Cornish,Alexander,Christianity,Adamawa,Kazaure,17/09/2022,01/03/2002,4,3,1,3,2
+28,12961,Isaac,Hart,Owen,Christianity,Adamawa,Ika North East,17/09/2019,01/04/2002,5,4,1,3,3
+29,13183,Alan,Grant,Stewart,Christianity,Adamawa,Awgu,17/09/2019,01/05/2002,6,1,1,3,4
+30,13263,Sam,Randall,Edward,Christianity,Adamawa,Isu,17/09/2023,01/06/2002,7,2,1,3,5
+31,12360,Alan,Quinn,Matt,Islam,Akwa Ibom,Agatu,17/09/2020,01/07/2002,8,3,1,1,1
+32,12885,Edward,Mills,Victor,Islam,Akwa Ibom,Kala/Balge,17/09/2020,01/08/2002,9,4,1,1,2
+33,12981,Adam,Lee,Luke,Islam,Akwa Ibom,Ethiope West,17/09/2020,01/09/2002,10,1,1,1,3
+34,13095F,Julian,Jones,Carl,Islam,Akwa Ibom,Aninri,17/09/2019,01/10/2002,11,2,2,1,4
+35,13150,Stephen,Morgan,Edward,Islam,Akwa Ibom,Isiala Mbano,17/09/2019,01/11/2002,12,3,1,1,5
+36,13277,Austin,Skinner,Jack,Islam,Akwa Ibom,Kiri Kasama,17/09/2019,01/12/2002,13,4,1,1,1
+37,13362,Bernadette,Edmunds,Trevor,Christianity,Akwa Ibom,Agatu,17/09/2021,01/01/2003,14,1,1,1,2
+38,12906,Peter,Hardacre,Joseph,Christianity,Akwa Ibom,Kala/Balge,17/09/2021,01/02/2003,15,2,1,2,3
+39,13027,Richard,Wilkins,Warren,Christianity,Akwa Ibom,Ethiope West,17/09/2021,01/03/2003,16,3,1,2,4
+40,13290,Harry,Lawrence,Anthony,Christianity,Akwa Ibom,Aninri,17/09/2022,01/04/2003,17,4,1,2,5
+41,13226,Ian,Underwood,Jack,Christianity,Akwa Ibom,Isiala Mbano,17/09/2022,01/05/2003,18,1,1,2,1
+42,12478,Sam,Coleman,Colin,Christianity,Akwa Ibom,Kiri Kasama,17/09/2022,01/06/2003,19,2,1,3,2
+43,12965,Austin,Newman,Eric,Christianity,Akwa Ibom,Ika South,17/09/2019,01/07/2003,20,3,1,3,3
+44,13184,Julian,Mitchell,Carl,Christianity,Akwa Ibom,Enugu East,17/09/2019,01/08/2003,21,4,1,3,4
+45,13264,Ian,Clarkson,Tim,Christianity,Akwa Ibom,Mbaitoli,17/09/2023,01/09/2003,22,1,1,3,5
+46,13073,Brian,McGrath,Harry,Islam,Anambra,Apa,17/09/2020,01/10/2003,23,2,1,1,1
+47,12887,Edward,Piper,Steven,Islam,Anambra,Konduga,17/09/2020,01/11/2003,1,3,1,1,2
+48,12985,Leonard,Anderson,Paul,Islam,Anambra,Ika North East,17/09/2020,01/12/2003,2,4,1,1,3
+49,13098,Matt,Russell,Leonard,Islam,Anambra,Awgu,17/09/2019,01/01/2004,3,1,1,1,4
+50,13151,Colin,Mitchell,Frank,Islam,Anambra,Isu,17/09/2019,01/02/2004,4,2,1,1,5
+51,13280,Ryan,Robertson,Oliver,Islam,Anambra,Kiyawa,17/09/2019,01/03/2004,5,3,1,1,1
+52,13364,Bella,Hughes,Liam,Christianity,Anambra,Apa,17/09/2021,01/04/2004,6,4,1,1,2
+53,12907,Harry,Campbell,Lucas,Christianity,Anambra,Konduga,17/09/2021,01/05/2004,7,1,1,2,3
+54,13034,Gordon,Lyman,Adrian,Christianity,Anambra,Ika North East,17/09/2021,01/06/2004,8,2,1,2,4
+55,13295,Adrian,Dowd,Brian,Christianity,Anambra,Awgu,17/09/2022,01/07/2004,9,3,1,2,5
+56,13228,Paul,North,Sean,Christianity,Anambra,Isu,17/09/2022,01/08/2004,10,4,1,2,1
+57,12605,Gordon,Cameron,Liam,Christianity,Anambra,Kiyawa,17/09/2022,01/09/2004,11,1,1,3,2
+58,12968,David,Anderson,Peter,Christianity,Anambra,Isoko North,17/09/2019,01/10/2004,12,2,1,3,3
+59,13185,David,Wright,Nathan,Christianity,Anambra,Enugu North,17/09/2019,01/11/2004,13,3,1,3,4
+60,13267,Nathan,Dyer,Evan,Christianity,Anambra,Ngor Okpala,17/09/2023,01/12/2004,14,4,1,3,5
+61,12392,Eric,Langdon,Alan,Islam,Bauchi,Buruku,17/09/2020,01/01/2000,15,1,1,1,1
+62,12888,Luke,Reid,Michael,Islam,Bauchi,Kukawa,17/09/2020,01/02/2000,16,2,1,1,2
+63,12989,Ryan,Peake,Jason,Islam,Bauchi,Ika South,17/09/2020,01/03/2000,17,3,1,1,3
+64,13101,Colin,Wright,Cameron,Islam,Bauchi,Enugu East,17/09/2019,01/04/2000,18,4,1,1,4
+65,13152,Trevor,Rampling,Owen,Islam,Bauchi,Mbaitoli,17/09/2019,01/05/2000,19,1,1,1,5
+66,13285,John,Abraham,Harry,Islam,Bauchi,Maigatari,17/09/2019,01/06/2000,20,2,1,1,1
+67,13365,Amy,Coleman,Adam,Christianity,Bauchi,Buruku,17/09/2021,01/07/2000,21,3,1,1,2
+68,12908,Thomas,Dyer,Christopher,Christianity,Bauchi,Kukawa,17/09/2021,01/08/2000,22,4,1,2,3
+69,13044F,Evan,Mills,Connor,Christianity,Bauchi,Ika South,17/09/2021,01/09/2000,23,1,2,2,4
+70,13300,Richard,Thomson,Ian,Christianity,Bauchi,Enugu East,17/09/2022,01/10/2000,1,2,1,2,5
+71,13229,Neil,Bell,Victor,Christianity,Bauchi,Mbaitoli,17/09/2022,01/11/2000,2,3,1,2,1
+72,12721,Robert,Mathis,Trevor,Christianity,Bauchi,Maigatari,17/09/2019,01/12/2000,3,4,1,3,2
+73,12973,Sebastian,Miller,Evan,Christianity,Bauchi,Isoko South,17/09/2019,01/01/2001,4,1,1,3,3
+74,13186,Leonard,Grant,Sean,Christianity,Bauchi,Enugu South,17/09/2019,01/02/2001,5,2,1,3,4
+75,13271,Austin,Churchill,Adam,Christianity,Bauchi,Njaba,17/09/2023,01/03/2001,6,3,1,3,5
+76,12399,Victor,Mathis,Benjamin,Islam,Bayelsa,Gboko,17/09/2020,01/04/2001,7,4,1,1,1
+77,12891,Gordon,Jones,Ian,Islam,Bayelsa,Kwaya Kusar,17/09/2020,01/05/2001,8,1,1,1,2
+78,12992,Joe,Hill,Adrian,Islam,Bayelsa,Isoko North,17/09/2020,01/06/2001,9,2,1,1,3
+79,13104,Cameron,Tucker,Edward,Islam,Bayelsa,Enugu North,17/09/2019,01/07/2001,10,3,1,1,4
+80,13153,Matt,Campbell,Joshua,Islam,Bayelsa,Ngor Okpala,17/09/2019,01/08/2001,11,4,1,1,5
+81,13286,Carl,Churchill,Victor,Islam,Bayelsa,Malam Madori,17/09/2019,01/09/2001,12,1,1,1,1
+82,13368,Lisa,Ogden,Sebastian,Christianity,Bayelsa,Gboko,17/09/2021,01/10/2001,13,2,1,1,2
+83,12916,Dan,Glover,Alan,Christianity,Bayelsa,Kwaya Kusar,17/09/2021,01/11/2001,14,3,1,2,3
+84,13045,Leonard,Bailey,Christian,Christianity,Bayelsa,Isoko North,17/09/2021,01/12/2001,15,4,1,2,4
+85,13304,Warren,Butler,Kevin,Christianity,Bayelsa,Enugu North,17/09/2022,01/01/2002,16,1,1,2,5
+86,13230,Steven,Peters,John,Christianity,Bayelsa,Ngor Okpala,17/09/2022,01/02/2002,17,2,1,2,1
+87,12730,Dylan,Dyer,Frank,Christianity,Bayelsa,Malam Madori,17/09/2019,01/03/2002,18,3,1,3,2
+88,12979F,Oliver,Wilson,Jack,Christianity,Bayelsa,Ndokwa East,17/09/2019,01/04/2002,19,4,2,3,3
+89,13187,Cameron,Newman,Adam,Christianity,Bayelsa,Ezeagu,17/09/2019,01/05/2002,20,1,1,3,4
+90,13276,Jack,King,Isaac,Christianity,Bayelsa,Nkwerre,17/09/2023,01/06/2002,21,2,1,3,5
+91,12400,Trevor,Young,Max,Islam,Benue,Guma,17/09/2020,01/07/2002,22,3,1,1,1
+92,12892,Jake,Ferguson,Dan,Islam,Benue,Mafa,17/09/2020,01/08/2002,23,4,1,1,2
+93,12993F,Joshua,Nash,Isaac,Islam,Benue,Isoko South,17/09/2020,01/09/2002,1,1,2,1,3
+94,13105,Kevin,Davies,Christian,Islam,Benue,Enugu South,17/09/2019,01/10/2002,2,2,1,1,4
+95,13154,Alan,North,Ryan,Islam,Benue,Njaba,17/09/2019,01/11/2002,3,3,1,1,5
+96,13287,Sebastian,Russell,Jake,Islam,Benue,Miga,17/09/2019,01/12/2002,4,4,1,1,1
+97,13370,Alexandra,Davidson,William,Christianity,Benue,Guma,17/09/2021,01/01/2003,5,1,1,1,2
+98,12922,Sebastian,Wilkins,Matt,Christianity,Benue,Mafa,17/09/2021,01/02/2003,6,2,1,2,3
+99,13049,Phil,May,Jonathan,Christianity,Benue,Isoko South,17/09/2021,01/03/2003,7,3,1,2,4
+100,12544,Piers,Clark,Owen,Christianity,Benue,Enugu South,17/09/2022,01/04/2003,8,4,1,2,5
+101,13231,Piers,Springer,Thomas,Christianity,Benue,Njaba,17/09/2022,01/05/2003,9,1,1,2,1
+102,12774,Phil,Hodges,Evan,Christianity,Benue,Miga,17/09/2019,01/06/2003,10,2,1,3,2
+103,12983,Victor,Kelly,Christopher,Christianity,Benue,Ndokwa West,17/09/2019,01/07/2003,11,3,1,3,3
+104,13188,Harry,Hill,Joshua,Christianity,Benue,Igbo Etiti,17/09/2019,01/08/2003,12,4,1,3,4
+105,13279,Leonard,Anderson,Adam,Christianity,Benue,Nwangele,17/09/2020,01/09/2003,13,1,1,3,5
+106,12457,Joseph,Dickens,Julian,Islam,Borno,Gwer East,17/09/2020,01/10/2003,14,2,1,1,1
+107,12895,Lucas,Martin,Keith,Islam,Borno,Magumeri,17/09/2020,01/11/2003,15,3,1,1,2
+108,12994,James,Allan,Owen,Islam,Borno,Ndokwa East,17/09/2020,01/12/2003,16,4,1,1,3
+109,13110,Charles,Ball,Carl,Islam,Borno,Ezeagu,17/09/2019,01/01/2004,17,1,1,1,4
+110,13155,Neil,Terry,Neil,Islam,Borno,Nkwerre,17/09/2019,01/02/2004,18,2,1,1,5
+111,13289,Anthony,Wright,Sebastian,Islam,Borno,Ringim,17/09/2019,01/03/2004,19,3,1,1,1
+112,13372,Carol,Wright,Gordon,Christianity,Borno,Gwer East,17/09/2021,01/04/2004,20,4,1,1,2
+113,12927,Neil,Cornish,Dominic,Christianity,Borno,Magumeri,17/09/2021,01/05/2004,21,1,1,2,3
+114,13053,Adrian,Alsop,Alexander,Christianity,Borno,Ndokwa East,17/09/2021,01/06/2004,22,2,1,2,4
+115,13306,Owen,Bell,Adrian,Christianity,Borno,Ezeagu,17/09/2022,01/07/2004,23,3,1,2,5
+116,13232,Blake,Fisher,Kevin,Christianity,Borno,Nkwerre,17/09/2022,01/08/2004,1,4,1,2,1
+117,12778,Jacob,Graham,Lucas,Christianity,Borno,Ringim,17/09/2019,01/09/2004,2,1,1,3,2
+118,12986,Keith,Berry,Piers,Christianity,Borno,Okpe,17/09/2019,01/10/2004,3,2,1,3,3
+119,13189,Dan,Oliver,Cameron,Christianity,Borno,Igbo Eze North,17/09/2019,01/11/2004,4,3,1,3,4
+120,13283,Joshua,Springer,Thomas,Christianity,Borno,Obowo,17/09/2020,01/12/2004,5,4,1,3,5
+121,12464,Colin,Abraham,Anthony,Islam,Cross River,Gwer West,17/09/2020,01/01/2000,6,1,1,1,1
+122,12897,Eric,Vaughan,Julian,Islam,Cross River,Maiduguri,17/09/2020,01/02/2000,7,2,1,1,2
+123,12996,Justin,Dyer,Charles,Islam,Cross River,Ndokwa West,17/09/2020,01/03/2000,8,3,1,1,3
+124,13112,John,Sutherland,Peter,Islam,Cross River,Igbo Etiti,17/09/2019,01/04/2000,9,4,1,1,4
+125,13156,Tim,Robertson,Sebastian,Islam,Cross River,Nwangele,17/09/2019,01/05/2000,10,1,1,1,5
+126,13292,Kevin,Dowd,Jack,Islam,Cross River,Roni,17/09/2019,01/06/2000,11,2,1,1,1
+127,13376,Victoria,Blake,Isaac,Christianity,Cross River,Gwer West,17/09/2021,01/07/2000,12,3,1,1,2
+128,12936,Dan,King,Stewart,Christianity,Cross River,Maiduguri,17/09/2021,01/08/2000,13,4,1,2,3
+129,13058,Joseph,Lyman,Peter,Christianity,Cross River,Ndokwa West,17/09/2021,01/09/2000,14,1,1,2,4
+130,13309,Paul,Jackson,Christopher,Christianity,Cross River,Igbo Etiti,17/09/2022,01/10/2000,15,2,1,2,5
+131,13233,Joe,Wilkins,Ian,Christianity,Cross River,Nwangele,17/09/2022,01/11/2000,16,3,1,2,1
+132,12793,Adrian,Carr,Jacob,Christianity,Cross River,Roni,17/09/2019,01/12/2000,17,4,1,3,2
+133,12998,Christian,Sharp,Joshua,Christianity,Cross River,Oshimili North,17/09/2019,01/01/2001,18,1,1,3,3
+134,13190,Cameron,Russell,Lucas,Christianity,Cross River,Igbo Eze South,17/09/2019,01/02/2001,19,2,1,3,4
+135,13284,Carl,Robertson,William,Christianity,Cross River,Oguta,17/09/2020,01/03/2001,20,3,1,3,5
+136,12475,Adam,Randall,Christian,Islam,Delta,Katsina-Ala,17/09/2020,01/04/2001,21,4,1,1,1
+137,12903,Stephen,Hunter,Julian,Islam,Delta,Marte,17/09/2020,01/05/2001,22,1,1,1,2
+138,13005,William,Rampling,Ian,Islam,Delta,Okpe,17/09/2020,01/06/2001,23,2,1,1,3
+139,13115,William,Roberts,Ian,Islam,Delta,Igbo Eze North,17/09/2019,01/07/2001,1,3,1,1,4
+140,13158,James,King,Dan,Islam,Delta,Obowo,17/09/2019,01/08/2001,2,4,1,1,5
+141,13293,Jake,Edmunds,Dylan,Islam,Delta,Sule Tankarkar,17/09/2019,01/09/2001,3,1,1,1,1
+142,13377,Jane,Ross,John,Christianity,Delta,Katsina-Ala,17/09/2021,01/10/2001,4,2,1,1,2
+143,12939,Joseph,Skinner,Peter,Christianity,Delta,Marte,17/09/2021,01/11/2001,5,3,1,2,3
+144,13060,Oliver,Hamilton,Robert,Christianity,Delta,Okpe,17/09/2021,01/12/2001,6,4,1,2,4
+145,13312,Michael,Hart,Stephen,Christianity,Delta,Igbo Eze North,17/09/2022,01/01/2002,7,1,1,2,5
+146,13234,Gordon,Hudson,Colin,Christianity,Delta,Obowo,17/09/2022,01/02/2002,8,2,1,2,1
+147,12829,Trevor,Baker,Jake,Christianity,Delta,Sule Tankarkar,17/09/2019,01/03/2002,9,3,1,3,2
+148,13003,Neil,James,Michael,Christianity,Delta,Oshimili South,17/09/2019,01/04/2002,10,4,1,3,3
+149,13191,Peter,Gibson,Evan,Christianity,Delta,Isi Uzo,17/09/2019,01/05/2002,11,1,1,3,4
+150,13288,Richard,Sharp,Robert,Christianity,Delta,Ohaji/Egbema,17/09/2020,01/06/2002,12,2,1,3,5
+151,12491,Matt,Johnston,Adam,Islam,Ebonyi,Konshisha,17/09/2020,01/07/2002,13,3,1,1,1
+152,12909,Frank,Thomson,Sebastian,Islam,Ebonyi,Mobbar,17/09/2020,01/08/2002,14,4,1,1,2
+153,13013F,Brandon,Mackenzie,Matt,Islam,Ebonyi,Oshimili North,17/09/2020,01/09/2002,15,1,2,1,3
+154,13117,Sam,Short,Victor,Islam,Ebonyi,Igbo Eze South,17/09/2019,01/10/2002,16,2,1,1,4
+155,13159,Sean,Mathis,Simon,Islam,Ebonyi,Oguta,17/09/2019,01/11/2002,17,3,1,1,5
+156,13297,Lucas,Alsop,Richard,Islam,Ebonyi,Taura,17/09/2019,01/12/2002,18,4,1,1,1
+157,13378,Alison,Marshall,Colin,Christianity,Ebonyi,Konshisha,17/09/2021,01/01/2003,19,1,1,1,2
+158,12943,Trevor,Rutherford,Blake,Christianity,Ebonyi,Mobbar,17/09/2021,01/02/2003,20,2,1,2,3
+159,13065,Steven,Quinn,Sean,Christianity,Ebonyi,Oshimili North,17/09/2021,01/03/2003,21,3,1,2,4
+160,13317,Peter,Mathis,Kevin,Christianity,Ebonyi,Igbo Eze South,17/09/2022,01/04/2003,22,4,1,2,5
+161,13235,Dominic,MacDonald,Connor,Christianity,Ebonyi,Oguta,17/09/2022,01/05/2003,23,1,1,2,1
+162,12847,Julian,Lyman,Adrian,Christianity,Ebonyi,Taura,17/09/2019,01/06/2003,1,2,1,3,2
+163,13015,Julian,Scott,Blake,Christianity,Ebonyi,Patani,17/09/2019,01/07/2003,2,3,1,3,3
+164,13192,Julian,Mackenzie,Dylan,Christianity,Ebonyi,Nkanu East,17/09/2019,01/08/2003,3,4,1,3,4
+165,13291,Brandon,Reid,Matt,Christianity,Ebonyi,Okigwe,17/09/2020,01/09/2003,4,1,1,3,5
+166,12493,Luke,Powell,Joseph,Islam,Edo,Kwande,17/09/2020,01/10/2003,5,2,1,1,1
+167,12910,Julian,Russell,Stewart,Islam,Edo,Monguno,17/09/2020,01/11/2003,6,3,1,1,2
+168,13017,Oliver,Wilson,Blake,Islam,Edo,Oshimili South,17/09/2020,01/12/2003,7,4,1,1,3
+169,13120,Jack,Hughes,Keith,Islam,Edo,Isi Uzo,17/09/2019,01/01/2004,8,1,1,1,4
+170,13161,Benjamin,Hart,Piers,Islam,Edo,Ohaji/Egbema,17/09/2019,01/02/2004,9,2,1,1,5
+171,13298,Stephen,Welch,Ryan,Islam,Edo,Yankwashi,17/09/2019,01/03/2004,10,3,1,1,1
+172,13380,Caroline,Hunter,Austin,Christianity,Edo,Kwande,17/09/2021,01/04/2004,11,4,1,1,2
+173,13398,Boris,Pullman,Warren,Christianity,Edo,Monguno,17/09/2021,01/05/2004,12,1,1,2,3
+174,13067,Jack,Young,Piers,Christianity,Edo,Oshimili South,17/09/2021,01/06/2004,13,2,1,2,4
+175,13320,Alexander,Gray,Peter,Christianity,Edo,Isi Uzo,17/09/2022,01/07/2004,14,3,1,2,5
+176,13236F,Robert,Churchill,Brandon,Christianity,Edo,Ohaji/Egbema,17/09/2022,01/08/2004,15,4,2,2,1
+177,12852,Jacob,Bell,Ian,Christianity,Edo,Yankwashi,17/09/2019,01/09/2004,16,1,1,3,2
+178,13021,Lucas,MacDonald,Victor,Christianity,Edo,Sapele,17/09/2019,01/10/2004,17,2,1,3,3
+179,13193,Liam,Randall,Nathan,Christianity,Edo,Nkanu West,17/09/2019,01/11/2004,18,3,1,3,4
+180,13296,Neil,King,Steven,Christianity,Edo,Orlu,17/09/2020,01/12/2004,19,4,1,3,5
+181,12529,Sam,Carr,Gordon,Islam,Ekiti,Logo,17/09/2020,01/01/2000,20,1,1,1,1
+182,12912,Joe,Mitchell,James,Islam,Ekiti,Ngala,17/09/2020,01/02/2000,21,2,1,1,2
+183,13020,Brandon,Gray,Owen,Islam,Ekiti,Patani,17/09/2020,01/03/2000,22,3,1,1,3
+184,13122,Adrian,Anderson,Andrew,Islam,Ekiti,Nkanu East,17/09/2019,01/04/2000,23,4,1,1,4
+185,13162,Christian,Thomson,Liam,Islam,Ekiti,Okigwe,17/09/2019,01/05/2000,1,1,1,1,5
+186,13301,Alan,Wilkins,Austin,Islam,Ekiti,Kaduna State,17/09/2019,01/06/2000,2,2,1,1,1
+187,13383,Rose,Short,Jack,Christianity,Ekiti,Logo,17/09/2021,01/07/2000,3,3,1,1,2
+188,12945F,Brian,Jackson,Gavin,Christianity,Ekiti,Ngala,17/09/2021,01/08/2000,4,4,2,2,3
+189,13072,Simon,Randall,Cameron,Christianity,Ekiti,Patani,17/09/2022,01/09/2000,5,1,1,2,4
+190,13325,Richard,Slater,Jacob,Christianity,Ekiti,Nkanu East,17/09/2022,01/10/2000,6,2,1,2,5
+191,13238,Boris,Ball,Richard,Christianity,Ekiti,Okigwe,17/09/2022,01/11/2000,7,3,1,2,1
+192,12857F,Eric,Paterson,Trevor,Christianity,Ekiti,Kaduna State,17/09/2019,01/12/2000,8,4,2,3,2
+193,13023,James,Anderson,John,Christianity,Ekiti,Udu,17/09/2019,01/01/2001,9,1,1,3,3
+194,13195F,Keith,Fraser,Paul,Christianity,Ekiti,Nsukka,17/09/2019,01/02/2001,10,2,2,3,4
+195,13299,Joseph,Berry,Matt,Christianity,Ekiti,Orsu,17/09/2020,01/03/2001,11,3,1,3,5
+196,12535,Nathan,Grant,Adam,Islam,Enugu,Makurdi,17/09/2020,01/04/2001,12,4,1,1,1
+197,12914,Adrian,Sutherland,Gordon,Islam,Enugu,Nganzai,17/09/2020,01/05/2001,13,1,1,1,2
+198,13025F,Dylan,Bower,Simon,Islam,Enugu,Sapele,17/09/2020,01/06/2001,14,2,2,1,3
+199,13123,Jason,Scott,Jake,Islam,Enugu,Nkanu West,17/09/2019,01/07/2001,15,3,1,1,4
+200,13164,Warren,Hughes,Dylan,Islam,Enugu,Orlu,17/09/2019,01/08/2001,16,4,1,1,5
+201,13303,Christopher,Cornish,Jacob,Islam,Enugu,Birnin Gwari,17/09/2019,01/09/2001,17,1,1,1,1
+202,13384,Emma,King,Robert,Christianity,Enugu,Makurdi,17/09/2021,01/10/2001,18,2,1,1,2
+203,12951,Paul,Hudson,Nathan,Christianity,Enugu,Nganzai,17/09/2021,01/11/2001,19,3,1,2,3
+204,13075,Carl,Graham,Boris,Christianity,Enugu,Sapele,17/09/2022,01/12/2001,20,4,1,2,4
+205,13328,Isaac,May,Joshua,Christianity,Enugu,Nkanu West,17/09/2022,01/01/2002,21,1,1,2,5
+206,13239,Max,Glover,Tim,Christianity,Enugu,Orlu,17/09/2022,01/02/2002,22,2,1,2,1
+207,12862,Edward,Wilkins,Owen,Christianity,Enugu,Birnin Gwari,17/09/2019,01/03/2002,23,3,1,3,2
+208,13029F,Alexander,King,David,Christianity,Enugu,Ughelli North,17/09/2019,01/04/2002,1,4,2,3,3
+209,13196,Owen,Blake,Robert,Christianity,Enugu,Oji River,17/09/2019,01/05/2002,2,1,1,3,4
+210,13302,Colin,Oliver,David,Christianity,Enugu,Oru East,17/09/2019,01/06/2002,3,2,1,3,5
+211,12557,Neil,Wilson,David,Islam,Gombe,Obi,17/09/2020,01/07/2002,4,3,1,1,1
+212,12918,David,Graham,Anthony,Islam,Gombe,Shani,17/09/2020,01/08/2002,5,4,1,1,2
+213,13026,Dominic,Cameron,Nicholas,Islam,Gombe,Udu,17/09/2020,01/09/2002,6,1,1,1,3
+214,13124,John,Black,Cameron,Islam,Gombe,Nsukka,17/09/2019,01/10/2002,7,2,1,1,4
+215,13165,Paul,Hemmings,David,Islam,Gombe,Orsu,17/09/2019,01/11/2002,8,3,1,1,5
+216,13305,James,Grant,James,Islam,Gombe,Chikun,17/09/2019,01/12/2002,9,4,1,1,1
+217,13388,Amelia,Ross,Peter,Christianity,Gombe,Obi,17/09/2021,01/01/2003,10,1,1,1,2
+218,12956,Oliver,Berry,Anthony,Christianity,Gombe,Shani,17/09/2021,01/02/2003,11,2,1,2,3
+219,13079,Sebastian,Simpson,Joseph,Christianity,Gombe,Udu,17/09/2022,01/03/2003,12,3,1,2,4
+220,13336,Eric,Robertson,Justin,Christianity,Gombe,Nsukka,17/09/2022,01/04/2003,13,4,1,2,5
+221,13240,Jake,Buckland,Justin,Christianity,Gombe,Orsu,17/09/2022,01/05/2003,14,1,1,2,1
+222,12865,Richard,MacDonald,Ian,Christianity,Gombe,Chikun,17/09/2019,01/06/2003,15,2,1,3,2
+223,13030,Warren,Clarkson,Paul,Christianity,Gombe,Ughelli South,17/09/2019,01/07/2003,16,3,1,3,3
+224,13197,Austin,Taylor,Phil,Christianity,Gombe,Udenu,17/09/2019,01/08/2003,17,4,1,3,4
+225,13307,Warren,Ferguson,Oliver,Christianity,Gombe,Oru West,17/09/2019,01/09/2003,18,1,1,3,5
+226,12562,Michael,Tucker,Jason,Islam,Imo,Ogbadibo,17/09/2020,01/10/2003,19,2,1,1,1
+227,12921,Keith,Carr,Jack,Islam,Imo,Abi,17/09/2020,01/11/2003,20,3,1,1,2
+228,13028,Owen,Allan,Sam,Islam,Imo,Ughelli North,17/09/2020,01/12/2003,21,4,1,1,3
+229,13127F,Adam,Poole,Nicholas,Islam,Imo,Oji River,17/09/2019,01/01/2004,22,1,2,1,4
+230,13166,Stephen,Gill,Phil,Islam,Imo,Oru East,17/09/2019,01/02/2004,23,2,1,1,5
+231,13308,Brandon,Vaughan,Dominic,Islam,Imo,Giwa,17/09/2019,01/03/2004,1,3,1,1,1
+232,13391,Caroline,Kerr,Dan,Christianity,Imo,Ogbadibo,17/09/2021,01/04/2004,2,4,1,1,2
+233,12957,Alexander,Clarkson,Dylan,Christianity,Imo,Abi,17/09/2021,01/05/2004,3,1,1,2,3
+234,13081,John,White,Phil,Christianity,Imo,Ughelli North,17/09/2022,01/06/2004,4,2,1,2,4
+235,13339F,Carl,Hodges,William,Christianity,Imo,Oji River,17/09/2022,01/07/2004,5,3,2,2,5
+236,13241,Dylan,Bell,John,Christianity,Imo,Oru East,17/09/2022,01/08/2004,6,4,1,2,1
+237,12872,Jason,Underwood,Joe,Christianity,Imo,Giwa,17/09/2019,01/09/2004,7,1,1,3,2
+238,13035,Adrian,Dickens,Piers,Christianity,Imo,Ukwuani,17/09/2019,01/10/2004,8,2,1,3,3
+239,13199,Joseph,Piper,Edward,Christianity,Imo,Udi,17/09/2019,01/11/2004,9,3,1,3,4
+240,13310,Stewart,McDonald,Piers,Christianity,Imo,Owerri Municipal,17/09/2019,01/12/2004,10,4,1,3,5
+241,12564,Oliver,Springer,John,Islam,Jigawa,Ohimini,17/09/2020,01/01/2000,11,1,1,1,1
+242,12926,Luke,Roberts,Jack,Islam,Jigawa,Akamkpa,17/09/2020,01/02/2000,12,2,1,1,2
+243,13031,John,Lambert,Paul,Islam,Jigawa,Ughelli South,17/09/2020,01/03/2000,13,3,1,1,3
+244,13128,Oliver,Wallace,Dominic,Islam,Jigawa,Udenu,17/09/2019,01/04/2000,14,4,1,1,4
+245,13168,Austin,Campbell,Anthony,Islam,Jigawa,Oru West,17/09/2019,01/05/2000,15,1,1,1,5
+246,13311,Brian,Henderson,Brian,Islam,Jigawa,Igabi,17/09/2019,01/06/2000,16,2,1,1,1
+247,13393,Jessica,White,Richard,Christianity,Jigawa,Ohimini,17/09/2021,01/07/2000,17,3,1,1,2
+248,12963,Thomas,Lewis,John,Christianity,Jigawa,Akamkpa,17/09/2021,01/08/2000,18,4,1,2,3
+249,13089,Stewart,Baker,Eric,Christianity,Jigawa,Ughelli South,17/09/2022,01/09/2000,19,1,1,2,4
+250,13343,Steven,Berry,Liam,Christianity,Jigawa,Udenu,17/09/2022,01/10/2000,20,2,1,2,5
+251,13242,Ian,McDonald,Joe,Christianity,Jigawa,Oru West,17/09/2022,01/11/2000,21,3,1,2,1
+252,12874,Peter,Grant,Steven,Christianity,Jigawa,Igabi,17/09/2019,01/12/2000,22,4,1,3,2
+253,13039,Trevor,Randall,Jason,Christianity,Jigawa,Uvwie,17/09/2019,01/01/2001,23,1,1,3,3
+254,13200,Jake,Parr,Joe,Christianity,Jigawa,Uzo-Uwani,17/09/2019,01/02/2001,1,2,1,3,4
+255,13314F,Thomas,Forsyth,Harry,Christianity,Jigawa,Owerri North,17/09/2019,01/03/2001,2,3,2,3,5
+256,12566,Victor,Alsop,John,Islam,Kaduna,Oju,17/09/2020,01/04/2001,3,4,1,1,1
+257,12928,Edward,Slater,Oliver,Islam,Kaduna,Akpabuyo,17/09/2020,01/05/2001,4,1,1,1,2
+258,13036,Warren,Anderson,Alan,Islam,Kaduna,Ukwuani,17/09/2020,01/06/2001,5,2,1,1,3
+259,13129,Richard,Ross,Christopher,Islam,Kaduna,Udi,17/09/2019,01/07/2001,6,3,1,1,4
+260,13169,Joseph,Hudson,Steven,Islam,Kaduna,Owerri Municipal,17/09/2019,01/08/2001,7,4,1,1,5
+261,13313,Adrian,Mills,Edward,Islam,Kaduna,Ikara,17/09/2019,01/09/2001,8,1,1,1,1
+262,13401,Alison,Mathis,Thomas,Christianity,Kaduna,Oju,17/09/2021,01/10/2001,9,2,1,1,2
+263,12964F,Owen,Lambert,James,Christianity,Kaduna,Akpabuyo,17/09/2021,01/11/2001,10,3,2,2,3
+264,13402,Julian,Underwood,Sam,Christianity,Kaduna,Ukwuani,17/09/2022,01/12/2001,11,4,1,2,4
+265,13346,Leonard,King,Justin,Christianity,Kaduna,Udi,17/09/2022,01/01/2002,12,1,1,2,5
+266,13243,Michael,Murray,David,Christianity,Kaduna,Owerri Municipal,17/09/2022,01/02/2002,13,2,1,2,1
+267,12877,Christian,Edmunds,Leonard,Christianity,Kaduna,Ikara,17/09/2019,01/03/2002,14,3,1,3,2
+268,13047,Luke,Hemmings,Jonathan,Christianity,Kaduna,Warri North,17/09/2019,01/04/2002,15,4,1,3,3
+269,13201,Michael,Peake,Nicholas,Christianity,Kaduna,Akko,17/09/2019,01/05/2002,16,1,1,3,4
+270,13316,Benjamin,White,Owen,Christianity,Kaduna,Owerri West,17/09/2019,01/06/2002,17,2,1,3,5
+271,12569,Owen,Grant,Austin,Islam,Kano,Okpokwu,17/09/2020,01/07/2002,18,3,1,1,1
+272,12931,Austin,Greene,Richard,Islam,Kano,Bakassi,17/09/2020,01/08/2002,19,4,1,1,2
+273,13037,Julian,Campbell,Lucas,Islam,Kano,Uvwie,17/09/2020,01/09/2002,20,1,1,1,3
+274,13130F,Edward,Springer,Lucas,Islam,Kano,Uzo-Uwani,17/09/2019,01/10/2002,21,2,2,1,4
+275,13170,Carl,Poole,Julian,Islam,Kano,Owerri North,17/09/2019,01/11/2002,22,3,1,1,5
+276,13315,Piers,Hughes,Brian,Islam,Kano,Jaba,17/09/2019,01/12/2002,23,4,1,1,1
+277,13407,Andrea,Campbell,Boris,Christianity,Kano,Okpokwu,17/09/2021,01/01/2003,1,1,1,1,2
+278,12970,Colin,Walker,Jacob,Christianity,Kano,Bakassi,17/09/2021,01/02/2003,2,2,1,2,3
+279,13404F,Boris,Lewis,Sebastian,Christianity,Kano,Uvwie,17/09/2022,01/03/2003,3,3,2,2,4
+280,13351,Jacob,Avery,Trevor,Christianity,Kano,Uzo-Uwani,17/09/2022,01/04/2003,4,4,1,2,5
+281,13244F,Gordon,Manning,Nicholas,Christianity,Kano,Owerri North,17/09/2022,01/05/2003,5,1,2,2,1
+282,12883,Christian,Hemmings,Tim,Christianity,Kano,Jaba,17/09/2019,01/06/2003,6,2,1,3,2
+283,13052,Richard,Berry,Alexander,Christianity,Kano,Warri South,17/09/2019,01/07/2003,7,3,1,3,3
+284,13202,Evan,Cornish,Dylan,Christianity,Kano,Balanga,17/09/2020,01/08/2003,8,4,1,3,4
+285,13321,Thomas,Payne,Jason,Christianity,Kano,Onuimo,17/09/2019,01/09/2003,9,1,1,3,5
+286,12573,John,Gill,David,Islam,Katsina,Oturkpo,17/09/2020,01/10/2003,10,2,1,1,1
+287,12933,Jack,MacLeod,Dan,Islam,Katsina,Bekwarra,17/09/2020,01/11/2003,11,3,1,1,2
+288,13038,Julian,Tucker,Christopher,Islam,Katsina,Warri North,17/09/2020,01/12/2003,12,4,1,1,3
+289,13131,Richard,Graham,Evan,Islam,Katsina,Akko,17/09/2019,01/01/2004,13,1,1,1,4
+290,13171,Dominic,Sharp,Alexander,Islam,Katsina,Owerri West,17/09/2019,01/02/2004,14,2,1,1,5
+291,13318,Austin,Russell,Thomas,Islam,Katsina,Jema'a,17/09/2019,01/03/2004,15,3,1,1,1
+292,13408,Sonia,Poole,Richard,Christianity,Katsina,Oturkpo,17/09/2021,01/04/2004,16,4,1,1,2
+293,12972,Peter,Terry,Anthony,Christianity,Katsina,Bekwarra,17/09/2021,01/05/2004,17,1,1,2,3
+294,13406,Max,Watson,Adam,Christianity,Katsina,Warri North,17/09/2022,01/06/2004,18,2,1,2,4
+295,13353,Stephen,Scott,Dylan,Christianity,Katsina,Akko,17/09/2022,01/07/2004,19,3,1,2,5
+296,13245,Adam,Greene,Christopher,Christianity,Katsina,Owerri West,17/09/2022,01/08/2004,20,4,1,2,1
+297,12886,Dan,Kerr,Keith,Christianity,Katsina,Jema'a,17/09/2019,01/09/2004,21,1,1,3,2
+298,13054,Christopher,Payne,Julian,Christianity,Katsina,Warri South West,17/09/2019,01/10/2004,22,2,1,3,3
+299,13203,Boris,Young,Lucas,Christianity,Katsina,Billiri,17/09/2020,01/11/2004,23,3,1,3,4
+300,13323,Isaac,Graham,Jason,Christianity,Katsina,Auyo,17/09/2019,01/12/2004,1,4,1,3,5
+301,12610,Owen,Baker,Eric,Islam,Kebbi,Tarka,17/09/2020,01/01/2000,2,1,1,1,1
+302,12935,Benjamin,Smith,Max,Islam,Kebbi,Biase,17/09/2020,01/02/2000,3,2,1,1,2
+303,13041,Thomas,Bower,Piers,Islam,Kebbi,Warri South,17/09/2020,01/03/2000,4,3,1,1,3
+304,13132,Frank,McLean,Andrew,Islam,Kebbi,Balanga,17/09/2019,01/04/2000,5,4,1,1,4
+305,13172,Edward,Kerr,Max,Islam,Kebbi,Onuimo,17/09/2019,01/05/2000,6,1,1,1,5
+306,13319,Amanda,Nash,Andrew,Christianity,Kebbi,Kachia,17/09/2021,01/06/2000,7,2,1,1,1
+307,12682,Carolyn,Wallace,Simon,Christianity,Kebbi,Tarka,17/09/2021,01/07/2000,8,3,1,1,2
+308,12977,Jason,Edmunds,Dan,Christianity,Kebbi,Biase,17/09/2021,01/08/2000,9,4,1,2,3
+309,13097,Connor,Parr,Boris,Christianity,Kebbi,Warri South,17/09/2022,01/09/2000,10,1,1,2,4
+310,13358,Christopher,Cornish,Sebastian,Christianity,Kebbi,Balanga,17/09/2022,01/10/2000,11,2,1,2,5
+311,13392,Phil,Lewis,Jason,Christianity,Kebbi,Onuimo,17/09/2022,01/11/2000,12,3,1,2,1
+312,12890,Michael,Hunter,Isaac,Christianity,Kebbi,Kachia,17/09/2019,01/12/2000,13,4,1,3,2
+313,13056,Brandon,Parsons,Carl,Christianity,Kebbi,Ado Ekiti,17/09/2019,01/01/2001,14,1,1,3,3
+314,13204,Victor,Buckland,Dan,Christianity,Kebbi,Dukku,17/09/2020,01/02/2001,15,2,1,3,4
+315,13324,Evan,Dickens,Blake,Christianity,Kebbi,Babura,17/09/2019,01/03/2001,16,3,1,3,5
+316,12656,Phil,Robertson,Justin,Islam,Kogi,Ukum,17/09/2020,01/04/2001,17,4,1,1,1
+317,12937,Oliver,Sharp,Phil,Islam,Kogi,Boki,17/09/2020,01/05/2001,18,1,1,1,2
+318,13042,Luke,Coleman,Adam,Islam,Kogi,Warri South West,17/09/2020,01/06/2001,19,2,1,1,3
+319,13133,Luke,White,Justin,Islam,Kogi,Billiri,17/09/2019,01/07/2001,20,3,1,1,4
+320,13174,Dylan,Skinner,Justin,Islam,Kogi,Auyo,17/09/2019,01/08/2001,21,4,1,1,5
+321,13322,Vanessa,Dowd,Brian,Christianity,Kogi,Kaduna North,17/09/2021,01/09/2001,22,1,1,1,1
+322,12697,Ella,Abraham,Sean,Christianity,Kogi,Ukum,17/09/2021,01/10/2001,23,2,1,1,2
+323,12966,Jake,Walker,Eric,Christianity,Kogi,Boki,17/09/2021,01/11/2001,1,3,1,2,3
+324,13100,Brian,Vaughan,Gordon,Christianity,Kogi,Warri South West,17/09/2022,01/12/2001,2,4,1,2,4
+325,13360,Julian,Bond,Charles,Christianity,Kogi,Billiri,17/09/2022,01/01/2002,3,1,1,2,5
+326,13394,Lucas,Lee,Peter,Christianity,Kogi,Auyo,17/09/2022,01/02/2002,4,2,1,2,1
+327,12893,Eric,Johnston,Brandon,Christianity,Kogi,Kaduna North,17/09/2019,01/03/2002,5,3,1,3,2
+328,13061,Boris,Jackson,Richard,Christianity,Kogi,Efon,17/09/2019,01/04/2002,6,4,1,3,3
+329,13205,Gordon,Arnold,Blake,Christianity,Kogi,Funakaye,17/09/2020,01/05/2002,7,1,1,3,4
+330,13327,Julian,May,Joshua,Christianity,Kogi,Biriniwa,17/09/2019,01/06/2002,8,2,1,3,5
+331,12658,Adrian,Butler,Neil,Islam,Kwara,Ushongo,17/09/2020,01/07/2002,9,3,1,1,1
+332,12940,Owen,Lee,Jason,Islam,Kwara,Calabar Municipal,17/09/2020,01/08/2002,10,4,1,1,2
+333,13043,Alexander,Hamilton,Liam,Islam,Kwara,Ado Ekiti,17/09/2020,01/09/2002,11,1,1,1,3
+334,13134,Boris,Pullman,Stewart,Islam,Kwara,Dukku,17/09/2019,01/10/2002,12,2,1,1,4
+335,13175,Charles,Lyman,Colin,Islam,Kwara,Babura,17/09/2019,01/11/2002,13,3,1,1,5
+336,13326,Abigail,Sharp,Colin,Christianity,Kwara,Kaduna South,17/09/2021,01/12/2002,14,4,1,1,1
+337,12495,Madeleine,Thomson,Julian,Christianity,Kwara,Ushongo,17/09/2021,01/01/2003,15,1,1,1,2
+338,12982,Eric,Wallace,Connor,Christianity,Kwara,Calabar Municipal,17/09/2021,01/02/2003,16,2,1,2,3
+339,13103,Joseph,Gibson,Joseph,Christianity,Kwara,Ado Ekiti,17/09/2022,01/03/2003,17,3,1,2,4
+340,13366,Julian,Allan,Simon,Christianity,Kwara,Dukku,17/09/2022,01/04/2003,18,4,1,2,5
+341,13395,Alexander,McLean,Brandon,Christianity,Kwara,Babura,17/09/2022,01/05/2003,19,1,1,2,1
+342,12898,Robert,Lyman,Edward,Christianity,Kwara,Kaduna South,17/09/2019,01/06/2003,20,2,1,3,2
+343,13064,Oliver,Brown,Lucas,Christianity,Kwara,Ekiti East,17/09/2019,01/07/2003,21,3,1,3,3
+344,13206,Jason,Manning,Justin,Christianity,Kwara,Gombe,17/09/2020,01/08/2003,22,4,1,3,4
+345,13331,Brandon,Edmunds,Peter,Christianity,Kwara,Birnin Kudu,17/09/2019,01/09/2003,23,1,1,3,5
+346,12695,Charles,Oliver,William,Islam,Lagos,Vandeikya,17/09/2020,01/10/2003,1,2,1,1,1
+347,12942,Jason,Murray,Boris,Islam,Lagos,Calabar South,17/09/2020,01/11/2003,2,3,1,1,2
+348,13048,Gordon,Randall,Evan,Islam,Lagos,Efon,17/09/2020,01/12/2003,3,4,1,1,3
+349,13135,Gordon,Berry,Joe,Islam,Lagos,Funakaye,17/09/2019,01/01/2004,4,1,1,1,4
+350,13176,Matt,Hart,Dylan,Islam,Lagos,Biriniwa,17/09/2019,01/02/2004,5,2,1,1,5
+351,13329,Tracey,Wilkins,Neil,Christianity,Lagos,Kagarko,17/09/2021,01/03/2004,6,3,1,1,1
+352,12845,Amy,Burgess,Warren,Christianity,Lagos,Vandeikya,17/09/2021,01/04/2004,7,4,1,1,2
+353,12988,Andrew,Ross,Andrew,Christianity,Lagos,Calabar South,17/09/2021,01/05/2004,8,1,1,2,3
+354,13107,Warren,Berry,Isaac,Christianity,Lagos,Efon,17/09/2022,01/06/2004,9,2,1,2,4
+355,13367,Austin,Stewart,Michael,Christianity,Lagos,Funakaye,17/09/2022,01/07/2004,10,3,1,2,5
+356,13396,Anthony,Howard,Andrew,Christianity,Lagos,Biriniwa,17/09/2022,01/08/2004,11,4,1,2,1
+357,12900,Justin,Sutherland,Brandon,Christianity,Lagos,Kagarko,17/09/2019,01/09/2004,12,1,1,3,2
+358,13068,Nicholas,Grant,Sebastian,Christianity,Lagos,Ekiti South-West,17/09/2019,01/10/2004,13,2,1,3,3
+359,13207,Warren,McDonald,Eric,Christianity,Lagos,Kaltungo,17/09/2020,01/11/2004,14,3,1,3,4
+360,13335,Evan,Rees,Stephen,Christianity,Lagos,Buji,17/09/2019,01/12/2004,15,4,1,3,5
+361,12696,Leonard,Watson,Julian,Islam,Nasarawa,Abadam,17/09/2020,01/01/2000,16,1,1,1,1
+362,12947,Julian,Buckland,Anthony,Islam,Nasarawa,Etung,17/09/2020,01/02/2000,17,2,1,1,2
+363,13050,Justin,Allan,Stephen,Islam,Nasarawa,Ekiti East,17/09/2020,01/03/2000,18,3,1,1,3
+364,13136,Tim,Peake,William,Islam,Nasarawa,Gombe,17/09/2019,01/04/2000,19,4,1,1,4
+365,13177,Gordon,Cameron,Joseph,Islam,Nasarawa,Birnin Kudu,17/09/2019,01/05/2000,20,1,1,1,5
+366,13330,Karen,Gray,Brandon,Christianity,Nasarawa,Kajuru,17/09/2021,01/06/2000,21,2,1,1,1
+367,12677,Wanda,McLean,Tim,Christianity,Nasarawa,Abadam,17/09/2021,01/07/2000,22,3,1,1,2
+368,12734,Peter,Sharp,William,Christianity,Nasarawa,Etung,17/09/2021,01/08/2000,23,4,1,2,3
+369,13111,John,Hardacre,Blake,Christianity,Nasarawa,Ekiti East,17/09/2022,01/09/2000,1,1,1,2,4
+370,13374,Joshua,Bond,Jake,Christianity,Nasarawa,Gombe,17/09/2022,01/10/2000,2,2,1,2,5
+371,13246,Stewart,Butler,Nathan,Christianity,Nasarawa,Birnin Kudu,17/09/2022,01/11/2000,3,3,1,2,1
+372,12905F,Andrew,Butler,Luke,Christianity,Nasarawa,Kajuru,17/09/2019,01/12/2000,4,4,2,3,2
+373,13071,Keith,Robertson,David,Christianity,Nasarawa,Ekiti West,17/09/2019,01/01/2001,5,1,1,3,3
+374,13208,James,Hardacre,Connor,Christianity,Nasarawa,Kwami,17/09/2020,01/02/2001,6,2,1,3,4
+375,13338,Charles,Vaughan,Nicholas,Christianity,Nasarawa,Dutse,17/09/2019,01/03/2001,7,3,1,3,5
+376,12735,Jason,Watson,Keith,Islam,Niger,Askira/Uba,17/09/2020,01/04/2001,8,4,1,1,1
+377,12949,Dan,Greene,Oliver,Islam,Niger,Ikom,17/09/2020,01/05/2001,9,1,1,1,2
+378,13051,Dylan,Piper,Adam,Islam,Niger,Ekiti South-West,17/09/2020,01/06/2001,10,2,1,1,3
+379,13137,Justin,Paige,Sebastian,Islam,Niger,Kaltungo,17/09/2019,01/07/2001,11,3,1,1,4
+380,13178,Trevor,Piper,Gavin,Islam,Niger,Buji,17/09/2019,01/08/2001,12,4,1,1,5
+381,13332,Olivia,Ross,Nathan,Christianity,Niger,Kaura,17/09/2021,01/09/2001,13,1,1,1,1
+382,12433,Emily,Fraser,Charles,Christianity,Niger,Askira/Uba,17/09/2021,01/10/2001,14,2,1,1,2
+383,12745,Keith,Ince,Dylan,Christianity,Niger,Ikom,17/09/2021,01/11/2001,15,3,1,2,3
+384,13116,Nathan,Carr,Edward,Christianity,Niger,Ekiti South-West,17/09/2022,01/12/2001,16,4,1,2,4
+385,13379,Sam,Langdon,Harry,Christianity,Niger,Kaltungo,17/09/2022,01/01/2002,17,1,1,2,5
+386,13247,Keith,Hemmings,Jonathan,Christianity,Niger,Buji,17/09/2022,01/02/2002,18,2,1,2,1
+387,12911,Luke,Bailey,Sean,Christianity,Niger,Kaura,17/09/2019,01/03/2002,19,3,1,3,2
+388,13077,Michael,James,Brandon,Christianity,Niger,Emure,17/09/2019,01/04/2002,20,4,1,3,3
+389,13209,Evan,Pullman,Isaac,Christianity,Niger,Nafada,17/09/2020,01/05/2002,21,1,1,3,4
+390,13340,Steven,Langdon,Jake,Christianity,Niger,Gagarawa,17/09/2019,01/06/2002,22,2,1,3,5
+391,12781,Sam,Springer,Jacob,Islam,Ogun,Bama,17/09/2020,01/07/2002,23,3,1,1,1
+392,12952,Oliver,Lambert,Adam,Islam,Ogun,Obanliku,17/09/2020,01/08/2002,1,4,1,1,2
+393,13055,Adrian,Bond,Lucas,Islam,Ogun,Ekiti West,17/09/2020,01/09/2002,2,1,1,1,3
+394,13138,Frank,Hunter,Richard,Islam,Ogun,Kwami,17/09/2019,01/10/2002,3,2,1,1,4
+395,13179,Stephen,Burgess,Carl,Islam,Ogun,Dutse,17/09/2019,01/11/2002,4,3,1,1,5
+396,13333,Bella,Hart,Anthony,Christianity,Ogun,Kauru,17/09/2021,01/12/2002,5,4,1,1,1
+397,12859,Nathan,Oliver,Joe,Christianity,Ogun,Bama,17/09/2021,01/01/2003,6,1,1,2,2
+398,12991,Carl,Manning,Dan,Christianity,Ogun,Obanliku,17/09/2021,01/02/2003,7,2,1,2,3
+399,13093,Austin,Peters,William,Christianity,Ogun,Ekiti West,17/09/2022,01/03/2003,8,3,1,2,4
+400,13385,Alan,Jackson,Piers,Christianity,Ogun,Kwami,17/09/2022,01/04/2003,9,4,1,2,5
+401,13248,Tim,Miller,Eric,Christianity,Ogun,Dutse,17/09/2022,01/05/2003,10,1,1,2,1
+402,12917,Neil,Kerr,Paul,Christianity,Ogun,Kauru,17/09/2019,01/06/2003,11,2,1,3,2
+403,13080,Evan,Forsyth,Colin,Christianity,Ogun,Gbonyin,17/09/2019,01/07/2003,12,3,1,3,3
+404,13210,William,Underwood,Dominic,Christianity,Ogun,Shongom,17/09/2020,01/08/2003,13,4,1,3,4
+405,13344,Joseph,Hudson,Kevin,Christianity,Ogun,Garki,17/09/2019,01/09/2003,14,1,1,3,5
+406,12799,Joseph,Nash,Jacob,Islam,Ondo,Bayo,17/09/2020,01/10/2003,15,2,1,1,1
+407,12954,Gavin,Jackson,Alan,Islam,Ondo,Obubra,17/09/2020,01/11/2003,16,3,1,1,2
+408,13057,Brian,James,Matt,Islam,Ondo,Emure,17/09/2020,01/12/2003,17,4,1,1,3
+409,13139,Jason,Graham,Anthony,Islam,Ondo,Nafada,17/09/2019,01/01/2004,18,1,1,1,4
+410,13180,Austin,Watson,Brandon,Islam,Ondo,Gagarawa,17/09/2019,01/02/2004,19,2,1,1,5
+411,13337,Diana,Welch,Colin,Christianity,Ondo,Kubau,17/09/2021,01/03/2004,20,3,1,1,1
+412,12861,Dan,Alsop,Simon,Christianity,Ondo,Bayo,17/09/2021,01/04/2004,21,4,1,2,2
+413,12995,Max,Rutherford,Alexander,Christianity,Ondo,Obubra,17/09/2021,01/05/2004,22,1,1,2,3
+414,13118,Jacob,Hardacre,Ian,Christianity,Ondo,Emure,17/09/2022,01/06/2004,23,2,1,2,4
+415,13386,Christian,Springer,Blake,Christianity,Ondo,Nafada,17/09/2022,01/07/2004,1,3,1,2,5
+416,13249,Liam,Henderson,Joseph,Christianity,Ondo,Gagarawa,17/09/2022,01/08/2004,2,4,1,2,1
+417,12919,Owen,Morrison,Stephen,Christianity,Ondo,Kubau,17/09/2019,01/09/2004,3,1,1,3,2
+418,13084,Joe,Smith,Sebastian,Christianity,Ondo,Ido Osi,17/09/2019,01/10/2004,4,2,1,3,3
+419,13211,Matt,James,Max,Christianity,Ondo,Yamaltu/Deba,17/09/2020,01/11/2004,5,3,1,3,4
+420,13347,Eric,Mills,Phil,Christianity,Ondo,Gumel,17/09/2019,01/12/2004,6,4,1,3,5
+421,12858,Frank,Quinn,Christopher,Islam,Osun,Biu,17/09/2020,01/01/2000,7,1,1,1,1
+422,12955,Jason,Duncan,Adrian,Islam,Osun,Obudu,17/09/2020,01/02/2000,8,2,1,1,2
+423,13059,Robert,Taylor,Adrian,Islam,Osun,Gbonyin,17/09/2019,01/03/2000,9,3,1,1,3
+424,13140,Jack,Mathis,Brandon,Islam,Osun,Shongom,17/09/2019,01/04/2000,10,4,1,1,4
+425,13181,Brandon,Kelly,Frank,Islam,Osun,Garki,17/09/2019,01/05/2000,11,1,1,1,5
+426,13341,Amy,Welch,William,Christianity,Osun,Kudan,17/09/2021,01/06/2000,12,2,1,1,1
+427,12866,Jonathan,McLean,Owen,Christianity,Osun,Biu,17/09/2021,01/07/2000,13,3,1,2,2
+428,13001,Evan,McGrath,Alexander,Christianity,Osun,Obudu,17/09/2021,01/08/2000,14,4,1,2,3
+429,12507,Richard,Springer,Simon,Christianity,Osun,Gbonyin,17/09/2022,01/09/2000,15,1,1,2,4
+430,13387,Tim,Walker,Dan,Christianity,Osun,Shongom,17/09/2022,01/10/2000,16,2,1,2,5
+431,13251,Colin,Mackenzie,Frank,Christianity,Osun,Garki,17/09/2022,01/11/2000,17,3,1,2,1
+432,12924,Blake,Vaughan,Benjamin,Christianity,Osun,Kudan,17/09/2019,01/12/2000,18,4,1,3,2
+433,13087,Stewart,Oliver,Keith,Christianity,Osun,Ijero,17/09/2019,01/01/2001,19,1,1,3,3
+434,13212F,Oliver,Davies,Piers,Christianity,Osun,Aboh Mbaise,17/09/2020,01/02/2001,20,2,2,3,4
+435,13349,Alexander,Bell,Gordon,Christianity,Osun,Guri,17/09/2019,01/03/2001,21,3,1,3,5
+436,12860,Harry,Wallace,Sebastian,Islam,Oyo,Chibok,17/09/2020,01/04/2001,22,4,1,1,1
+437,12958,Dan,Henderson,Carl,Islam,Oyo,Odukpani,17/09/2020,01/05/2001,23,1,1,1,2
+438,13062,Stewart,Sanderson,Robert,Islam,Oyo,Ido Osi,17/09/2019,01/06/2001,1,2,1,1,3
+439,13141,Luke,Payne,Max,Islam,Oyo,Yamaltu/Deba,17/09/2019,01/07/2001,2,3,1,1,4
+440,13182,Cameron,Walsh,Keith,Islam,Oyo,Gumel,17/09/2019,01/08/2001,3,4,1,1,5
+441,13342,Julia,Black,Kevin,Christianity,Oyo,Lere,17/09/2021,01/09/2001,4,1,1,1,1
+442,12869,Thomas,Duncan,Liam,Christianity,Oyo,Chibok,17/09/2021,01/10/2001,5,2,1,2,2
+443,13004F,William,Poole,Kevin,Christianity,Oyo,Odukpani,17/09/2021,01/11/2001,6,3,2,2,3
+444,12480,Liam,Vaughan,Warren,Christianity,Oyo,Ido Osi,17/09/2022,01/12/2001,7,4,1,2,4
+445,13389F,Steven,Underwood,Tim,Christianity,Oyo,Yamaltu/Deba,17/09/2022,01/01/2002,8,1,2,2,5
+446,13253,Stephen,Mills,Joseph,Christianity,Oyo,Gumel,17/09/2022,01/02/2002,9,2,1,2,1
+447,12929,Adrian,Wilson,Stephen,Christianity,Oyo,Lere,17/09/2019,01/03/2002,10,3,1,3,2
+448,13090,Carl,Thomson,Matt,Christianity,Oyo,Ikere,17/09/2019,01/04/2002,11,4,1,3,3
+449,13213,Dan,Rampling,Sebastian,Christianity,Oyo,Ahiazu Mbaise,17/09/2020,01/05/2002,12,1,1,3,4
+450,13363,Christian,Manning,Christian,Christianity,Oyo,Gwaram,17/09/2019,01/06/2002,13,2,1,3,5
+451,12864,Austin,Bailey,Brandon,Islam,Plateau,Damboa,17/09/2020,01/07/2002,14,3,1,1,1
+452,12960,Luke,Mathis,Peter,Islam,Plateau,Ogoja,17/09/2020,01/08/2002,15,4,1,1,2
+453,13066,Dan,Bailey,Phil,Islam,Plateau,Ijero,17/09/2019,01/09/2002,16,1,1,1,3
+454,13142,Joe,Clark,Phil,Islam,Plateau,Aboh Mbaise,17/09/2019,01/10/2002,17,2,1,1,4
+455,13258,William,Dickens,Alexander,Islam,Plateau,Guri,17/09/2019,01/11/2002,18,3,1,1,5
+456,13345,Megan,Lewis,Michael,Christianity,Plateau,Makarfi,17/09/2021,01/12/2002,19,4,1,1,1
+457,12870,Eric,Watson,Blake,Christianity,Plateau,Damboa,17/09/2021,01/01/2003,20,1,1,2,2
+458,13007,Sam,MacLeod,Julian,Christianity,Plateau,Ogoja,17/09/2021,01/02/2003,21,2,1,2,3
+459,12456,Stewart,Murray,Austin,Christianity,Plateau,Ijero,17/09/2022,01/03/2003,22,3,1,2,4
+460,13219,Owen,King,Anthony,Christianity,Plateau,Aboh Mbaise,17/09/2022,01/04/2003,23,4,1,2,5
+461,13255,Jason,Walker,Evan,Christianity,Plateau,Guri,17/09/2022,01/05/2003,1,1,1,2,1
+462,12930,Evan,Coleman,Trevor,Christianity,Plateau,Makarfi,17/09/2019,01/06/2003,2,2,1,3,2
+463,13096,Jason,Ince,Harry,Christianity,Plateau,Ikole,17/09/2019,01/07/2003,3,3,1,3,3
+464,13214,Dan,Pullman,Liam,Christianity,Plateau,Ehime Mbano,17/09/2020,01/08/2003,4,4,1,3,4
+465,13369,Ian,Marshall,Jason,Christianity,Plateau,Gwiwa,17/09/2019,01/09/2003,5,1,1,3,5
+466,12867,John,Allan,Keith,Islam,Rivers,Dikwa,17/09/2020,01/10/2003,6,2,1,1,1
+467,12962,Harry,Morrison,Piers,Islam,Rivers,Yakurr,17/09/2020,01/11/2003,7,3,1,1,2
+468,13074F,Adrian,Allan,Jacob,Islam,Rivers,Ikere,17/09/2019,01/12/2003,8,4,2,1,3
+469,13143,Kevin,Wilkins,Evan,Islam,Rivers,Ahiazu Mbaise,17/09/2019,01/01/2004,9,1,1,1,4
+470,13259,Stephen,Black,Michael,Islam,Rivers,Gwaram,17/09/2019,01/02/2004,10,2,1,1,5
+471,13348,Megan,Bailey,Frank,Christianity,Rivers,Sabon Gari,17/09/2021,01/03/2004,11,3,1,1,1
+472,12873,Ian,Carr,Steven,Christianity,Rivers,Dikwa,17/09/2021,01/04/2004,12,4,1,2,2
+473,13008,Paul,Howard,Carl,Christianity,Rivers,Yakurr,17/09/2021,01/05/2004,13,1,1,2,3
+474,13260,Harry,Paige,Eric,Christianity,Rivers,Ikere,17/09/2022,01/06/2004,14,2,1,2,4
+475,12345,Peter,Russell,Peter,Christianity,Rivers,Ahiazu Mbaise,17/09/2022,01/07/2004,15,3,1,2,5
+476,13256,Harry,MacLeod,John,Christianity,Rivers,Gwaram,17/09/2022,01/08/2004,16,4,1,2,1
+477,12938,Colin,Paige,Alan,Christianity,Rivers,Sabon Gari,17/09/2019,01/09/2004,17,1,1,3,2
+478,13099,Jack,Ellison,Alan,Christianity,Rivers,Ilejemeje,17/09/2019,01/10/2004,18,2,1,3,3
+479,13215,Blake,Avery,Warren,Christianity,Rivers,Ezinihitte,17/09/2020,01/11/2004,19,3,1,3,4
+480,13371,Stewart,Kelly,William,Christianity,Rivers,Hadejia,17/09/2019,01/12/2004,20,4,1,3,5
+481,12871,Ryan,Walsh,Christian,Islam,Sokoto,Gubio,17/09/2020,01/01/2000,21,1,1,1,1
+482,12967,Max,Pullman,Simon,Islam,Sokoto,Yala,17/09/2020,01/02/2000,22,2,1,1,2
+483,13078,Victor,Russell,Liam,Islam,Sokoto,Ikole,17/09/2019,01/03/2000,23,3,1,1,3
+484,13144,Warren,Dickens,Joseph,Islam,Sokoto,Ehime Mbano,17/09/2019,01/04/2000,1,4,1,1,4
+485,13262,David,Wallace,Stephen,Islam,Sokoto,Gwiwa,17/09/2019,01/05/2000,2,1,1,1,5
+486,13350,Irene,Davidson,Benjamin,Christianity,Sokoto,Sanga,17/09/2021,01/06/2000,3,2,1,1,1
+487,12876,Michael,Black,Trevor,Christianity,Sokoto,Gubio,17/09/2021,01/07/2000,4,3,1,2,2
+488,13010,Richard,King,Piers,Christianity,Sokoto,Yala,17/09/2021,01/08/2000,5,4,1,2,3
+489,13266F,Jonathan,McDonald,Kevin,Christianity,Sokoto,Ikole,17/09/2022,01/09/2000,6,1,2,2,4
+490,13221,Christian,Nash,Max,Christianity,Sokoto,Ehime Mbano,17/09/2022,01/10/2000,7,2,1,2,5
+491,12352,Dan,Walsh,Connor,Christianity,Sokoto,Gwiwa,17/09/2022,01/11/2000,8,3,1,3,1
+492,12941,Owen,Abraham,Jason,Christianity,Sokoto,Sanga,17/09/2019,01/12/2000,9,4,1,3,2
+493,13106,Isaac,Bond,Oliver,Christianity,Sokoto,Irepodun/Ifelodun,17/09/2019,01/01/2001,10,1,1,3,3
+494,13216,Owen,Ferguson,Warren,Christianity,Sokoto,Ideato North,17/09/2023,01/02/2001,11,2,1,3,4
+495,13375,Anthony,Ince,Trevor,Christianity,Sokoto,Jahun,17/09/2019,01/03/2001,12,3,1,3,5
+496,12875,David,North,Christian,Islam,Taraba,Guzamala,17/09/2020,01/04/2001,13,4,1,1,1
+497,12969,Benjamin,Young,Dominic,Islam,Taraba,Aniocha North,17/09/2020,01/05/2001,14,1,1,1,2
+498,13082,Thomas,Carr,Evan,Islam,Taraba,Ilejemeje,17/09/2019,01/06/2001,15,2,1,1,3
+499,13145,Simon,Taylor,Adam,Islam,Taraba,Ezinihitte,17/09/2019,01/07/2001,16,3,1,1,4
+500,13265,Adam,Arnold,Connor,Islam,Taraba,Hadejia,17/09/2019,01/08/2001,17,4,1,1,5
+501,13352,Rose,Johnston,Trevor,Christianity,Taraba,Soba,17/09/2021,01/09/2001,18,1,1,1,1
+502,12880F,Joe,Cameron,Isaac,Christianity,Taraba,Guzamala,17/09/2021,01/10/2001,19,2,2,2,2
+503,13011,Evan,Martin,Phil,Christianity,Taraba,Aniocha North,17/09/2021,01/11/2001,20,3,1,2,3
+504,13268,Anthony,Sutherland,Steven,Christianity,Taraba,Ilejemeje,17/09/2022,01/12/2001,21,4,1,2,4
+505,13222,John,Peake,Tim,Christianity,Taraba,Ezinihitte,17/09/2022,01/01/2002,22,1,1,2,5
+506,12370,Piers,Wright,Evan,Christianity,Taraba,Hadejia,17/09/2022,01/02/2002,23,2,1,3,1
+507,12948,Liam,Anderson,Jack,Christianity,Taraba,Soba,17/09/2019,01/03/2002,1,3,1,3,2
+508,13108,Neil,Paige,Gavin,Christianity,Taraba,Ise/Orun,17/09/2019,01/04/2002,2,4,1,3,3
+509,13217,Justin,Reid,Alan,Christianity,Taraba,Ideato South,17/09/2023,01/05/2002,3,1,1,3,4
+510,13381,Michael,Short,Adrian,Christianity,Taraba,Kafin Hausa,17/09/2019,01/06/2002,4,2,1,3,5
+511,12878,Oliver,Slater,Richard,Islam,Yobe,Gwoza,17/09/2020,01/07/2002,5,3,1,1,1
+512,12971,Matt,Davidson,Colin,Islam,Yobe,Aniocha South,17/09/2020,01/08/2002,6,4,1,1,2
+513,13083,Liam,Hodges,Trevor,Islam,Yobe,Irepodun/Ifelodun,17/09/2019,01/09/2002,7,1,1,1,3
+514,13146,Liam,Marshall,Joe,Islam,Yobe,Ideato North,17/09/2019,01/10/2002,8,2,1,1,4
+515,13269,Dominic,Wilson,Thomas,Islam,Yobe,Jahun,17/09/2019,01/11/2002,9,3,1,1,5
+516,13354,Anne,Fisher,Benjamin,Christianity,Yobe,Zangon Kataf,17/09/2021,01/12/2002,10,4,1,1,1
+517,12889,Peter,Wilson,Peter,Christianity,Yobe,Gwoza,17/09/2021,01/01/2003,11,1,1,2,2
+518,13070,Max,Newman,Blake,Christianity,Yobe,Aniocha South,17/09/2021,01/02/2003,12,2,1,2,3
+519,13272,Victor,Simpson,James,Christianity,Yobe,Irepodun/Ifelodun,17/09/2022,01/03/2003,13,3,1,2,4
+520,13223,Jake,Hodges,Simon,Christianity,Yobe,Ideato North,17/09/2022,01/04/2003,14,4,1,2,5
+521,12384,John,Mackay,Lucas,Christianity,Yobe,Jahun,17/09/2022,01/05/2003,15,1,1,3,1
+522,12950,Cameron,Pullman,Victor,Christianity,Yobe,Zangon Kataf,17/09/2019,01/06/2003,16,2,1,3,2
+523,13113F,Sebastian,Russell,Eric,Christianity,Yobe,Moba,17/09/2019,01/07/2003,17,3,2,3,3
+524,13218,Simon,Fraser,Luke,Christianity,Yobe,Ihitte/Uboma,17/09/2023,01/08/2003,18,4,1,3,4
+525,13382,Sebastian,MacDonald,Brian,Christianity,Yobe,Kaugama,17/09/2019,01/09/2003,19,1,1,3,5
+526,13403F,Abigail,Alexanda,Simon,Christianity,Yobe,Kiri Kasama,17/09/2019,01/10/2003,20,2,2,3,1
+527,12881,Piers,Johnston,Benjamin,Islam,Zamfara,Hawul,17/09/2020,01/11/2003,21,3,1,1,2
+528,12974,Alexander,Edmunds,Alexander,Islam,Zamfara,Bomadi,17/09/2020,01/12/2003,22,4,1,1,3
+529,13088,Sam,Johnston,David,Islam,Zamfara,Ise/Orun,17/09/2019,01/01/2004,23,1,1,1,4
+530,13147,Harry,Ince,Dylan,Islam,Zamfara,Ideato South,17/09/2019,01/02/2004,1,2,1,1,5
+531,13270,Anthony,Sutherland,Julian,Islam,Zamfara,Kafin Hausa,17/09/2019,01/03/2004,2,3,1,1,1
+532,13355,Faith,Abraham,Julian,Christianity,Zamfara,Zaria,17/09/2021,01/04/2004,3,4,1,1,2
+533,12894,David,Quinn,Edward,Christianity,Zamfara,Hawul,17/09/2021,01/05/2004,4,1,1,2,3
+534,13014,James,Wallace,Benjamin,Christianity,Zamfara,Bomadi,17/09/2021,01/06/2004,5,2,1,2,4
+535,13275,Paul,Welch,Warren,Christianity,Zamfara,Ise/Orun,17/09/2022,01/07/2004,6,3,1,2,5
+536,12346,Simon,Rutherford,Ryan,Christianity,Zamfara,Ideato South,17/09/2022,01/08/2004,7,4,1,2,1
+537,12394,Cameron,Reid,Jonathan,Christianity,Zamfara,Kafin Hausa,17/09/2022,01/09/2004,8,1,1,3,2
+538,12953,Alexander,Dickens,Peter,Christianity,Zamfara,Zaria,17/09/2019,01/10/2004,9,2,1,3,3
+539,13114,Steven,Sharp,Frank,Christianity,Zamfara,Oye,17/09/2019,01/11/2004,10,3,1,3,4
+540,13257,Evan,Welch,Christian,Christianity,Zamfara,Ikeduru,17/09/2023,01/12/2004,11,4,1,3,5
+541,13397,Cameron,Kelly,Dylan,Christianity,Zamfara,Kazaure,17/09/2019,01/01/2005,12,1,1,3,1

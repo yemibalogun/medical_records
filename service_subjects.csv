@@ -1,0 +1,68 @@
+1,major,1,ft,Field training/field craft
+2,major,1,dr,Drill 
+3,major,1,wt,Weapon training
+4,major,1,pt,Physical training
+5,major,1,mr,Map Reading
+6,minor,1,ml,Military law
+7,major,1,sig,Signals
+8,minor,1,fe,Field engineering
+9,minor,1,fa,First aid
+10,minor,1,gsk,General service knowledge
+11,minor,1,i&s,Intelligence and security
+12,minor,1,d&m,Driving and maintenence
+13,minor,1,eqt,Equitation
+14,major,1,mh,Military history
+15,major,1,is,Internal security
+16,major,1,geopol,Geopolitics
+17,minor,1,el,Essentials of leadership
+18,minor,1,o&a,Organisation and administration
+19,minor,1,moi,Method of instructions
+20,minor,1,sw,Service writing
+21,minor,1,fre,French
+22,camp,1,initial,Ex Camp initial
+23,camp,1,brushup,Ex Camp brush up
+24,camp,1,okwe,Ex Camp okwu
+25,camp,1,farauta,Ex Camp farauta
+26,camp,1,kurata,Ex Camp kurata
+27,camp,1,kurata,Ex Camp kura
+28,camp,1,pre-highland,Ex pre-camp highland
+29,camp,1,hland,Ex Camp Highland
+30,major,2,gen nav,General navigation
+31,major,2,smshp,Seamanship
+32,minor,2,div duties,Divisional duties
+33,major,2,comms,Communications
+34,major,2,ror,Rules of the road
+35,minor,2,uwww,Under water warfare
+36,minor,2,nbcw,"Nuclear, biological, chemical warfare and damage control"
+37,minor,2,a&b,Accounts and budget
+38,minor,2,log,Logistics
+39,minor,2,aww,Above water warfare
+40,minor,2,swn,Service writing (nn(
+41,minor,2,nl,Naval law
+42,minor,2,prd,Provost and regulating duties
+43,minor,2,aio,Action information organisation
+44,minor,2,mengr,Marine engineering
+45,minor,2,wee,Weapon electrical engineering
+46,minor,2,mhnn,Military history (Naval campaigns)
+47,minor,2,ca,Current affairs
+48,minor,2,ca,Computer application
+49,minor,2,nigcon,Nigerian constitution
+50,major,2,onne,Attachment to onne 
+51,camp,2,ry,Ex Camp ruwan yaro
+52,camp,2,by,Ex Camp baban yaro
+53,major,2,mid trg,Midshipman training
+54,tour,2,tour,Tours
+55,major,3,aero,Aerodynamics
+56,major,3,airnav,Air navigation
+57,major,3,atc,Air traffic control
+58,major,3,met,Meteorology 
+59,minor,3,airpower,Air Power
+60,minor,3,afl,Air force law
+61,minor,3,swnaf,Service writing(naf)
+62,minor,3,acg,Air craft general
+63,minor,3,ai,Admin instruction
+64,minor,3,olc,"Officership, leadership and command"
+65,camp,3,asha,Ex Camp asha enu-igwe
+66,camp,3,belemu,Ex Camp belemu
+67,camp,3,bette,Ex Camp bette
+68,camp,3,mfama,Ex Camp mazan fama

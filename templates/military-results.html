@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+{% extends "base.html" %} {% block content %}
+
+<div
+  style="font-size: smaller; height: 1100px"
+  class="container-fluid text-center"
+>
+  <!-- <button class="btn btn-primary" id="openExcelBtn">Add Excel</button> -->
+
+  <div
+    class="row form-container"
+    style="text-align: left; width: 60%; padding: 20px; margin: auto"
+  >
+    <h4 style="color: rgb(0, 68, 171); text-align: center">Add Cadet</h4>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+    <form method="POST" action="{{ url_for('add_cadet') }}">
+      {{ add_cadet_form.csrf_token() }}
+
+      <div class="row">
+        <div class="col">
+          {{ add_cadet_form.cadet_no(class="form-control", placeholder="Cadet
+          Number") }} {% if add_cadet_form.cadet_no.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.cadet_no.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+
+        <div class="col">
+          {{ add_cadet_form.first_name(class="form-control", placeholder="First
+          Name") }} {% if add_cadet_form.first_name.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.first_name.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+
+        <div class="col">
+          {{ add_cadet_form.middle_name(class="form-control",
+          placeholder="Middle Name") }} {% if add_cadet_form.middle_name.errors
+          %}
+          <ul class="errors">
+            {% for error in add_cadet_form.middle_name.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+
+        <div class="col">
+          {{ add_cadet_form.last_name(class="form-control", placeholder="Last
+          Name") }} {% if add_cadet_form.last_name.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.last_name.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          {% for subfield in add_cadet_form.religion %} {{ subfield }} {{
+          subfield.label }}
+          <br />
+          {% endfor %}
+        </div>
+        <div class="col">
+          {% for subfield in add_cadet_form.gender %} {{ subfield }} {{
+          subfield.label }}
+          <br />
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          {{ add_cadet_form.state(class="form-control", placeholder="State of
+          Origin") }} {% if add_cadet_form.state.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.state.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+
+        <div class="col">
+          {{ add_cadet_form.lga(class="form-control", placeholder="LGA") }} {%
+          if add_cadet_form.lga.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.lga.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          {{ add_cadet_form.doe.label(class="form-label") }} {{
+          add_cadet_form.doe(class="form-control", placeholder="Date of
+          Enlistment", type='date') }} {% if add_cadet_form.doe.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.doe.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+        <div class="col">
+          {{ add_cadet_form.dob.label(class="form-label") }} {{
+          add_cadet_form.dob(class="form-control", placeholder="Date of Birth",
+          type='date') }} {% if add_cadet_form.dob.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.dob.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+      </div>
+
+      {{ add_cadet_form.department(class="form-control",
+      placeholder="Department") }} {% if add_cadet_form.department.errors %}
+      <ul class="errors">
+        {% for error in add_cadet_form.department.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <br />
+
+      <div class="row">
+        <div class="col">
+          {{ add_cadet_form.bn(class="form-control", placeholder="Battalion") }}
+          {% if add_cadet_form.bn.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.bn.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+
+        <div class="col">
+          {{ add_cadet_form.service(class="form-control", placeholder="Arm of
+          Service") }} {% if add_cadet_form.service.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.service.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="col">
+          {{ add_cadet_form.regular_course(class="form-control",
+          placeholder="Regular Course") }} {% if
+          add_cadet_form.regular_course.errors %}
+          <ul class="errors">
+            {% for error in add_cadet_form.regular_course.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+      </div>
+
+      <br />
+      <div class="form-group" style="text-align: center">
+        {{ add_cadet_form.submit( class="btn btn-primary") }}
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

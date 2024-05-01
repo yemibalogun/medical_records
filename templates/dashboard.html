@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+{% extends "base.html" %} {% block title %} dashboard {% endblock %} {% block
+content %}
+<div style="height: 1100px" class="container" style="width: 90%;">
+  <div
+    style="display: flex; flex-wrap: wrap; justify-content: space-between;"
+    class="row"
+  >
+    <div class="col-md-4 col-sm-8">
+      
+        <div class="card" style="margin-bottom: 20px">
+          <div style="margin: 0; display: flex; justify-content: space-between;" class="row">
+
+            <div class="col-md-4">
+              <img class="profile-img" src="/static/images/image_placeholder.png" alt="Profile Picture">
+          
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 style="color: rgb(0, 68, 171)" class="card-title">
+                  {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name
+                  + ' ' + selected_cadet.last_name }}
+                  <a
+                    href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
+                    style="color: rgb(171, 68, 0)"
+                    >({{ selected_cadet.regular_course.course_no }}RC)</a
+                  >  
+                </h5>
+                <p class="card-subtitle mb-2 text-body-secondary">
+                  {{selected_cadet.bn.bn.capitalize() }} ({{
+                  selected_cadet.service.service_type.upper() }})
+                </p>
+                
+                <p style="font-size: smaller" class="card-text">
+                  Gender |
+                  <b style="color: rgb(0, 68, 171)"
+                    >{{ selected_cadet.gender.gender_type.capitalize() }}</b
+                  >
+                </p>
+                <p style="font-size: smaller" class="card-text">
+                  Age |
+                  <b style="color: rgb(0, 68, 171)"
+                    >{{ cadet_age }}</b
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+    </div>
+
+    
+   
+    <div class="col" style="max-width: 200px; font-size: small;">
+      <a type="btn"
+        href="{{ url_for('add_medical_record', id=selected_cadet.id) }}"
+        class="card-link"
+        >Medical Records</a
+      >
+    </div>
+  </div>
+  <!-- <hr>     -->
+
+  <div class="row table-responsive" style="display: flex; flex-wrap: wrap; background-color: #fafafa; border-radius: 5px 5px 0 0;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);">
+    <div class="col" style="margin: 0, auto;">
+      <div class="chart-container" style="position: relative; padding: 0">
+        <canvas id="majorChart"></canvas>
+      </div>
+    </div>
+
+    <div class="col" style="margin: 0, auto;">
+      <div class="chart-container" style="position: relative; padding: 0">
+        <canvas id="minorChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div style="color: rgb(0, 68, 171)" class="container">
+    <div class="row">
+      <h6>RESULTS</h6>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="table-responsive">
+      <table class="custom-table table-sm table-hover table-borderless">
+        <thead>
+          <tr style="font-size: smaller">
+            {% for row in rows %}
+            <th scope="col">{{ row.service_subject.subject_title.title() }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for row in rows %}
+            <td data-cell="{{ row.service_subject.subject_title }}" style="padding: 1rem;">{{ ((row.first_term_score + row.second_term_score)/2)|round(2) }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+        
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const atx = document.getElementById("majorChart");
+const btx = document.getElementById("minorChart");
+
+const subjects = [
+  {% for score in major_scores %}
+  ["{{ score[0].title() }}", "{{ score[1] }}"],
+  {% endfor %}
+];
+
+const minorSubjects = [
+  {% for score in minor_scores %}
+  ["{{ score[0].title() }}", "{{ score[1] }}"],
+  {% endfor %}
+];
+
+function createChart(chartElement, labels, data, label) {
+  new Chart(chartElement, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: label,
+          data: data,
+          backgroundColor: data.map(() => getRandomColor()),
+          borderColor: [],
+          borderWidth: 0.1,
+          barThickness: 14,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        
+      }
+    },
+  });
+}
+
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+createChart(atx, subjects.map(item => item[0]), subjects.map(item => item[1]), "Major Subjects Results");
+createChart(btx, minorSubjects.map(item => item[0]), minorSubjects.map(item => item[1]), "Minor Subjects Results");
+
+</script>
+{% endblock %} 
+{% endblock %} 

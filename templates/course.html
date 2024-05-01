@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends "base.html" %} {% block content %}
+
+<div style="font-size: smaller;" class="container text-center">
+  <h3 style="color: rgb(0, 68, 171)">
+    Academy |
+    <span style="font-weight: normal; font-size: small; color: grey"
+      >Postal Strenght: {{ academy_count }}</span
+    >
+  </h3>
+
+  <div class="row gy-5">
+    <a
+    style="color: rgb(0, 68, 171)"
+      class="nav-link"
+      aria-current="page"
+      href="{{ url_for('add_cadet') }}"
+      >Add Cadet</a
+    >
+    
+    <div class="container">
+      <div class="row">
+        
+        <div style="display: flex; flex-wrap: wrap;" class="column">
+          {% for key, value in course_dict.items() %}
+            <div class="link-card card-body">
+              <a href="{{ url_for('select_course', id=key) }}">
+                <h5 class="card-title">{{ value[0] }} RC</h5>
+                <hr style="margin: 10px auto" />
+                <p
+                  style="font-size: 1.2em"
+                  class="card-subtitle mb-2 text-body-secondary"
+                >
+                  PS: {{ value[1] }}
+                </p>
+              </a>
+            </div>
+      {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <hr style="margin: 20px auto" />
+</div>
+
+{% endblock %}

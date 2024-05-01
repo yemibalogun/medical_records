@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <div style="margin: 0;" class="row">
+    <h4 style="color: rgb(0, 68, 171)">
+      <a href="{{ url_for('student_info', id=cadet.id )}}"
+        >{{ cadet.first_name }} {{ cadet.middle_name }} {{ cadet.last_name }}</a
+      >
+      <span>
+        <a
+          type="btn"
+          style="font-size: small; float: right"
+          href="{{ url_for('add_military_score', id=cadet.id) }}"
+          class="card-link"
+          >See Service Results</a
+        ><br>
+        <a
+          type="btn"
+          style="font-size: small; float: right"
+          href="{{ url_for('add_medical_record', id=cadet.id) }}"
+          class="card-link"
+          >See Medical Records</a
+        >
+      </span>
+    </h4>
+    <p class="card-subtitle mb-2 text-body-secondary">
+      {{ cadet.bn.bn.capitalize() }} ({{ cadet.service.service_type.upper() }})
+    </p>
+    <p class="card-text">
+      Department |
+      <b style="color: rgb(0, 68, 171)"
+        >{{ cadet.department.department_name.title() }}</b
+      >
+    </p>
+  </div>
+
+  <div class="row">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li style="font-size: smaller">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+    <div class="col">
+      <!-- Form for entering academic scores -->
+      <form
+        id="academic-score-form"
+        method="POST"
+        action="{{ url_for('add_academic_score', id=cadet.id) }}"
+      >
+        {{ academic_score_form.csrf_token() }}
+        <p>Enter Academic Results:</p>
+        <table
+          class="custom-table table-sm table-hover table-borderless"
+        >
+          <thead style="text-align: center; font-size: small">
+            <tr>
+              <th style="width: 5%" scope="col">Serial</th>
+              <th style="width: 20%" scope="col">Course</th>
+              <th style="width: 5%" scope="col">First Semester</th>
+              <th style="width: 5%" scope="col">Second Semester</th>
+              <th style="width: 10%" scope="col">Academic Year</th>
+              <th style="width: 10%" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody
+            style="text-align: center; font-size: small"
+            id="cadet-table-body"
+          >
+            <!-- Initial row for data entry -->
+            <tr class="active-row">
+              <th style="text-align: center" scope="row">1</th>
+              <td data-cell="Course" style="text-align: center">
+                {{ academic_score_form.course(class="form-control",
+                placeholder="Course") }}
+              </td>
+              <td data-cell="First Semester" class="head-center">
+                {{
+                academic_score_form.first_semester_score(class="form-control",
+                placeholder="0.0", maxlength="5") }}
+              </td>
+              <td data-cell="Second Semester" class="head-center">
+                {{
+                academic_score_form.second_semester_score(class="form-control",
+                placeholder="0.0", maxlength="5") }}
+              </td>
+              <td data-cell="Academic Year" class="head-center">
+                {{ academic_score_form.academic_year(class="form-control",
+                placeholder="Academic Year") }}
+              </td>
+              <td style="padding: 5px">
+                <div class="form-group" style="text-align: center">
+                  {{ academic_score_form.submit( class="btn btn-primary btn-sm")
+                  }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+    <div class="col">
+      <p>Results:</p>
+      <table class="custom-table table-sm table-hover table-borderless">
+        <thead>
+          <tr>
+            <th style="width: 5%" scope="col">Serial</th>
+            <th style="width: 40%" scope="col">Course</th>
+            <th style="width: 5%" scope="col">First Semester</th>
+            <th style="width: 5%" scope="col">Second Semester</th>
+            <th style="width: 10%" scope="col">Academic Year</th>
+            <th style="width: 1%" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody  id="cadet-table-body">
+          {% for row in rows %}
+          <!-- Initial row for data entry -->
+          <tr class="active-row">
+            <th class="card-heading-text" scope="row">
+              {{ (page - 1) * per_page + loop.index }}
+            </th>
+            <td data-cell="Course">{{ row.course.course_title.title() }}</td>
+            <td data-cell="First Semester" class="head-center">
+              {{ row.first_semester_score }}
+            </td>
+            <td data-cell="second semester" class="head-center">
+              {{row.second_semester_score }}
+            </td>
+            <td data-cell="Academic Year" class="head-center">
+              {{row.academic_year.title() }}
+            </td>
+            <td data-cell="remove" class="head-center">
+              <a
+                href="#"
+                onclick="confirmDelete('{{ url_for('remove_course', id=row.id, cadet_id=row.cadet_id) }}')"
+                ><i style="color: #f90b31" class="fas fa-minus-circle fa-md"></i
+              ></a>
+            </td>
+          </tr>
+
+          {% endfor %}
+          <!-- Additional rows will be dynamically added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row"></div>
+</div>
+
+<!-- JavaScript to handle dynamic row addition and form submission -->
+<script>
+  function confirmDelete(url) {
+    if (confirm("Are you sure you want to delete this course?")) {
+      window.location.href = url;
+    }
+  }
+  // Counter to track the number of rows
+  // let rowCount = 1;
+
+  // // Function to add a new row to the table
+  // function addRow() {
+  //   rowCount++;
+  //   let newRow = `
+  //     <tr>
+  //       <th style="text-align: center;" scope="row">${rowCount}</th>
+  //       <td style="text-align: center;">
+  //         {{ academic_score_form.course(class="form-control", placeholder="Course") }}
+  //       </td>
+  //       <td class="head-center">
+  //         {{ academic_score_form.first_semester_score(class="form-control", placeholder="0.0", maxlength="5") }}
+  //       </td>
+  //       <td class="head-center">
+  //         {{ academic_score_form.second_semester_score(class="form-control", placeholder="0.0", maxlength="5") }}
+  //       </td>
+  //       <td class="head-center">
+  //         {{ academic_score_form.academic_year(class="form-control", placeholder="Academic Year") }}
+  //       </td>
+  //       <td style="padding: 5px;">
+  //         <div class="form-group" style="text-align: center;">
+  //           <button style="font-size: larger; text-decoration: none; color: #0044ab;" type="button" class="btn btn-link add-row-btn"><i class="fas fa-plus-circle fa-md"></i></button>
+  //           <button style="font-size: larger; text-decoration: none; color: #F90B31;" type="button" class="btn btn-link remove-row-btn"><i class="fas fa-minus-circle fa-md"></i></button>
+  //         </div>
+  //       </td>
+  //     </tr>`;
+  //   document.getElementById('cadet-table-body').insertAdjacentHTML('beforeend', newRow);
+  // }
+
+  //   // Function to remove the last row from the table
+  // function removeRow() {
+  //   if (rowCount > 1) {
+  //     document.getElementById('cadet-table-body').lastElementChild.remove();
+  //     rowCount--;
+  //   }
+  // }
+
+  //   // Event listeners for "Add New" and "Remove" buttons
+  // document.addEventListener('click', function(event) {
+
+  //   if (event.target.classList.contains('add-row-btn')) {
+  //     addRow();
+  //   } else if (event.target.classList.contains('remove-row-btn')) {
+  //     removeRow();
+  //   } else if (event.target.id === 'submit-all-btn') {
+  //     submitForm();
+  //   }
+
+  // });
+
+  // Function to submit the form data
+  // function submitForm() {
+  //   const formData = new FormData(document.getElementById('academic-score-form'));
+  //   fetch(document.getElementById('academic-score-form').action, {
+  //     method: 'POST',
+  //     body: formData
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log('Form submitted successfully:', data);
+  //     // Optionally, you can handle the response or redirect the user
+  //   })
+  // .catch(error => {
+  //   console.error('Error submitting form:', error);
+  // });
+  // }
+</script>
+
+{% endblock %}

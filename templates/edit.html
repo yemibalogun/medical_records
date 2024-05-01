@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+{% extends "base.html"%}
+
+{% block title %} Edit {% endblock %}
+
+{% block content %}
+<div style="height: 1100px;" class="form-container container">
+  <form method="POST" action="{{ url_for('edit_cadet', id=row.id) }}">
+    {{ edit_form.csrf_token() }}
+
+    <div class="row">
+      <div class="col">
+    {{ edit_form.cadet_no(class="form-control", placeholder="Cadet Number") }}
+    {% if edit_form.cadet_no.errors %}
+      <ul class="errors">
+      {% for error in edit_form.cadet_no.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <br>
+      </div>
+   
+    <div class="col">
+    
+    {{ edit_form.first_name(class="form-control", placeholder="First Name") }}
+    {% if edit_form.first_name.errors %}
+      <ul class="errors">
+      {% for error in edit_form.first_name.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} 
+    <br>
+    </div>
+
+    <div class="col">
+    {{ edit_form.middle_name(class="form-control", placeholder="Middle Name") }}
+    {% if edit_form.middle_name.errors %}
+      <ul class="errors">
+      {% for error in edit_form.middle_name.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} 
+    <br>
+    </div>
+
+    <div class="col">
+    {{ edit_form.last_name(class="form-control", placeholder="Last Name") }}
+    {% if edit_form.last_name.errors %}
+      <ul class="errors">
+      {% for error in edit_form.last_name.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} 
+    <br>
+    </div>
+
+  </div>
+    
+  <div class="row">
+    <div class="col">
+      {% for subfield in edit_form.religion %}
+
+        {{ subfield }} 
+        {{ subfield.label }}
+        <br>
+    {% endfor %}
+    
+    </div>
+    <div class="col">
+      {% for subfield in edit_form.gender %}
+        {{ subfield }} 
+        
+        {{ subfield.label }}
+        <br>
+    {% endfor %}
+    
+    </div>
+  </div> 
+
+    <div class="row">
+      <div class="col">
+        {{ edit_form.state(class="form-control", placeholder="State of Origin") }}
+        {% if edit_form.state.errors %}
+          <ul class="errors">
+          {% for error in edit_form.state.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %} 
+      </div>
+
+      <div class="col">
+    {{ edit_form.lga(class="form-control", placeholder="LGA") }}
+    {% if edit_form.lga.errors %}
+      <ul class="errors">
+      {% for error in edit_form.lga.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} 
+    <br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        {{ edit_form.doe.label(class="form-label") }}
+        {{ edit_form.doe(class="form-control", placeholder="Date of Enlistment", type='date') }}
+        {% if edit_form.doe.errors %}
+          <ul class="errors">
+          {% for error in edit_form.doe.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %} 
+        <br>
+      </div>
+      <div class="col">
+        {{ edit_form.dob.label(class="form-label") }}
+        {{ edit_form.dob(class="form-control", placeholder="Date of Birth", type='date') }}
+        {% if edit_form.dob.errors %}
+          <ul class="errors">
+          {% for error in edit_form.dob.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %} 
+        <br>
+      </div>
+   
+    </div>
+    
+    {{ edit_form.department(class="form-control", placeholder="Department") }}
+    {% if edit_form.department.errors %}
+      <ul class="errors">
+      {% for error in edit_form.department.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} 
+    <br>
+    
+    <div class="row">
+      <div class="col">
+        
+        {{ edit_form.bn(class="form-control", placeholder="Battalion") }}
+        {% if edit_form.bn.errors %}
+          <ul class="errors">
+          {% for error in edit_form.bn.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %} 
+        <br>
+      </div>
+
+      <div class="col">
+        
+        {{ edit_form.service(class="form-control", placeholder="Arm of Service") }}
+        {% if edit_form.service.errors %}
+          <ul class="errors">
+          {% for error in edit_form.service.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %} 
+      </div>
+      <div class="col">
+        
+    {{ edit_form.regular_course(class="form-control", placeholder="Regular Course") }}
+    {% if edit_form.regular_course.errors %}
+      <ul class="errors">
+      {% for error in edit_form.regular_course.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} 
+    <br>
+      </div>
+
+    </div>
+     
+   <br>
+    <div class="form-group" style="text-align: center;">
+      {{ edit_form.submit( class="btn btn-primary") }}
+    </div>
+  </form>    
+</div>
+
+{% endblock %}
+
+
+
+

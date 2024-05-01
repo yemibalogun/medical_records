@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+
+{% block title %}Nigerian Defence Academy{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <img class="hero-img" src="/static/images/nda_logo.png" alt="">
+        <table class="table-sm table-hover table-borderless">
+            <thead>
+              <tr>
+                <th scope="col">Serial</th>
+                <th scope="col">Cadet Number</th>
+                <th scope="col">Rank</th>
+                <th scope="col">Name</th>
+                <th scope="col">Battalion</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+              <tr class="active-row">
+                <th scope="row">{{ loop.index }}</th>
+                <a href="{{ url_for('edit', id=row.id) }}" style="text-decoration: none;">
+                  <td>{{ row.cadet_no }}</td>
+                  <td>{{ row.rank }}</td>
+                  <td>{{ row.name }}</td>
+                  <td>{{ row.bn }} </td>
+                </a>
+                
+              </tr>
+
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+
+{% endblock %}

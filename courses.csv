@@ -1,0 +1,526 @@
+1,dss111,fundamentals of defence studies,2,core,1
+2,dss113,introduction to war studies,2,core,1
+3,his111,introduction to history,2,elective,1
+4,pds110,introduction to political science,2,elective,1
+5,pds117,elements of defence administration,2,elective,1
+6,pds135,introduction to peace studies,2,elective,1
+7,psy111,introduction to military psychology,2,elective,1
+8,gst111,french/arabic for beginners I,2,core,1
+9,gst112,use of english I,2,core,1
+10,dss120,introduction to security studies,2,core,1
+11,dss121,introduction to international relations,2,core,1
+12,dss122,introduction to comparative politics,2,core,1
+13,dss123,introduction to peace studies and conflict resolution,2,core,1
+14,dss124,elements of military leadership,2,core,1
+15,pds124,introduction to regional integration,2,elective,1
+16,gst121,french for beginners II,2,required,1
+17,gst123,"use of library, study skills and ICT",2,required,1
+18,dss211,theories of security studies,2,core,1
+19,dss212,theories of peace and conflict studies,2,core,1
+20,dss213,theoris of war,2,core,1
+21,dss214,nigerian national security,2,core,1
+22,dss215,defence economics,2,core,1
+23,dss216,"science, technology and defence",2,core,1
+24,dss217,defence administration,2,core,1
+25,gst212,environment and sustainable development,2,core,1
+26,gst213,sociology of nigerian people and culture I,2,core,1
+27,gst214,history and philosophy of science,2,core,1
+28,dss221,theories of military leadership,2,core,1
+29,dss222,ict and defence,2,core,1
+30,dss223,human security,2,core,1
+31,dss225,nigerian defence foreign policy,2,core,1
+32,pds223,nigerian government and politics,2,elective,1
+33,geo221,military mapping,2,elective,1
+34,gst221,french/arabic for beginners,2,core,1
+35,gst222,peace studies and conflict resolution,2,core,1
+36,dss311,research methodology,2,core,1
+37,dss312,"confilit, security and development",2,core,1
+38,dss313,military operations and tactics,2,core,1
+39,dss314,terrorism and political violence,2,core,1
+40,dss315,military aid to civil authority,2,elective,1
+41,dss316,law of armed conflict,2,elective,1
+42,gst311,entrepreneurship studies,2,core,1
+43,gst312,general psychology,2,core,1
+44,gst313,economic and management sciences I,2,core,1
+45,gst314,history of political thought II,2,core,1
+46,gst315,history and philosopy of science,2,core,1
+47,dss320,campaign planning and operational estimates,2,core,1
+48,dss321,ethics of military operations,2,core,1
+49,dss322,military operations other than war,2,core,1
+50,dss323,military alliances and security regiment,2,core,1
+51,dss324,perspectives in military doctrine,2,core,1
+52,dss325,international law and diplomacy,2,elective,1
+53,dss326,defence diplomacy,2,core,1
+54,gst321,french for beginners VI,2,core,1
+55,gst322,military psychology,2,core,1
+56,gst323,economic and management sciences II,2,core,1
+57,gst325,use of english,2,core,1
+58,dss410,comparative derence policy,2,core,1
+59,dss411,civil military relations,2,core,1
+60,dss412,arms control and disarmament,2,core,1
+61,dss413,joint and combined military operations,2,core,1
+62,dss414,counter-terrorism and counter-insurgency operations,2,core,1
+63,dss415,inter-agency collaboration,2,core,1
+64,dss416,defence transformation,2,elective,1
+65,dss417,military industrial complex,2,elective,1
+66,dss420,strategic communication,2,core,1
+67,dss421,military logistics and supply chain,2,core,1
+68,dss422,security sector reforms,2,core,1
+69,dss423,defence order of battle,2,core,1
+70,dss434,international peacekeeping,1,core,1
+71,dss425,military intelligence,2,elective,1
+72,dss426,cybersecurity,2,elective,1
+73,dss499,final year project,6,core,1
+74,geo111,introduction to elements of physical geography I,2,core,2
+75,geo112,introduction to elements of human geography I,2,core,2
+76,geo113,elementary surveying,2,core,2
+77,geo114,introduction to practical geography,2,core,2
+78,geo115,map analysis,2,core,2
+79,ecn111,principles of economics I,3,elective,2
+80,ecn113,introduction to maths for economics/social sciences I,2,elective,2
+81,geo121,introduction to elements of physical geography II,2,core,2
+82,geo122,introduction to elements of human geography II,2,CORE,2
+83,geo123,local field studies,3,core,2
+84,geo124,introduction to environmental sciences,2,core,2
+85,geo125,map analysis,2,core,2
+86,ecn121,principles of economics II,2,required,2
+87,ecn123,introduction to maths or economics/social sciences II,2,required,2
+88,geo211,spatial organization of society,2,core,2
+89,geo212,introductory geomorphology,2,core,2
+90,geo213,elementary statistics for geographers I,2,core,2
+91,geo214,introductory cartography,2,core,2
+92,geo215,introduction to geographic information system,2,core,2
+93,geo216,geographic thought theory I,2,core,2
+94,geo217,air photo interpretation,2,core,2
+95,ecn214,structure of nigerian economy I,2,required,2
+96,geo222,introductory geomorphology and soil geography II,2,core,2
+97,geo223,elementary statistics for geographers II,2,core,2
+98,geo224,introduction to biogeography and climatology,2,core,2
+99,geo225,local field studies,3,core,2
+100,geo226,geography thought theory,2,core,2
+101,gst224,leadership and critical thinking skills,2,required,2
+102,gst225,africa in world politics,2,required,2
+103,ecn224,structure of the nigerian economy II,2,elective,2
+104,geo311,research methods,2,core,2
+105,geo312,advanced quantitative techniques I,2,core,2
+106,geo313,geomorphology,2,core,2
+107,geo314,economic geography,2,core,2
+108,geo315,population geography,2,core,2
+109,geo316,biogeography,2,core,2
+110,geo317,advance map interpretation and analysis,2,core,2
+111,geo331,settlement geography,2,elective,2
+112,geo332,transport geography,2,elective,2
+113,geo333,soil geography,2,elective,2
+114,geo334,vegetation studies,2,elective,2
+115,geo321,field course,3,core,2
+116,geo322,advanced quantitative techniques II,2,core,2
+117,geo323,regional geography of africa,2,core,2
+118,geo324,advanced cartography,2,core,2
+119,geo325,population geography II,2,core,2
+120,geo326,photogrammetry,2,core,2
+121,geo327,hydrology,2,core,2
+122,geo343,ecosystems,2,elective,2
+123,geo344,land evaluation,2,elective,2
+124,geo345,oceanography,2,elective,2
+125,geo411,systematic geography of nigeria,2,core,2
+126,geo412,contemporary philosophy and methodology in geography I,2,core,2
+127,geo413,geographic information system,2,core,2
+128,geo414,military geography,2,core,2
+129,geo415,remote sensing,2,core,2
+130,geo416,applied climatology,2,core,2
+131,geo417,the developed world,2,core,2
+132,geo418,arid land,2,core,2
+133,geo431,political geography,2,elective,2
+134,geo432,medical geography,2,elective,2
+135,geo433,humid regions,2,elective,2
+136,geo434,logistical geography,2,elective,2
+137,geo421,navigational techniques,2,core,2
+138,geo422,contemporary philosophy and methodology in geography II,2,core,2
+139,geo423,military terrain evaluation,2,core,2
+140,geo424,regional development and planning,2,core,2
+141,geo425,the developed world,2,core,2
+142,geo499,original research project,6,core,2
+143,hws111,introduction to history,2,core,3
+144,hws112,introduction to economic history,3,core,3
+145,hws113,nigeria before 1800 AD,3,core,3
+146,hws114,history of africa from 1500 - 1800 AD,3,core,3
+147,hws115,islamic revolutions in west africa,3,core,3
+148,hws117,europe to the age of revolution,3,core,3
+149,hws121,war and society in africa to 1900,2,core,3
+150,hws122,history of west africa 1500 - 1800 AD,3,core,3
+151,hws123,north africa from first conquest of egypt to 1500,3,core,3
+152,hws124,"archaelogy of the nok, benin and oyo areas",3,core,3
+153,hws125,evolution of the theory and art of war,2,core,3
+154,hws126,blacks in diaspora,3,core,3
+155,hws211,nigeria 1800-1900,3,core,3
+156,hws212,economic history of nigeria in the 19th century,3,core,3
+157,hws213,africa and european imperialism,3,core,3
+158,hws214,history of southern africa from circa 1400-present,3,core,3
+159,hws216,history of the nigerian army,2,core,3
+160,hws217,europe from french revolution to the 2nd world war,3,core,3
+161,pds218,introduction to comparative politics I,2,elective,3
+162,hws221,history of latin america and caribbean since 1500 AD,3,core,3
+163,hws222,history of east and central africa since 1800 AD,3,core,3
+164,hws223,history of the USA since 1877,3,core,3
+165,hws224,history of the nigerian armed forces,2,core,3
+166,hws225,history of russia 19th century,3,core,3
+167,hws227,economic history of west africa in the 19th and 20th centuries,3,core,3
+168,pds228,introduction to comparative politics II,2,elective,3
+169,hws311,"nigeria, 1900-1970",3,core,3
+170,hws312,research methodology I,3,core,3
+171,hws313,africa and the outside world since 1900,3,core,3
+172,hws314,history of the commonwealth,3,core,3
+173,hws315,war and peace in the 20th century,3,core,3
+174,hws317,problems and issues in africa historiography,3,core,3
+175,hws318,economic history of USA in the 19th century,3,core,3
+176,hws319,ussr from 1950-1950,3,core,3
+177,hws321,nigeria during the inter-war periods,3,core,3
+178,hws322,"comparative industrial growth of usa, ussr, japan and china",3,core,3
+179,hws323,problems and prospects of regional economic development in west africa,3,core,3
+180,hws324,air power since 1914,2,core,3
+181,hws325,the nigerian civil war,2,core,3
+182,hws326,the military in colonial africa,2,core,3
+183,hws327,emerging issues in military history,2,core,3
+184,hws329,research method II,3,core,3
+185,hws411,nigeria 1970-present,3,core,3
+186,hws412,theory and art of war from 1945-present,2,core,3
+187,hws413,"comparative parliamentary studies (nigeria, britain, france and india)",3,core,3
+188,hws414,war and society in the middle east,3,core,3
+189,hws415,naval warfare since trafalgar,2,core,3
+190,hws416,the military in independent africa,2,core,3
+191,hws418,land and labour in africa 1850-1950,3,core,3
+192,hws419,colonial wars in nigeria I,2,elective,3
+193,hws421,terrorism in world history,2,core,3
+194,hws422,economic history of nigeria in the 20th and 21st centuries,3,core,3
+195,hws423,oau/au-a study of african international relations,3,core,3
+196,hws424,international peacekeeping,2,core,3
+197,hws426,philosophy of history,3,core,3
+198,hws427,colonial wars in nigeria II,2,elective,3
+199,hws428,modern african political thoughts,3,core,3
+200,hws499,supervised project,6,core,3
+201,fre111,french phonetics,2,core,4
+202,fre112,french corrective grammar,2,core,4
+203,fre113,reading/listening comprehension,2,core,4
+204,fre114,introduction to french composition,2,core,4
+205,fre115,practical french I,2,core,4
+206,fre116,introduction to a 2nd foreign language,2,core,4
+207,fre121,french phonetics,2,core,4
+208,fre122,french grammar,2,core,4
+209,fre123,reading/listening comprehension,2,core,4
+210,fre124,advance french composition,2,core,4
+211,fre125,practical french,2,core,4
+212,fre126,introduction to a 2nd foreign language,2,core,4
+213,psy121,introduction to psychology,2,core,4
+214,fre211,translation theory and practice,2,core,4
+215,fre212,french grammatical structures I,2,core,4
+216,fre213,french phonetics and phonology I,2,core,4
+217,fre214,advanced practical french I,2,core,4
+218,fre215,introduction to french literary genre: prose,2,core,4
+219,fre216,second foreign lang,2,core,4
+220,pds213,introduction to international relations,2,core,4
+221,fre221,"translation: ""version"" and ""theme""",2,core,4
+222,fre222,french grammatical structures,2,core,4
+223,fre223,french phonetics and phonology II,2,core,4
+224,fre224,advanced practical french II,2,core,4
+225,fre225,french drama and poetry,2,core,4
+226,fre226,survey of french literature 16th and 17th centuries,2,core,4
+227,pds242,introduction to political analysis,2,core,4
+228,fre311,translation I,2,core,4
+229,fre312,advance studies in french language structure,2,core,4
+230,fre313,french phonetics and phonology,2,core,4
+231,fre314,french culture and civilisation,2,core,4
+232,fre315,comparative african literature written in english and french,2,core,4
+233,fre316,introduction to french military terminologies,2,core,4
+234,fre318,french literature of 19th century,2,core,4
+235,fre319,research methodology I,2,core,4
+236,fre321,translation II,2,core,4
+237,fre322,advance studies in french language structure II,2,core,4
+238,fre323,creative writing in french,2,core,4
+239,fre324,caribbean french literature,2,core,4
+240,fre325,introduction to african literature written in french,2,core,4
+241,fre326,the sociolinguistics of french,2,core,4
+242,fre327,advance french military terminologies,2,core,4
+243,fre328,french literature of the 19th century,2,core,4
+244,fre329,introduction to project writing/research methodology,2,core,4
+245,fre411,advance translation I,2,core,4
+246,fre412,linguistics applied to the teaching of french language,2,core,4
+247,fre413,caribbean francophone literature,2,core,4
+248,fre414,"french literature of the 20th century: drama, prose and poetry",2,core,4
+249,fre415,advanced creative writing in french,2,core,4
+250,fre416,post-independence francophone-african literature,2,core,4
+251,fre421,advance translation II,2,core,4
+252,fre422,linguistics applied to the teaching of french language,2,core,4
+253,fre423,caribbean francophone literature,2,core,4
+254,fre424,french literature of the 20th century,2,core,4
+255,fre425,literary criticism in french,2,core,4
+256,fre426,post-independence francophone-african literature,2,core,4
+257,fre499,final year essay,6,core,4
+258,arb111,grammar,3,core,5
+259,arb112,introduction to arabic literature,3,core,5
+260,arb113,reading skills,2,core,5
+261,arb114,writing skills,2,core,5
+262,arb115,rhetoric,2,core,5
+263,arb116,introduction to a second foreign language,2,core,5
+264,arb121,introduction to arabic novel,2,core,5
+265,arb122,translation,2,core,5
+266,arb123,text from ancient arabic literature,2,core,5
+267,arb124,defence and security terms,2,core,5
+268,arb125,computer studies in arabic,2,core,5
+269,arb127,introduction to essay writing,2,core,5
+270,arb126,introduction to a second foreign language,2,core,5
+271,gst124,computer application/ICT,1,elective,5
+272,arb211,grammar,3,core,5
+273,arb212,arabic literature,3,core,5
+274,arb213,reading skills,2,core,5
+275,arb214,morphology,2,core,5
+276,arb215,introduction to nigerian arabic literature,2,core,5
+277,arb217,computer study in arabic,2,core,5
+278,arb216,second foreign language III,2,core,5
+279,arb221,grammar III,2,core,5
+280,arb222,rhetoric II,2,core,5
+281,arb223,translation II,2,core,5
+282,arb224,writing of nigerian arabic scholars,2,core,5
+283,arb225,strategic lexicography,2,core,5
+284,arb226,a novel,2,core,5
+285,arb227,essay writing,2,core,5
+286,arb311,grammar,2,core,5
+287,arb312,arabic literature in umayyad period,2,core,5
+288,arb313,rhetoric III,2,core,5
+289,arb314,a novel II,2,core,5
+290,arb315,arabic literature in west africa,2,core,5
+291,arb316,classical and modern arabic library,2,core,5
+292,arb317,morphology of noun,2,core,5
+293,arb318,text from classical arabic literature I,2,core,5
+294,arb319,media arabic,2,core,5
+295,arb321,arabic literature in abbasid period,2,core,5
+296,arb322,arabic literature in spain,2,core,5
+297,arb323,phonetics and phonology,2,core,5
+298,arb324,special author,2,core,5
+299,arb325,prosody I,2,core,5
+300,arb326,translation III,2,core,5
+301,arb327,method of research,2,core,5
+302,arb328,morphology of verb,2,core,5
+303,arb329,text from classical arabic literature II,2,core,5
+304,arb411,modern arabic poetry,2,core,5
+305,arb412,morphology,2,core,5
+306,arb413,selected topics in grammar,2,core,5
+307,arb414,prosody II,2,core,5
+308,arb415,a play,2,core,5
+309,arb416,introduction to classical arabic criticism,2,core,5
+310,arb417,a special author,2,core,5
+311,arb418,arabic literature in al-mahjar,2,core,5
+312,arb421,modern arabic prose,2,core,5
+313,arb422,modern arabic critism,2,core,5
+314,arb423,the works of nigerian arabic writers,2,core,5
+315,arb424,translation,2,core,5
+316,arb425,arabic for international purpose,2,core,5
+317,arb499,supervised project,6,core,5
+318,pol110,introduction to political science I,3,core,6
+319,pol111,nigerian legal system,2,core,6
+320,pol112,nigerian constitutional development,2,core,6
+321,pol113,introduction to peace studies,2,core,6
+322,pol114,citizen and the state,2,core,6
+323,pol120,introduction to political science II,3,core,6
+324,pol121,terrorism and world politics,2,core,6
+325,pol122,introduction to regional integration,2,core,6
+326,pol123,nigerian political culture,2,core,6
+327,pol124,politics in africa,2,core,6
+328,pol210,social statistics for political science I,3,core,6
+329,pol211,introduction to political theories,2,core,6
+330,pol212,nigerian government and politics,3,core,6
+331,pol213,history of political thought,2,core,6
+332,pol214,introduction to comparative politics I,2,core,6
+333,pol215,introduction to local government administration,2,core,6
+334,pol216,organisation of government,2,core,6
+335,pol220,social statistics for political science II,3,core,6
+336,pol221,introduction to political analysis,2,core,6
+337,pol222,political ideas,2,core,6
+338,pol223,introduction to public administration,2,core,6
+339,pol224,introduction to comparative politics II,2,core,6
+340,pol225,foundations of political economy,2,core,6
+341,pol226,africa in world politics,2,elective,6
+342,pol227,citizenship and the state,2,elective,6
+343,pol310,logic and methods of political inquiry I,3,core,6
+344,pol311,contemporary political analysis,3,core,6
+345,pol312,political bahaviour,3,core,6
+346,pol313,theories of international relations,3,core,6
+347,pol314,politics of international economic relations,2,core,6
+348,pol315,theories and pratice of public administration,3,core,6
+349,pol316,history of political thought (western),3,elective,6
+350,pol317,theory and practice of marxism,3,elective,6
+351,pol320,logic and methods of political inquiry II,3,core,6
+352,pol321,african political thought,3,core,6
+353,pol322,international law and organizations,3,core,6
+354,pol323,comparative federalism,3,core,6
+355,pol324,imperialism and nationalism,3,core,6
+356,pol325,comparative public administration,3,core,6
+357,pol326,politics of development and underdevelopment,2,core,6
+358,pol327,gender and politics in nigeria,2,elective,6
+359,pol328,urban politics and government in nigeria,2,elective,6
+360,pol410,theories and practice of conflict management,3,core,6
+361,pol411,public opinion and pressure group,2,core,6
+362,pol412,civil-military relations,3,core,6
+363,pol413,development administration,3,core,6
+364,pol414,public policy analysis,3,core,6
+365,pol415,nigerian foreign policy I,2,core,6
+366,pol416,local government in nigeria,3,core,6
+367,pol417,politics and law in africa,3,core,6
+368,pol418,politics of integration in africa,3,elective,6
+369,pol420,third world and dependency,3,core,6
+370,pol421,revolution and society,3,core,6
+371,pol422,comparative public administration,2,core,6
+372,pol423,public personnel administration,3,core,6
+373,pol424,nigerian foreign policy II,2,core,6
+374,pol425,public financial administration,3,core,6
+375,pol426,state and economy,3,core,6
+376,pol499,research project,6,core,6
+377,pol427,race and ethnicity in international relations,3,elective,6
+378,pol428,race and ethnicity in international relations,3,elective,6
+379,psy112,history of psychology,2,core,7
+380,psy113,psychology of learning I,2,core,7
+381,psy114,quantitative methods in psychology I,2,core,7
+382,bio111,general biology I,3,core,7
+383,bio112,experimental biology I,1,core,7
+384,pds112,introduction to defence and strategic studies I,2,elective,7
+385,psy122,basic concepts in experimental psychology,2,core,7
+386,psy124,quantitative methods in psychology II,2,core,7
+387,bio121,general biology II,3,core,7
+388,bio122,experimental biology II,1,core,7
+389,pds126,introduction to defence and strategic studies II,2,core,7
+390,psy211,general experimental psychology I,2,core,7
+391,psy212,introduction to physiology psychology I,2,core,7
+392,psy213,developmental psychology I,2,core,7
+393,psy214,introduction to social psychology,2,core,7
+394,psy215,industrial psychology,2,core,7
+395,psy216,introduction to personality theories,2,core,7
+396,psy217,introduction to statistics in psychology,2,core,7
+397,psy221,general experimental psychology II,2,core,7
+398,psy222,physiological psychology II,2,core,7
+399,psy223,developmental psychology II,2,core,7
+400,psy224,psychology of ethnicity and ethnic groups,2,core,7
+401,psy225,social perception,2,core,7
+402,psy226,experimental design,2,core,7
+403,psy227,principles of criminology and juvenile delinquency,2,core,7
+404,hist224,history of nigerian armed forces,2,elective,7
+405,psy311,statistical method in psychology,2,core,7
+406,psy312,clinical psychology I,2,core,7
+407,psy313,personality assessment I,2,core,7
+408,psy314,cognitive psychology I,2,core,7
+409,psy315,psychological testing and test construction I,2,core,7
+410,psy316,environmental psychology,2,core,7
+411,psy317,community psychology,2,core,7
+412,psy318,cross-cultural psychology,2,core,7
+413,psy319,psychology of guidance and counselling,2,core,7
+414,psy321,research method in psychology,2,core,7
+415,psy322,clinical psychology II,2,core,7
+416,psy323,personality assessment II,2,core,7
+417,psy324,cognitive psychology II,2,core,7
+418,psy326,abnormal psychology,2,core,7
+419,psy327,psychology of substance abuse,2,core,7
+420,psy328,psychology of personnel management,2,elective,7
+421,psy329,political psychology,2,elective,7
+422,psy411,military psychology I,2,core,7
+423,psy412,organisational psychology I,2,core,7
+424,psy413,advanced psychobiology I,2,core,7
+425,psy414,practicum in psychotherapy,2,core,7
+426,psy415,health psychology,2,core,7
+427,psy416,forensic psychology,2,core,7
+428,psy417,clinical psychology III,2,core,7
+429,psy418,consumer psychology,2,core,7
+430,psy419,psychology of vocational behaviour,2,core,7
+431,psy421,military psychology II,2,core,7
+432,psy422,organisational psychology II,2,core,7
+433,psy423,advanced psychobiology II,2,core,7
+434,psy424,behaviour modification (practicum),3,core,7
+435,psy425,survival psychology,2,core,7
+436,psy499,research project,6,core,7
+437,psy426,psychology of social change,2,core,7
+438,psy427,current issues in psychology,2,core,7
+439,chm111,general chemistry I,3,core,8
+440,chm112,experimental chemistry I,1,core,8
+441,mat111,general mathematics I,3,core,8
+442,mat112,general mathematics I,3,core,8
+443,phy111,general physics I,3,core,8
+444,phy112,experimental physics I,1,core,8
+445,csc111,fundamentals of computer science,3,core,8
+446,eng121,material science,2,core,8
+447,chm121,general chemistry II,3,core,8
+448,chm122,experimental chemistry II,1,core,8
+449,mat121,general mathematics III,3,core,8
+450,phy121,general physics II,3,core,8
+451,phy122,experimental physics II,1,core,8
+452,csc121,fundamentals of computer science,1,core,8
+453,csc122,introduction to computer programming (basic),3,core,8
+454,eng211,engineering mathematics I,3,core,8
+455,eng212,engineering drawing,2,core,8
+456,eng213,experimentation I,2,core,8
+457,eng214,workshop practice I,1,core,8
+458,eng215,applied electricity,2,core,8
+459,eng216,applied mechanics,2,core,8
+460,eng217,thermodynamics I,2,core,8
+461,eng219,fluid mechanics I,2,core,8
+462,cvl211,soil mechanics I,2,core,8
+463,cvl212,civil engineering materials,2,core,8
+464,cvl213,engineering survey and photogrammetric,2,core,8
+465,eng221,engineering mathematics II,3,core,8
+466,eng222,engineering drawing II,2,core,8
+467,eng223,experimentation II,2,core,8
+468,eng224,workshop pratice II,1,core,8
+469,eng225,strength of materials I,2,core,8
+470,eng226,applied electricity II,2,core,8
+471,cvl220,engineering survey and photogrammetry II,2,core,8
+472,cvl221,engineering geology I,2,core,8
+473,cvl222,soils mechanics II,2,core,8
+474,eng311,engineering mathematics III,3,core,8
+475,eng312,numerical analysis,2,core,8
+476,eng313,engineering communications,2,core,8
+477,cvl311,engineering geology II,2,core,8
+478,cvl312,structural analysis I,2,core,8
+479,cvl314,engineering hydrology,2,core,8
+480,cvl315,highway and transportation I,2,core,8
+481,cvl316,civil engineering practical I,2,core,8
+482,mec315,strength of materials II,2,core,8
+483,eng321,engineering mathematics IV,3,core,8
+484,cvl321,computer applications in civil engineering,2,core,8
+485,cvl322,structural analysis II,2,core,8
+486,cvl323,reinforced concrete design I,2,core,8
+487,cvl324,engineering hydraulics,2,core,8
+488,cvl325,highway and transportation II,2,core,8
+489,cvl326,civil engineering practical II,2,core,8
+490,cvl327,foundation engineering I,2,core,8
+491,cvl328,water supply and wastewater engineering I,2,core,8
+492,eng411,engineering law and management,2,core,8
+493,cvl411,structural analysis III,2,core,8
+494,cvl412,coundation engineering II,2,core,8
+495,cvl413,practical III,2,core,8
+496,cvl414,design of hydraulic structures,2,core,8
+497,cvl415,water supply and wastewater engineering II,2,core,8
+498,cvl416,design of steel structures I,2,core,8
+499,cvl417,environmental impact assessment,2,core,8
+500,cvl418,reinforced concrete design II,2,core,8
+501,cvl419,highway and transportation III,2,core,8
+502,cvl499,project,6,core,8
+503,cvl432,traffic engineering,2,core,8
+504,cvl434,building technology,2,core,8
+505,cvl435,hydrogeology,2,core,8
+506,eng421,engineering in society,2,core,8
+507,cvl421,structural analysis III,2,core,8
+508,cvl422,design of timber structures,2,core,8
+509,cvl423,solid waste management,2,core,8
+510,cvl424,construction management,2,core,8
+511,cvl425,maintenance management,2,core,8
+512,cvl426,design of steel structures II,2,core,8
+513,cvl428,advanced structural design,2,core,8
+514,cvl441,coastal and habour engineering,2,elective,8
+515,cvl442,airfield planning and design,2,elective,8
+516,cvl443,rail transportation,2,elective,8
+517,ele222,introduction to electronics II,2,core,9
+518,ele223,electrical circuit theory I,2,core,9
+519,ele311,electric circuit theory II,2,core,9
+520,ele312,electrical engineering materials,2,core,9
+521,ele313,electrical machines I,2,core,9
+522,ele314,electronic engineering I,2,core,9
+523,ele315,experimentation III,3,core,9
+524,ele316,electrical measurement and instrumentation,2,core,9
+525,ele317,communication principles I,2,core,9
+526,ele321,communication principles II,2,core,9
