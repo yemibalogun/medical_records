@@ -1,172 +1,172 @@
 <!DOCTYPE html>
-{% extends "base.html" %} {% block title %} dashboard {% endblock %} {% block
-content %}
-<div style="height: 1100px" class="container" style="width: 90%;">
+{% extends "base.html" %} 
+{% block title %} dashboard {% endblock %} 
+{% block content %}
+
+<div style="height: 1100px" class="container" style="width: 90%">
   <div
-    style="display: flex; flex-wrap: wrap; justify-content: space-between;"
+    style="display: flex; flex-wrap: wrap; justify-content: space-between"
     class="row"
   >
-    <div class="col-md-4 col-sm-8">
-      
-        <div class="card" style="margin-bottom: 20px">
-          <div style="margin: 0; display: flex; justify-content: space-between;" class="row">
+    <div class="col-md-6 col-sm-8">
+      <div class="card" style="margin-bottom: 20px;">
+        <div
+          style="margin: 0; display: flex; justify-content: space-between"
+          class="row"
+        >
+          <div class="col-md-4">
+            <img id="profilePicture" 
+              src="{% if profile_pics.filename %}/profile_pics/{{ profile_pics.filename }}{% else %}/static/images/image_placeholder.png{% endif %}" 
+              alt="Profile Picture">
 
-            <div class="col-md-4">
-              <img class="profile-img" src="/static/images/image_placeholder.png" alt="Profile Picture">
+            <form id="profileForm" enctype="multipart/form-data">
+              <input type="hidden" id="cadetId" name="id" value="{{selected_cadet.id}}"> <!-- Replace "123" with actual cadet ID -->
+              <input type="file" id="profilePictureInput" name="file" accept="image/*">
+            </form>
+          </div>
           
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 style="color: rgb(0, 68, 171)" class="card-title">
-                  {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name
-                  + ' ' + selected_cadet.last_name }}
-                  <a
-                    href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
-                    style="color: rgb(171, 68, 0)"
-                    >({{ selected_cadet.regular_course.course_no }}RC)</a
-                  >  
-                </h5>
-                <p class="card-subtitle mb-2 text-body-secondary">
-                  {{selected_cadet.bn.bn.capitalize() }} ({{
-                  selected_cadet.service.service_type.upper() }})
-                </p>
-                
-                <p style="font-size: smaller" class="card-text">
-                  Gender |
-                  <b style="color: rgb(0, 68, 171)"
-                    >{{ selected_cadet.gender.gender_type.capitalize() }}</b
-                  >
-                </p>
-                <p style="font-size: smaller" class="card-text">
-                  Age |
-                  <b style="color: rgb(0, 68, 171)"
-                    >{{ cadet_age }}</b
-                  >
-                </p>
-              </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 style="color: rgb(0, 68, 171)" class="card-title">
+                {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name
+                + ' ' + selected_cadet.last_name }}
+                <a
+                  href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
+                  style="color: rgb(171, 68, 0)"
+                  >({{ selected_cadet.regular_course.course_no }}RC)</a
+                >
+              </h5>
+              <p class="card-subtitle mb-2 text-body-secondary">
+                {{selected_cadet.bn.bn.capitalize() }} ({{
+                selected_cadet.service.service_type.upper() }})
+              </p>
+
+              <p style="font-size: smaller" class="card-text">
+                Gender |
+                <b style="color: rgb(0, 68, 171)"
+                  >{{ selected_cadet.gender.gender_type.capitalize() }}</b
+                >
+              </p>
+              <p style="font-size: smaller" class="card-text">
+                Age |
+                <b style="color: rgb(0, 68, 171)">{{ cadet_age }}</b>
+              </p>
             </div>
           </div>
         </div>
-      
+      </div>
     </div>
 
+    <div class="col" style="max-width: 150px; font-size: small">
+      <p>Days Admitted: {{ selected_cadet.admission_count }}</p>
+      <p>Days Confined: </p>
+    </div>
     
-   
-    <div class="col" style="max-width: 200px; font-size: small;">
-      <a type="btn"
+    <div class="col" style="max-width: 150px; font-size: small">
+      <a
+        type="btn"
         href="{{ url_for('add_medical_record', id=selected_cadet.id) }}"
         class="card-link"
-        >Medical Records</a
+        >Add Medical Records</a
       >
+    
     </div>
   </div>
   <!-- <hr>     -->
-
-  <div class="row table-responsive" style="display: flex; flex-wrap: wrap; background-color: #fafafa; border-radius: 5px 5px 0 0;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);">
-    <div class="col" style="margin: 0, auto;">
-      <div class="chart-container" style="position: relative; padding: 0">
-        <canvas id="majorChart"></canvas>
-      </div>
-    </div>
-
-    <div class="col" style="margin: 0, auto;">
-      <div class="chart-container" style="position: relative; padding: 0">
-        <canvas id="minorChart"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div style="color: rgb(0, 68, 171)" class="container">
-    <div class="row">
-      <h6>RESULTS</h6>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="table-responsive">
+  
+  <!-- <div
+    class="row table-responsive"
+    style="
+      display: flex;
+      flex-wrap: wrap;
+      background-color: #fafafa;
+      border-radius: 5px 5px 0 0;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    "
+  > -->
+  
+  <div style="margin: auto;" class="container">
+    
+    <div style="margin: 0;" id="autocomplete-suggestions" class="autocomplete-suggestions">
+      <p>Medical Records:</p>
       <table class="custom-table table-sm table-hover table-borderless">
         <thead>
-          <tr style="font-size: smaller">
-            {% for row in rows %}
-            <th scope="col">{{ row.service_subject.subject_title.title() }}</th>
-            {% endfor %}
+          <tr>
+            <th style="width: 10%" scope="col">Date</th>
+            <th style="width: 20%" scope="col">History</th>
+            <th style="width: 20%" scope="col">Examination</th>
+            <th style="width: 20%" scope="col">Diagnosis</th>
+            <th style="width: 20%" scope="col">Plan</th>
+            <th style="width: 20%" scope="col">Prescription</th>
+            <th style="width: 20%" scope="col">Excuse Duty</th>
+            <th style="width: 20%" scope="col">Days</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            {% for row in rows %}
-            <td data-cell="{{ row.service_subject.subject_title }}" style="padding: 1rem;">{{ ((row.first_term_score + row.second_term_score)/2)|round(2) }}</td>
-            {% endfor %}
+        <tbody style="font-size: small" id="cadet-table-body">
+          {% for row in rows %}
+          <!-- Initial row for data entry -->
+          <tr class="active-row">
+            
+            <td data-cell="date">{{ row.date_reported_sick.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ') }}</td>
+            <td data-cell="history" class="head-center">
+              {{ row.history }}
+            </td>
+            <td data-cell="examination" class="head-center">
+              {{ row.examination }}
+            </td>
+            <td data-cell="diagnosis" class="head-center">
+              {{ row.diagnosis }}
+            </td>
+            <td data-cell="plan" class="head-center">
+              {{ row.plan }}
+            </td>
+            <td data-cell="prescription" class="head-center">
+              {{ row.prescription }}
+            </td>
+            <td data-cell="excuse_duty" class="head-center">
+              {{ row.excuse_duty.title() }}
+            </td>
+            <td data-cell="days" class="head-center">
+              {{ row.excuse_duty_days }}
+            </td>
+            
           </tr>
-        </tbody>
-        
-      </table>
 
+          {% endfor %}
+          <!-- Additional rows will be dynamically added here -->
+        </tbody>
+      </table>
     </div>
   </div>
-</div>
+
+<!-- </div> -->
 
 {% block javascript %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+  document.getElementById('profilePictureInput').addEventListener('change', function () {
+      const file = this.files[0];
+      const formData = new FormData();
+      formData.append('id', document.getElementById('cadetId').value);
+      formData.append('file', file);
 
-const atx = document.getElementById("majorChart");
-const btx = document.getElementById("minorChart");
-
-const subjects = [
-  {% for score in major_scores %}
-  ["{{ score[0].title() }}", "{{ score[1] }}"],
-  {% endfor %}
-];
-
-const minorSubjects = [
-  {% for score in minor_scores %}
-  ["{{ score[0].title() }}", "{{ score[1] }}"],
-  {% endfor %}
-];
-
-function createChart(chartElement, labels, data, label) {
-  new Chart(chartElement, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: label,
-          data: data,
-          backgroundColor: data.map(() => getRandomColor()),
-          borderColor: [],
-          borderWidth: 0.1,
-          barThickness: 14,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        
-      }
-    },
+      fetch('/upload', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              const imageUrl = `/uploads/${data.filename}`;
+              document.getElementById('profilePicture').src = imageUrl;
+          } else if (data.error) {
+              console.error('Error uploading profile picture:', data.error);
+          }
+      })
+      .catch(error => {
+          console.error('Error uploading profile picture:', error);
+      });
   });
-}
-
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
-createChart(atx, subjects.map(item => item[0]), subjects.map(item => item[1]), "Major Subjects Results");
-createChart(btx, minorSubjects.map(item => item[0]), minorSubjects.map(item => item[1]), "Minor Subjects Results");
-
 </script>
-{% endblock %} 
-{% endblock %} 
+{% endblock %} {% endblock %}

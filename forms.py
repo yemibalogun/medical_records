@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, RadioField, SelectField, IntegerField, FloatField, BooleanField
+from wtforms import StringField, SubmitField, FieldList, DateField, RadioField, SelectField, IntegerField, FloatField, TextAreaField
 from wtforms.validators import DataRequired, InputRequired, ValidationError
 from course_code import choices
 import datetime
@@ -113,11 +113,17 @@ class MilScoreForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class MedicalRecordForm(FlaskForm):
-    date = DateField('Date Reported Sick', default= datetime.date.today, validators=[DataRequired()])
-    diagnosis = StringField('Diagnosis', validators=[DataRequired()])
-    excuse_duty_type = SelectField('Excuse Duty', choices=[('nil', 'Nil'), ('excused boot', 'Excused Boot'), ('excused all parades', 'Excused all Parades'), ('excused marching', 'Excused Marching'), ('confinement', 'Confinement')], validators=[InputRequired()])
+    date_reported_sick = DateField('Date Reported Sick', default= datetime.date.today, validators=[DataRequired()])
+    history = TextAreaField('History', validators=[DataRequired()])
+    examination = TextAreaField('Examination', validators=[DataRequired()])
+    diagnosis = TextAreaField('Diagnosis', validators=[DataRequired()])
+    plan = TextAreaField('Plan', validators=[DataRequired()])
+    prescription = TextAreaField('Prescription', validators=[DataRequired()])
+    excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), ('excused boot', 'Excused Boot'), ('excused all parades', 'Excused all Parades'), ('excused marching', 'Excused Marching'), ('confinement', 'Confinement')], validators=[InputRequired()])
     excuse_duty_days = IntegerField('Days', validators=[DataRequired()])
-    admitted = SelectField('Admitted', choices=[('yes', 'Yes'), ('no', 'No')], validators=[DataRequired()])
-    discharged = SelectField('Discharged', choices=[('yes', 'Yes'), ('no', 'No')], validators=[DataRequired()])
 
     submit = SubmitField('Submit')
+
+class AdmissionForm(FlaskForm):
+    cadet_no = StringField('Cadet Number', validators=[DataRequired()])
+    submit = SubmitField('Add')

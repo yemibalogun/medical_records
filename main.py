@@ -1,8 +1,8 @@
-from flask import render_template, redirect, url_for, send_file, request, jsonify, session, flash
-from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm
+from flask import render_template, redirect, url_for, send_file, request, jsonify, session, flash, send_from_directory
+from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm, AdmissionForm
 from config import app, db, session
 from werkzeug.utils import secure_filename
-from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical
+from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical, ProfilePicture
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import declarative_base, relationship, aliased
 from sqlalchemy.orm.exc import NoResultFound
@@ -12,13 +12,32 @@ from flask_migrate import Migrate
 from concurrent.futures import ThreadPoolExecutor
 from PIL import Image
 import csv, io, os, time, json
-from datetime import datetime 
+import uuid
+from datetime import datetime, date
 from utils import regular_courses, filtered_subjects, get_total_first_term_score, get_total_second_term_score, log_score_change, calculate_gpa_cpga
 
 
 year = datetime.now().year
 migrate = Migrate(app, db)
 Bootstrap(app)
+
+# Get the current working directory
+current_directory = os.getcwd()
+
+# Define the upload folder path within the current working directory
+upload_folder_path = os.path.join(current_directory, 'profile_pics')
+
+# Set the Flask app's upload folder configuration
+app.config['UPLOAD_FOLDER'] = upload_folder_path
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Check if the upload folder exists and create it if it doesn't
+if not os.path.exists(upload_folder_path):
+    os.makedirs(upload_folder_path)
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # Pass Stuff to NavBar
 @app.context_processor
@@ -366,26 +385,17 @@ def edit_cadet(id):
 @app.route("/dashboard/<int:id>", methods=["GET","POST"])
 def student_info(id):
     search_form = SearchForm()
-    gpa, cgpa = calculate_gpa_cpga(id)
-    print(gpa, cgpa)
-    
-    cadet_scores = session.query(ServiceScore).filter(ServiceScore.cadet_id==id).all()
-    major_scores = session.query(ServiceScore).join(ServiceSubject).filter(ServiceScore.cadet_id==id, ServiceScore.service_subject_id==ServiceSubject.id, ServiceSubject.status=='major').all()
-    
-    minor_scores = session.query(ServiceScore).join(ServiceSubject).filter(ServiceScore.cadet_id==id, ServiceScore.service_subject_id==ServiceSubject.id, ServiceSubject.status=='minor').all()
-    
-    major_scores_processed = []
-    for score in major_scores:
-        major_subject_title = score.service_subject.subject_title
-        major_total_score = (score.first_term_score + score.second_term_score)/2
-        major_scores_processed.append([major_subject_title, major_total_score])
 
-    minor_scores_processed = []
-    for score in minor_scores:
-        minor_subject_title = score.service_subject.subject_title
-        minor_total_score = (score.first_term_score + score.second_term_score)/2
-        minor_scores_processed.append([minor_subject_title, minor_total_score])
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
     
+    cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
+    cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
+    profile_pics = session.query(ProfilePicture).filter(ProfilePicture.cadet_id==id).first()
+    
+    days_confined = session.query(Medical).filter(Medical.cadet_id==id, Medical.excuse_duty=="confinement").first()
+    print(days_confined)
+
     try:
         selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id == id, Cadet.bn_id == Battalion.id).first()
         
@@ -397,7 +407,6 @@ def student_info(id):
         dob_year = dob_obj.year
         current_year = datetime.now().year
         cadet_age = current_year - dob_year
-        print(cadet_age)
         
         formatted_dob = dob_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
         formatted_doe = doe_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
@@ -410,13 +419,21 @@ def student_info(id):
     return render_template("dashboard.html",
                                search_form=search_form,
                                selected_cadet=selected_cadet,
-                               rows=cadet_scores,
-                               major_scores=major_scores_processed,
-                               minor_scores=minor_scores_processed,
+                               profile_pics=profile_pics,
+                               rows=cadet_medical_records,
+                               cadet_records=cadet_records,
                                cadet_age=cadet_age,
                                formatted_dob=formatted_dob,
-                               formatted_doe=formatted_doe
+                               formatted_doe=formatted_doe,
+                               page=page,
+                               per_page=per_page
                                )
+
+@app.route('/medical_history/<int:id>')
+def medical_history(id):
+    search_form = SearchForm()
+    
+    return render_template('medical_history.html', search_form=search_form)
 
 @app.route('/cadet/results/<int:id>', methods=['GET','POST'])
 def add_academic_score(id):
@@ -528,22 +545,27 @@ def add_medical_record(id):
     per_page = 20
     selected_cadet = session.query(Cadet).filter(Cadet.id==id).first()
     cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
-    print(cadet_medical_records)
-
-    diagnosis = medical_record_form.diagnosis.data
-    excuse_duty_type = medical_record_form.excuse_duty_type.data 
-    excuse_duty_days = medical_record_form.excuse_duty_days.data
-    admitted = medical_record_form.admitted.data
-    discharged = medical_record_form.discharged.data
     
+    history = medical_record_form.history.data
+    examination = medical_record_form.examination.data
+    diagnosis = medical_record_form.diagnosis.data
+    plan = medical_record_form.plan.data
+    prescription = medical_record_form.prescription.data
+    excuse_duty = medical_record_form.excuse_duty.data 
+    excuse_duty_days = medical_record_form.excuse_duty_days.data
+    
+    # cadet_excuse_duty_days = session.query(Medical).filter(Medical.cadet_id==id, Medical.confinement_count).all()
+
     if medical_record_form.validate_on_submit():
         # Create a new MedicalRecord object and add it to the database
         new_medical_record = Medical(
+            history=history,
+            examination=examination,
             diagnosis=diagnosis,
-            excuse_duty_type=excuse_duty_type,
+            plan=plan,
+            prescription=prescription,
+            excuse_duty=excuse_duty,
             excuse_duty_days=excuse_duty_days,
-            admitted=admitted,
-            discharged=discharged,
             cadet_id=id,
         )
 
@@ -562,6 +584,64 @@ def add_medical_record(id):
                            page=page,
                            per_page=per_page
                            )
+
+
+@app.route('/admit_cadet', methods=['GET', 'POST'])
+def admit_cadet():
+    search_form = SearchForm()  # Assuming you have a SearchForm defined
+
+    if request.method == 'POST':
+        selected_cadets_json = request.json.get('selectedCadets')
+        if selected_cadets_json is None:
+            flash("Error: No data received or invalid JSON format.")
+            return redirect(url_for('admit_cadet'))
+
+        # Convert each string in cadet_list to a list of strings separated by spaces
+        selected_cadets_list = [cadet_string.split(" ") for cadet_string in selected_cadets_json]
+        # Process the selected cadets JSON data as needed
+        # For example, you can parse the JSON and access individual cadet details
+        for cadet in selected_cadets_list:
+            admitted_cadet = session.query(Cadet).filter(Cadet.cadet_no == cadet[1]).first()
+            if admitted_cadet:
+                # Check if the cadet has already been admitted today
+                if admitted_cadet.admission_date == date.today():
+                    flash(f"Cadet NDA/ {cadet[1]} has already been admitted today.", "info")
+                else:
+                    admitted_cadet.admission_count += 1
+                    admitted_cadet.admission_date = date.today()  # Set admission date
+                    session.commit()
+                    flash(f"Cadet {cadet[1]} has been admitted successfully.", "success")
+            else:
+                flash(f"Error: Cadet {cadet[1]} not found in the database.", "error")
+
+        # Redirect to the same page after processing all cadets
+        return redirect(url_for('admitted_cadets'))
+
+    # Handle GET request to render the template
+    return render_template('add_admitted.html', search_form=search_form)
+
+@app.route('/admitted_cadets')
+def admitted_cadets():
+    search_form = SearchForm()
+
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+    today_date = date.today()
+    admitted_cadets = session.query(Cadet).filter(Cadet.admission_date == today_date).all()
+    today_date = str(today_date)
+
+    today_date_obj = datetime.strptime(today_date, '%Y-%m-%d')
+    formatted_today_date = today_date_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
+    
+    return render_template('admitted_cadets.html', 
+                           search_form=search_form, 
+                           rows=admitted_cadets,
+                           year=year,
+                           page=page,
+                           per_page=per_page,
+                           today=formatted_today_date
+                           )
+
 
 @app.route('/remove_course/<int:id>/<int:cadet_id>', methods=['GET'])
 def remove_course(id, cadet_id):
@@ -683,18 +763,58 @@ def remove_medical_record(id, cadet_id):
                            )
 
 
-@app.route('/upload/<int:id>', methods=['GET', 'POST'])
-def upload(id):
-    cadet = Cadet.query.get(id)
-    form = EditForm(obj=cadet)
-    if form.validate_on_submit():
-        cadet.image = form.image.data
-        
-        return render_template('edit.html', cadet=cadet)
+@app.route('/upload', methods=['POST'])
+def upload_profile_picture():
+    cadet_id = request.form.get('id')
+    
+    if not cadet_id:
+        return jsonify({'error': 'Cadet ID is required'})
+    
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+    
+    if not allowed_file(file.filename):
+        return jsonify({'error': 'File type not allowed'})
 
-@app.route('/static/images/<filename>')
+    try:
+        # Check if a profile picture already exists for the cadet_id
+        existing_picture = ProfilePicture.query.filter_by(cadet_id=cadet_id).first()
+        if existing_picture:
+            # Update the existing picture's filename
+            filename = existing_picture.filename
+        else:
+            # Generate a unique filename for the uploaded picture
+            filename = str(uuid.uuid4()) + '_' + file.filename
+
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # Resize and save the image to the upload folder
+        with Image.open(file) as img:
+            # Resize the image to a smaller size (e.g., 200x200)
+            resized_img = img.resize((200, 200))
+            resized_img.save(file_path)
+        
+        # Save or update the profile picture in the database
+        if existing_picture:
+            existing_picture.filename = filename
+        else:
+            new_picture = ProfilePicture(filename=filename, cadet_id=cadet_id)
+            db.session.add(new_picture)
+        
+        db.session.commit()
+
+        return jsonify({'success': 'File uploaded successfully', 'filename': filename})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'An error occurred while saving the file'})
+
+@app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_file(f'./static/images/{filename}', as_attachment=True)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route("/add_cadet", methods=['GET', 'POST'])
 def add_cadet():

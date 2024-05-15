@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends "base.html" %} {% block title %}Add Admitted Cadets{% endblock %} {%
+block content %}
+
+<div style="margin: auto" class="container">
+  <h3 style="color: rgb(0, 68, 171)">Add Admitted Cadets</h3>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="flash-{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  
+    <div class="row">
+      <div class="col">
+        <input
+          class="form-control"
+          type="text"
+          id="cadetName"
+          placeholder="Enter cadet number"
+        />
+        <div id="suggestions"></div>
+      </div>
+
+      <div class="col">
+        <div class="card">
+          <h6 style="color: rgb(0, 68, 171); padding: 1em">
+            List of admitted cadets
+          </h6>
+          <li
+            style="list-style-type: none; padding: 10px; color: rgb(0, 68, 171)"
+            id="selectedCadetsList"
+          ></li>
+          <div><br /></div>
+          <button
+            style="width: 100px; margin: 20px auto"
+            type="button"
+            class="btn btn-primary"
+            id="sendSelectedCadetsBtn"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</div>

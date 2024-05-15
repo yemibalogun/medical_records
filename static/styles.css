@@ -168,9 +168,8 @@ table {
 }
 
 .active-row:hover {
-  font-weight: 600;
   color: rgb(0, 68, 171);
-  transition: 0.2s;
+  transition: 0.1s;
 }
 
 .custom-table tbody tr:nth-of-type(even) {
@@ -294,10 +293,14 @@ footer {
   display: none;
 }
 
-.flashes {
-  text-align: center;
-  color: #08a045;
-  list-style-type: none;
+.flash-success {
+  color: green;
+}
+.flash-error {
+  color: red;
+}
+.flash-info {
+  color: blue;
 }
 
 .dropdown-item {

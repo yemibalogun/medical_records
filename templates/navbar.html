@@ -1,42 +1,94 @@
 <!DOCTYPE html>
-<nav class="navbar bg-light navbar-expand-lg bg-body-primary" data-bs-theme="light">
-    <div class="container">
-      <a class="navbar-brand" href="/"><img id="nda-logo" src="{{ url_for('static', filename='images/nda_logo.png') }}" alt="nda-logo"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul style="font-size: smaller;" class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
-          </li>
-          <!-- {% if session.get('show_button') %} -->
-          <li class="nav-item">
+<nav
+  class="navbar bg-light navbar-expand-lg bg-body-primary"
+  data-bs-theme="light"
+>
+  <div class="container">
+    <a class="navbar-brand" href="/"
+      ><img
+        id="nda-logo"
+        src="{{ url_for('static', filename='images/nda_logo.png') }}"
+        alt="nda-logo"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul style="font-size: smaller" class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('home') }}"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Admission
+          </a>
+          <ul class="dropdown-menu">
+            <li><a
+              class="dropdown-item"
+              aria-current="page"
+              href="{{ url_for('admit_cadet') }}"
+              >Add cadets</a
+            ></li>
+            <li><a class="dropdown-item" href="{{ url_for('admitted_cadets') }}">Admission cadets</a></li>
             
-          </li>
-          <!-- {% endif %} -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Regular Course
-            </a>
-            
-            <ul class="dropdown-menu">
-              {% for key, value in course_dict.items() %}
-              <li><a class="dropdown-item" href="{{ url_for('select_course', id=key) }}"> {{ value[0] }} RC</a></li>
-              {% endfor %}
-              
-            </ul>  
-          </li>  
-          
-        </ul>
+          </ul>
+        </li>
 
-        <form class="d-flex" name="searchForm" method="POST" action="{{ url_for('search') }}" role="search">
-          {{ search_form.csrf_token }}
-          {{ search_form.searched(id="searched", class="form-control", type="search", placeholder="Search", aria_label="Search", oninput="autocompleteSearch()") }}
-          {{ search_form.submit(class="btn btn-outline-primary btn-sm", style="margin-left: 20px;") }}
-        </form>
-         
-      </div>
+        <!-- {% if session.get('show_button') %} -->
+        <li class="nav-item"></li>
+        <!-- {% endif %} -->
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Regular Course
+          </a>
+
+          <ul class="dropdown-menu">
+            {% for key, value in course_dict.items() %}
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('select_course', id=key) }}"
+              >
+                {{ value[0] }} RC</a
+              >
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+
+      <form
+        class="d-flex"
+        name="searchForm"
+        method="POST"
+        action="{{ url_for('search') }}"
+        role="search"
+      >
+        {{ search_form.csrf_token }} {{ search_form.searched(id="searched",
+        class="form-control", type="search", placeholder="Search",
+        aria_label="Search", oninput="autocompleteSearch()") }} {{
+        search_form.submit(class="btn btn-outline-primary btn-sm",
+        style="margin-left: 20px;") }}
+      </form>
     </div>
-  </nav>
-
+  </div>
+</nav>

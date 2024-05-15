@@ -14,16 +14,9 @@
         <a
           type="btn"
           style="font-size: small; float: right"
-          href="{{ url_for('add_academic_score', id=cadet.id) }}"
+          href="{{ url_for('student_info', id=cadet.id )}}"
           class="card-link"
-          >See Academic results</a
-        ><br />
-        <a
-          type="btn"
-          style="font-size: small; float: right"
-          href="{{ url_for('add_military_score', id=cadet.id) }}"
-          class="card-link"
-          >See Military results</a
+          >Back to Dashboard</a
         >
       </span>
     </h4>
@@ -51,7 +44,7 @@
       {% endfor %}
     </ul>
     {% endif %} {% endwith %}
-    <div class="col">
+    <div style="padding: 2em; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);" class="col">
       <!-- Form for entering academic scores -->
       <form
         id="medial-record-form"
@@ -60,68 +53,101 @@
       >
         {{ medical_record_form.csrf_token() }}
         <p>Enter Record:</p>
-        <table class="custom-table table-sm table-hover table-borderless">
-          <thead style="font-size: small">
-            <tr>
-              <th style="width: 10%" scope="col">Diagnosis</th>
-              <th style="width: 5%" scope="col">Excuse Duty</th>
-              <th style="width: 5%" scope="col">Days</th>
-              <th style="width: 5%" scope="col">Admitted</th>
-              <th style="width: 5%" scope="col">Discharged</th>
-              <th style="width: 5%" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody
-            style="text-align: center; font-size: small"
-            id="cadet-table-body"
-          >
-            <!-- Initial row for data entry -->
-            <tr class="active-row">
 
-              <td data-cell="Diagnosis" class="head-center">
-                {{ medical_record_form.diagnosis(class="form-control",
-                placeholder="Diagnosis") }}
-              </td>
-              <td data-cell="Excuse Duty Type" class="head-center">
-                {{ medical_record_form.excuse_duty_type(class="form-control",
-                placeholder="Service Year") }}
-              </td>
-              <td data-cell="Days" class="head-center">
-                {{ medical_record_form.excuse_duty_days(class="form-control",
-                placeholder="Days") }}
-              </td>
-              <td data-cell="Admitted" class="head-center">
-                {{ medical_record_form.admitted(class="form-control",
-                placeholder="Service Year") }}
-              </td>
-              <td data-cell="Discharged" class="head-center">
-                {{ medical_record_form.discharged(class="form-control",
-                placeholder="Service Year") }}
-              </td>
-              <td data-cell="Submit" style="padding: 5px">
-                <div class="form-group" style="text-align: center">
-                  {{ medical_record_form.submit( class="btn btn-primary btn-sm")
-                  }}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          {{ medical_record_form.history(class="form-control",
+          placeholder="history") }} {% if medical_record_form.history.errors
+          %}
+          <ul class="errors">
+            {% for error in medical_record_form.history.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+          {{ medical_record_form.examination(class="form-control",
+          placeholder="examination") }} {% if medical_record_form.examination.errors
+          %}
+          <ul class="errors">
+            {% for error in medical_record_form.examination.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+
+          {{ medical_record_form.diagnosis(class="form-control",
+          placeholder="diagnosis") }} {% if medical_record_form.diagnosis.errors
+          %}
+          <ul class="errors">
+            {% for error in medical_record_form.diagnosis.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+
+          {{ medical_record_form.plan(class="form-control",
+          placeholder="plan") }} {% if
+          medical_record_form.plan.errors %}
+          <ul class="errors">
+            {% for error in medical_record_form.plan.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+
+          {{ medical_record_form.prescription(class="form-control",
+          placeholder="prescription") }} {% if
+          medical_record_form.prescription.errors %}
+          <ul class="errors">
+            {% for error in medical_record_form.prescription.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+
+          {{ medical_record_form.excuse_duty.label(class="form-label") }}
+          {{ medical_record_form.excuse_duty(class="form-control",
+          placeholder="days") }} {% if medical_record_form.excuse_duty.errors %}
+          <ul class="errors">
+            {% for error in medical_record_form.excuse_duty.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+
+          {{ medical_record_form.excuse_duty_days(class="form-control",
+          placeholder="days") }} {% if
+          medical_record_form.excuse_duty_days.errors %}
+          <ul class="errors">
+            {% for error in medical_record_form.excuse_duty_days.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+
+          <br />
+          <div class="form-group" style="text-align: center">
+            {{ medical_record_form.submit( class="btn btn-primary") }}
+          </div>
+
       </form>
     </div>
 
     <div class="col">
       <p>Medical Records:</p>
       <table class="custom-table table-sm table-hover table-borderless">
-        <thead style="text-align: center">
+        <thead style="font-size: small; text-align: center">
           <tr>
             <th style="width: 1%" scope="col">Ser</th>
-            <th style="width: 20%" scope="col">Date</th>
-            <th style="width: 10%" scope="col">Diagnosis</th>
+            <th style="width: 10%" scope="col">Date</th>
+            <th style="width: 20%" scope="col">Diagnosis</th>
             <th style="width: 5%" scope="col">Excuse Duty</th>
             <th style="width: 5%" scope="col">Days</th>
-            <th style="width: 5%" scope="col">Admitted</th>
-            <th style="width: 5%" scope="col">Discharged</th>
             <th style="width: 1%" scope="col"></th>
           </tr>
         </thead>
@@ -132,22 +158,20 @@
             <th class="card-heading-text" scope="row">
               {{ (page - 1) * per_page + loop.index }}
             </th>
-            <td data-cell="date">{{ row.date_reported_sick.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ') }}</td>
+            <td data-cell="date">
+              {{ row.date_reported_sick.strftime('%d %B
+              %Y').lstrip('0').replace(' 0', ' ') }}
+            </td>
             <td data-cell="diagnosis" class="head-center">
               {{ row.diagnosis.title() }}
             </td>
             <td data-cell="excuse_duty_type" class="head-center">
-              {{row.excuse_duty_type.title() }}
+              {{row.excuse_duty.title() }}
             </td>
             <td data-cell="excuse_duty_days" class="head-center">
               {{row.excuse_duty_days }}
             </td>
-            <td data-cell="admitted" class="head-center">
-              {{ row.admitted.title() }}
-            </td>
-            <td data-cell="discharged" class="head-center">
-              {{ row.discharged.title() }}
-            </td>
+
             <td data-cell="remove record" class="head-center">
               <a
                 href="#"

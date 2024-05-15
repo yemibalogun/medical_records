@@ -1,8 +1,10 @@
 from sqlalchemy import  Column, String, Integer, ForeignKey, Float, Enum, Table, MetaData, Date
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from config import db, app
 from datetime import datetime, date
 from flask_migrate import Migrate
+import os
+import uuid
 
 metadata = MetaData()
 migrate = Migrate(app, db)
@@ -117,17 +119,33 @@ class Medical(db.Model):
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     date_reported_sick = Column("date_reported_sick", Date, nullable=False, default=date.today)
+    history = Column("history", String, nullable=False)
+    examination = Column("examination", String, nullable=False)
     diagnosis = Column("diagnosis", String, nullable=False)
-    excuse_duty_type = Column("excuse_duty", String, nullable=False)
-    excuse_duty_days = Column("days", Integer, nullable=False)
-    admitted = Column("admitted", String, nullable=False, default='no')
-    discharged = Column("discharged", String, nullable=False, default='no')
+    plan = Column("plan", String, nullable=False)
+    prescription = Column("prescription", String, nullable=False)
+    excuse_duty = Column("excuse_duty", String, nullable=False)
+    excuse_duty_days = Column("excuse_duty_days", Integer, nullable=False, default=0)
+    
     # relationship
     cadet_id = Column(Integer, ForeignKey("cadets.id"))
     cadet = relationship("Cadet", back_populates="medical")
 
     def __repr__(self):
-        return f"({self.id} {self.date_reported_sick} {self.diagnosis} {self.excuse_duty_type} {self.excuse_duty_days} {self.admitted} {self.discharged})"
+        return f"({self.id} {self.date_reported_sick} {self.diagnosis} {self.excuse_duty} {self.excuse_duty_days})"
+
+class ProfilePicture(db.Model):
+    __tablename__ = "profile_pictures"
+
+    id = Column("id", String(255), primary_key=True,default=str(uuid.uuid4())) # Unique ID for each picture
+    filename = Column("filename", String(255), nullable=False) # Filename of the picture
+    # Define the foreign key relationship with Cadet
+    cadet_id = Column(Integer, ForeignKey('cadets.id'))
+    cadet = relationship("Cadet", back_populates='profile_picture')
+    
+    def __repr__(self):
+        return f"({self.id} {self.filename} {self.cadet_id})"
+
 
 class Service(db.Model):
     __tablename__="services"
@@ -208,15 +226,30 @@ class Cadet(db.Model):
     regular_id = Column("regular_id", ForeignKey('regular_courses.id'), nullable=False)
     regular_course = relationship('RegularCourse', back_populates='cadet')
     medical = relationship('Medical', back_populates='cadet')
+    admission_count = Column("admission_count", Integer, nullable=False, default=0)
+    admission_date = Column(Date, nullable=True)  # New field for admission date
 
-    # Add CGPA column
-    cgpa = Column(Float, default=0.0)
+    @classmethod
+    def admit_cadets(cls, cadet_ids):
+        cadets = cls.query.filter(cls.id.in_(cadet_ids)).all()
+        for cadet in cadets:
+            cadet.admission_count += 1
+            cadet.admission_date = datetime.now().date()  # Set admission date
+
+        db.session.commit()
 
     # Establish relationships with Score and ServiceScore tables
     scores = relationship("Score", back_populates='cadet', uselist=False)
     service_scores = relationship("ServiceScore", back_populates='cadet', uselist=False)
 
     courses = relationship("Course", back_populates="cadet")
+    profile_picture = relationship('ProfilePicture', back_populates='cadet')
+
+    @validates('admission_count')
+    def validate_admission_count(self, key, admission_count):
+        if admission_count < 0:
+            raise ValueError('Admission count cannot be negative.')
+        return admission_count
 
     @property
     def total_units(self):
