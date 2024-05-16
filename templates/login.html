@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} {% block title %} login {% endblock %} {% block
+content %}
+
+<!-- Page Header -->
+<header
+  class="masthead"
+  style="
+    background-image: url('https://images.unsplash.com/photo-1601370690183-1c7796ecec61?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  "
+>
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div style="color: #fff" class="page-heading">
+          <h1>Login</h1>
+          <span class="subheading">Welcome Back!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div style="width: 400px; margin: auto; padding: 1em;" class="form-container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto content">
+        <div></div>
+        <!-- <h4 style="color: rgb(0, 68, 171); text-align: left">Login</h4> -->
+        <br>
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for
+        message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+          {{ login_form.csrf_token() }}
+
+          <div class="col">
+            {{ login_form.email(class="form-control", placeholder="email") }} {%
+            if login_form.email.errors %}
+            <ul class="errors">
+              {% for error in login_form.email.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <br />
+          </div>
+
+          <div class="col">
+            {{ login_form.password(class="form-control", placeholder="password")
+            }} {% if login_form.password.errors %}
+            <ul class="errors">
+              {% for error in login_form.password.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <br />
+          </div>
+
+          <div class="form-group">
+            {{ login_form.submit( class="btn btn-primary") }}
+            
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="div">
+      <br>
+      <br>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

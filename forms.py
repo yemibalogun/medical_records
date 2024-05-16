@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FieldList, DateField, RadioField, SelectField, IntegerField, FloatField, TextAreaField
+from wtforms import StringField, SubmitField, PasswordField, DateField, RadioField, SelectField, IntegerField, FloatField, TextAreaField, EmailField, TelField
 from wtforms.validators import DataRequired, InputRequired, ValidationError
 from course_code import choices
 import datetime
@@ -127,3 +127,25 @@ class MedicalRecordForm(FlaskForm):
 class AdmissionForm(FlaskForm):
     cadet_no = StringField('Cadet Number', validators=[DataRequired()])
     submit = SubmitField('Add')
+
+class StaffRegisterForm(FlaskForm):
+    firstname = StringField('First Name', validators=[DataRequired()])
+    middlename = StringField('Middle Name', validators=[DataRequired()])
+    lastname = StringField('Last Name', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    phone = TelField('Phone Number', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
+    gender = RadioField('Gender', choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired()])
+    role = RadioField('Role', choices=[('admin', 'Admin'), ('staff', 'Staff')], validators=[DataRequired()])
+    status = RadioField('Status', choices=[('active', 'Active'), ('inactive', 'Inactive')], validators=[DataRequired()])
+    appointment = StringField('Appointment', validators=[DataRequired()])
+    date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
+    date_tos = DateField('Date taken on strenght', validators=[DataRequired()])
+    
+    submit = SubmitField('Register')
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField("Login")

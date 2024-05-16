@@ -97,6 +97,7 @@ class Gender(db.Model):
         
     id = Column("id", Integer, primary_key=True)
     gender_type = Column("gender_type", String, nullable=False)
+    staff = relationship('Staff', back_populates='gender')
     cadet = relationship('Cadet', back_populates='gender')
     
     def __repr__(self):
@@ -201,7 +202,31 @@ class ServiceScore(db.Model):
     def __repr__(self):
         return f"({self.id} {self.first_term_score} {self.second_term_score} {self.service_year} {self.service_subject_id} {self.cadet_id})"
 
-        
+class Staff(db.Model):
+    __tablename__ = "staffs"
+
+    staff_id = Column("staff_id", Integer, primary_key=True, autoincrement=True)
+    firstname = Column("firstname", String(255), nullable=False)
+    middlename = Column("middlename", String(255))
+    lastname = Column("lastname", String(255), nullable=False)
+    email = Column("email", String(255), nullable=False, unique=True)
+    password = Column("password", String(255), nullable=False)
+    phone = Column("phone", String(255), nullable=False, unique=True)
+    address = Column("address", String(255), nullable=False)
+    gender_id = Column("gender_id", ForeignKey('genders.id'), nullable=False)
+    gender = relationship('Gender', back_populates='staff')
+    role = Column(Enum('admin', 'staff'), nullable=False) # Enum for staff role (admin or staff)
+    status = Column(Enum('active', 'inactive'), nullable=False) # Enum for staff status (active or inactive)
+    appointment = Column("appointment", String(255), nullable=False)
+    date_of_birth = Column("date_of_birth", Date, nullable=False)
+    date_tos = Column("date_tos", Date, nullable=False)
+    date_of_joining = Column("date_of_joining", Date, nullable=False, default=date.today)
+
+    def __repr__(self):
+        return f"({self.staff_id} {self.firstname} {self.middlename} {self.lastname} {self.email} {self.password} {self.phone} {self.address} {self.gender_id} {self.role} {self.status} {self.appointment} {self.date_of_birth} {self.date_tos} {self.date_of_joining})"
+
+
+
 class Cadet(db.Model):
     __tablename__= "cadets"
     

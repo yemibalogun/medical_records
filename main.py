@@ -1,8 +1,10 @@
 from flask import render_template, redirect, url_for, send_file, request, jsonify, session, flash, send_from_directory
-from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm, AdmissionForm
+from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user 
+from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm, AdmissionForm, StaffRegisterForm, LoginForm
 from config import app, db, session
 from werkzeug.utils import secure_filename
-from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical, ProfilePicture
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical, ProfilePicture, Staff
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import declarative_base, relationship, aliased
 from sqlalchemy.orm.exc import NoResultFound
@@ -11,7 +13,7 @@ from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
 from concurrent.futures import ThreadPoolExecutor
 from PIL import Image
-import csv, io, os, time, json
+import csv, io, os, time, json, sys
 import uuid
 from datetime import datetime, date
 from utils import regular_courses, filtered_subjects, get_total_first_term_score, get_total_second_term_score, log_score_change, calculate_gpa_cpga
@@ -38,6 +40,16 @@ if not os.path.exists(upload_folder_path):
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(staff_id):
+    return Staff.query.get(int(staff_id))
+
+print(sys.executable)
 
 # Pass Stuff to NavBar
 @app.context_processor
@@ -120,6 +132,29 @@ def search():
         ).all()
         
     return render_template("search.html", search_form=search_form, rows=name_search)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    search_form = SearchForm()
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+
+        email=login_form.email.data
+        password=login_form.password.data
+        
+        staff = Staff.query.filter_by(email=email).first()
+        if not staff:
+            flash('This email does not exist!')
+            return redirect(url_for('login'))
+        elif not check_password_hash(staff.password, password):
+                login_user(staff)
+                flash('Password incorrect, please try again.')
+                return redirect(url_for('login'))
+        else:
+            login_user(staff)
+            return redirect(url_for('home'))
+    return render_template("login.html", login_form=login_form, search_form=search_form)
+
 
 @app.route("/")
 def home():
@@ -383,6 +418,7 @@ def edit_cadet(id):
     return render_template("edit.html", row=selected_cadet, edit_form=edit_form, year=year, search_form=search_form)
 
 @app.route("/dashboard/<int:id>", methods=["GET","POST"])
+@login_required
 def student_info(id):
     search_form = SearchForm()
 
@@ -434,6 +470,52 @@ def medical_history(id):
     search_form = SearchForm()
     
     return render_template('medical_history.html', search_form=search_form)
+
+@app.route('/register_staff', methods=['GET', 'POST'])
+def register_staff():
+    search_form = SearchForm()
+    staff_register_form = StaffRegisterForm()
+
+    if staff_register_form.validate_on_submit():
+        email = staff_register_form.email.data
+        
+        if Staff.query.filter_by(email=email).first():
+            flash(f"You've already signed up with that email, Login instead!")
+            return redirect(url_for('login'))
+        else:
+            
+            hash_and_salted_password = generate_password_hash(
+                staff_register_form.password.data,
+                method='pbkdf2:sha256',
+                salt_length=8
+            )
+
+            gender = staff_register_form.gender.data
+            gender_instance = Gender.query.filter_by(gender_type=gender).first()
+            
+            new_staff = Staff(
+                firstname=staff_register_form.firstname.data,
+                middlename=staff_register_form.middlename.data,
+                lastname=staff_register_form.lastname.data,
+                email=staff_register_form.email.data,
+                password=hash_and_salted_password,
+                phone=staff_register_form.phone.data,
+                address=staff_register_form.address.data,
+                gender = gender_instance,
+                role=staff_register_form.role.data,
+                status=staff_register_form.status.data,
+                appointment=staff_register_form.appointment.data,
+                date_of_birth=staff_register_form.date_of_birth.data,
+                date_tos=staff_register_form.date_tos.data,
+                )
+            db.session.add(new_staff)
+            db.session.commit()
+        
+            # This next line will authenticate the user with Flask-Login
+            login_user(new_staff)
+            return redirect(url_for("home"))
+
+    return render_template('staff_registration.html', search_form=search_form, staff_register_form=staff_register_form)
 
 @app.route('/cadet/results/<int:id>', methods=['GET','POST'])
 def add_academic_score(id):
