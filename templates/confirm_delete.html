@@ -5,6 +5,13 @@
 
 {% block content %}
 <div style="height: 1100px;" class="container">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
     <div id="confirmation-popup" class="confirmation-popup">
         <p>Are you sure you want to delete this cadet?</p>
         <button onclick="confirmDelete('{{ cadet_id }}')">Yes</button>

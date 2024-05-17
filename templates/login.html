@@ -7,7 +7,7 @@ content %}
   class="masthead"
   style="
     background-image: url('https://images.unsplash.com/photo-1601370690183-1c7796ecec61?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-  "
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);"
 >
   <div class="overlay"></div>
   <div class="container">
@@ -15,30 +15,36 @@ content %}
       <div class="col-lg-8 col-md-10 mx-auto">
         <div style="color: #fff" class="page-heading">
           <h1>Login</h1>
-          <span class="subheading">Welcome Back!</span>
+          <span class="subheading"></span>
         </div>
       </div>
     </div>
   </div>
 </header>
+<br>
 
 <div class="container">
-  <div style="width: 400px; margin: auto; padding: 1em;" class="form-container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto content">
-        <div></div>
-        <!-- <h4 style="color: rgb(0, 68, 171); text-align: left">Login</h4> -->
+  <div style="width: 400px; margin: auto; padding: 1em; border-radius: 5%;" class="form-container">
+    <div style="margin: auto;" class="row">
+        
+        <h4 style="color: rgb(0, 68, 171); text-align: center">Welcome</h4>
         <br>
-        {% with messages = get_flashed_messages() %} {% if messages %} {% for
-        message in messages %}
-        <p>{{ message }}</p>
-        {% endfor %} {% endif %} {% endwith %}
-
-        <form method="POST" action="{{ url_for('login') }}">
+        <br>
+        <div style="font-size: small; text-align: center;">
+          {% with messages = get_flashed_messages() %} 
+          {% if messages %} 
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %} 
+          {% endif %} 
+          {% endwith %}
+        </div>
+        
+        <form style="text-align: center; padding: 1em;" method="POST" action="{{ url_for('login') }}">
           {{ login_form.csrf_token() }}
 
-          <div class="col">
-            {{ login_form.email(class="form-control", placeholder="email") }} {%
+          <div >
+            {{ login_form.email(class="form-control input-sm", placeholder="email") }} {%
             if login_form.email.errors %}
             <ul class="errors">
               {% for error in login_form.email.errors %}
@@ -49,8 +55,8 @@ content %}
             <br />
           </div>
 
-          <div class="col">
-            {{ login_form.password(class="form-control", placeholder="password")
+          <div>
+            {{ login_form.password(class="form-control input-sm", placeholder="password")
             }} {% if login_form.password.errors %}
             <ul class="errors">
               {% for error in login_form.password.errors %}
@@ -65,13 +71,15 @@ content %}
             {{ login_form.submit( class="btn btn-primary") }}
             
           </div>
+          <br>
         </form>
-      </div>
+        <div class="div">
+          <p style="font-size: small;">Not registered yet? <span><a style="font-size: small;" href="{{ url_for('register_staff')}}"> Register here</a></span></p>  
+
+        </div>
+      
     </div>
-    <div class="div">
-      <br>
-      <br>
-    </div>
+    
   </div>
 </div>
 

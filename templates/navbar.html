@@ -11,7 +11,7 @@
         alt="nda-logo"
     /></a>
     <button
-      class="navbar-toggler"
+      class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarSupportedContent"
@@ -19,7 +19,9 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <span class="toggler-icon top-bar"></span>
+      <span class="toggler-icon middle-bar"></span>
+      <span class="toggler-icon bottom-bar"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul style="font-size: smaller" class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -32,24 +34,7 @@
           >
         </li>
 
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            href="{{ url_for('login') }}"
-            >Login</a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            href="{{ url_for('register_staff') }}"
-            >Register staff</a
-          >
-        </li>
-
+        {% if current_user.is_authenticated %}
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
@@ -104,8 +89,38 @@
             {% endfor %}
           </ul>
         </li>
+
+        
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('logout') }}"
+            >Logout</a
+          >
+        </li>
+        {% else%}
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('register_staff') }}"
+            >Register</a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('login') }}"
+            >Login</a
+          >
+        </li>
+        {% endif %}
       </ul>
 
+      
       <form
         class="d-flex"
         name="searchForm"
@@ -114,10 +129,10 @@
         role="search"
       >
         {{ search_form.csrf_token }} {{ search_form.searched(id="searched",
-        class="form-control", type="search", placeholder="Search",
+        class="form-control input-sm", type="search", placeholder="Search",
         aria_label="Search", oninput="autocompleteSearch()") }} {{
         search_form.submit(class="btn btn-outline-primary btn-sm",
-        style="margin-left: 20px;") }}
+        style="margin-left: 20px; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;") }}
       </form>
     </div>
   </div>

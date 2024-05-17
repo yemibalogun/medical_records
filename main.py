@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for, send_file, request, jsonify, session, flash, send_from_directory
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user 
+from flask_login import login_user, LoginManager, login_required, current_user, logout_user 
+from flask_bcrypt import Bcrypt
 from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm, AdmissionForm, StaffRegisterForm, LoginForm
 from config import app, db, session
 from werkzeug.utils import secure_filename
@@ -22,6 +23,11 @@ from utils import regular_courses, filtered_subjects, get_total_first_term_score
 year = datetime.now().year
 migrate = Migrate(app, db)
 Bootstrap(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
 
 # Get the current working directory
 current_directory = os.getcwd()
@@ -41,15 +47,6 @@ if not os.path.exists(upload_folder_path):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-@login_manager.user_loader
-def load_user(staff_id):
-    return Staff.query.get(int(staff_id))
-
-print(sys.executable)
 
 # Pass Stuff to NavBar
 @app.context_processor
@@ -64,6 +61,12 @@ def base():
 
 # Create a session
 session = db.session
+
+@login_manager.user_loader
+def load_user(staff_id):
+    staff = session.get(Staff, int(staff_id))
+    session.close() # Close the session after use
+    return staff
 
 @app.route('/autocomplete', methods=['GET'])
 def autocomplete():
@@ -135,6 +138,8 @@ def search():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     search_form = SearchForm()
     login_form = LoginForm()
     if login_form.validate_on_submit():
@@ -144,19 +149,26 @@ def login():
         
         staff = Staff.query.filter_by(email=email).first()
         if not staff:
-            flash('This email does not exist!')
+            flash('This email does not exist!', 'info')
             return redirect(url_for('login'))
-        elif not check_password_hash(staff.password, password):
-                login_user(staff)
+        elif not bcrypt.check_password_hash(staff.password, password):
                 flash('Password incorrect, please try again.')
                 return redirect(url_for('login'))
         else:
             login_user(staff)
-            return redirect(url_for('home'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
     return render_template("login.html", login_form=login_form, search_form=search_form)
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("You have been logged out!")
+    return redirect(url_for('login'))
 
 @app.route("/")
+@login_required
 def home():
     search_form = SearchForm()
     cadets = session.query(Cadet).all()          
@@ -174,6 +186,7 @@ def home():
     return render_template("course.html", academy_count=academy_count, course_dict=course_dict, search_form=search_form)
 
 @app.route("/course/<int:id>", methods=["GET"])  
+@login_required
 def select_course(id):
     search_form = SearchForm()
     page = request.args.get("page", 1, type=int)
@@ -391,6 +404,7 @@ def select_course_bn_service(id, bn_id, service_id):
                            )
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
+@login_required
 def edit_cadet(id):
     search_form=SearchForm()
     edit_form=EditForm()
@@ -466,6 +480,7 @@ def student_info(id):
                                )
 
 @app.route('/medical_history/<int:id>')
+@login_required
 def medical_history(id):
     search_form = SearchForm()
     
@@ -473,23 +488,20 @@ def medical_history(id):
 
 @app.route('/register_staff', methods=['GET', 'POST'])
 def register_staff():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     search_form = SearchForm()
     staff_register_form = StaffRegisterForm()
 
     if staff_register_form.validate_on_submit():
         email = staff_register_form.email.data
-        
+        password = staff_register_form.password.data
         if Staff.query.filter_by(email=email).first():
-            flash(f"You've already signed up with that email, Login instead!")
+            flash(f"You've already registered with that email, Login instead!")
             return redirect(url_for('login'))
         else:
-            
-            hash_and_salted_password = generate_password_hash(
-                staff_register_form.password.data,
-                method='pbkdf2:sha256',
-                salt_length=8
-            )
-
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+     
             gender = staff_register_form.gender.data
             gender_instance = Gender.query.filter_by(gender_type=gender).first()
             
@@ -498,7 +510,7 @@ def register_staff():
                 middlename=staff_register_form.middlename.data,
                 lastname=staff_register_form.lastname.data,
                 email=staff_register_form.email.data,
-                password=hash_and_salted_password,
+                password=hashed_password,
                 phone=staff_register_form.phone.data,
                 address=staff_register_form.address.data,
                 gender = gender_instance,
@@ -513,6 +525,8 @@ def register_staff():
         
             # This next line will authenticate the user with Flask-Login
             login_user(new_staff)
+
+            flash('Your account has been created!', 'success')
             return redirect(url_for("home"))
 
     return render_template('staff_registration.html', search_form=search_form, staff_register_form=staff_register_form)
@@ -619,6 +633,7 @@ def add_military_score(id):
 
 
 @app.route('/cadet/medical/<int:id>', methods=['GET','POST'])
+@login_required
 def add_medical_record(id):
     search_form = SearchForm()
     medical_record_form = MedicalRecordForm()
@@ -669,6 +684,7 @@ def add_medical_record(id):
 
 
 @app.route('/admit_cadet', methods=['GET', 'POST'])
+@login_required
 def admit_cadet():
     search_form = SearchForm()  # Assuming you have a SearchForm defined
 

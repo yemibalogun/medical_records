@@ -5,6 +5,13 @@
 
 {% block content %}
 <div style="height: 1100px;" class="form-container container">
+  {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
   <form method="POST" action="{{ url_for('edit_cadet', id=row.id) }}">
     {{ edit_form.csrf_token() }}
 

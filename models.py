@@ -3,12 +3,12 @@ from sqlalchemy.orm import relationship, validates
 from config import db, app
 from datetime import datetime, date
 from flask_migrate import Migrate
+from flask_login import UserMixin
 import os
 import uuid
 
 metadata = MetaData()
 migrate = Migrate(app, db)
-
 
 score_table = Table('score_table', metadata,
     Column('first_semester_score', Float, default=0.0),
@@ -202,7 +202,7 @@ class ServiceScore(db.Model):
     def __repr__(self):
         return f"({self.id} {self.first_term_score} {self.second_term_score} {self.service_year} {self.service_subject_id} {self.cadet_id})"
 
-class Staff(db.Model):
+class Staff(db.Model, UserMixin):
     __tablename__ = "staffs"
 
     staff_id = Column("staff_id", Integer, primary_key=True, autoincrement=True)
@@ -222,6 +222,9 @@ class Staff(db.Model):
     date_tos = Column("date_tos", Date, nullable=False)
     date_of_joining = Column("date_of_joining", Date, nullable=False, default=date.today)
 
+    def get_id(self):
+        return str(self.staff_id)
+    
     def __repr__(self):
         return f"({self.staff_id} {self.firstname} {self.middlename} {self.lastname} {self.email} {self.password} {self.phone} {self.address} {self.gender_id} {self.role} {self.status} {self.appointment} {self.date_of_birth} {self.date_tos} {self.date_of_joining})"
 

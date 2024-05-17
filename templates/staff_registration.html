@@ -82,6 +82,17 @@
         {% endif %}
         <br />
       </div>
+      
+      <div class="col">
+        {{ staff_register_form.confirm_password(class="form-control", placeholder="confirm password") }} {% if staff_register_form.confirm_password.errors %}
+        <ul class="errors">
+          {% for error in staff_register_form.confirm_password.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
+      </div>
     </div>
 
       

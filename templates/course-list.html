@@ -12,6 +12,13 @@
 
   <!-- <h1>{{ course }} RC</h1> -->
   <div style="margin: 0 auto" class="container" style="font-size: 1rem">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
     <div style="width: fit-content; margin: 0 auto" class="container">
       <div
         style="margin: auto"

@@ -24,8 +24,7 @@
 
       <div class="row">
         <div class="col">
-          {{ add_cadet_form.cadet_no(class="form-control", placeholder="Cadet
-          Number") }} {% if add_cadet_form.cadet_no.errors %}
+          {{ add_cadet_form.cadet_no(class="form-control", placeholder="Cadet number") }} {% if add_cadet_form.cadet_no.errors %}
           <ul class="errors">
             {% for error in add_cadet_form.cadet_no.errors %}
             <li>{{ error }}</li>
@@ -36,8 +35,7 @@
         </div>
 
         <div class="col">
-          {{ add_cadet_form.first_name(class="form-control", placeholder="First
-          Name") }} {% if add_cadet_form.first_name.errors %}
+          {{ add_cadet_form.first_name(class="form-control", placeholder="First name") }} {% if add_cadet_form.first_name.errors %}
           <ul class="errors">
             {% for error in add_cadet_form.first_name.errors %}
             <li>{{ error }}</li>
@@ -49,7 +47,7 @@
 
         <div class="col">
           {{ add_cadet_form.middle_name(class="form-control",
-          placeholder="Middle Name") }} {% if add_cadet_form.middle_name.errors
+          placeholder="Middle name") }} {% if add_cadet_form.middle_name.errors
           %}
           <ul class="errors">
             {% for error in add_cadet_form.middle_name.errors %}
@@ -61,8 +59,7 @@
         </div>
 
         <div class="col">
-          {{ add_cadet_form.last_name(class="form-control", placeholder="Last
-          Name") }} {% if add_cadet_form.last_name.errors %}
+          {{ add_cadet_form.last_name(class="form-control", placeholder="Last name") }} {% if add_cadet_form.last_name.errors %}
           <ul class="errors">
             {% for error in add_cadet_form.last_name.errors %}
             <li>{{ error }}</li>
@@ -90,8 +87,7 @@
 
       <div class="row">
         <div class="col">
-          {{ add_cadet_form.state(class="form-control", placeholder="State of
-          Origin") }} {% if add_cadet_form.state.errors %}
+          {{ add_cadet_form.state(class="form-control", placeholder="State of Origin") }} {% if add_cadet_form.state.errors %}
           <ul class="errors">
             {% for error in add_cadet_form.state.errors %}
             <li>{{ error }}</li>
