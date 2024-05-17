@@ -138,8 +138,16 @@ class StaffRegisterForm(FlaskForm):
     phone = TelField('Phone Number', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
     gender = RadioField('Gender', choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired()])
-    role = RadioField('Role', choices=[('admin', 'Admin'), ('staff', 'Staff')], validators=[DataRequired()])
-    status = RadioField('Status', choices=[('active', 'Active'), ('inactive', 'Inactive')], validators=[DataRequired()])
+    role = SelectField('Role', choices=[('admin', 'Admin'), 
+                                        ('doctor', 'Doctor'), 
+                                        ('nurse', 'Nurse'), 
+                                        ('cadets brigade', 'Cadets Brigade')
+                                        ], validators=[DataRequired()])
+    
+    status = SelectField('Status', choices=[('active', 'Active'), 
+                                            ('inactive', 'Inactive')
+                                            ], validators=[DataRequired()])
+    
     appointment = StringField('Appointment', validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
     date_tos = DateField('Date taken on strenght', validators=[DataRequired()])
@@ -147,6 +155,6 @@ class StaffRegisterForm(FlaskForm):
     submit = SubmitField('Register')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Login")
