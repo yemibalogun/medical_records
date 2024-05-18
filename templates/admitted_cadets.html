@@ -5,19 +5,24 @@ block content %}
 <div style="margin: auto" class="container">
   <h3 style="color: rgb(0, 68, 171)">Admitted Cadets</h3>
   <h5 style="font-size: small; color: grey">{{ today }}</h5>
-  {% with messages = get_flashed_messages() %} {% if messages %}
+  <div style="font-size: small;" class="div">
+    {% with messages = get_flashed_messages() %} {% if messages %}
   <ul class="flashes">
     {% for message in messages %}
     <li>{{ message }}</li>
     {% endfor %}
   </ul>
-  {% endif %} {% endwith %}
+  {% endif %} 
+  {% endwith %}
+  </div>
+  
   <div style="margin: 0 auto" class="container" style="font-size: 1rem">
     <div style="width: fit-content; margin: 0 auto" class="container">
       <div
         style="margin: auto"
         class="autocomplete-suggestions custom-container"
       >
+      <div style="margin: 0; padding: 0;" class="scrollable-table">
         <table class="custom-table table-sm table-hover">
           <thead>
             <tr>
@@ -47,17 +52,21 @@ block content %}
                 >
               </td>
               <td data-cell="Service">
-                {{ row.service.service_type.capitalize() }}
+                
               </td>
-              <td data-cell="Battalion">{{ row.bn.bn.capitalize() }}</td>
+              <td data-cell="Battalion">
+                
+
+              </td>
               <td data-cell="Department">
-                {{ row.department.department_name.title() }}
+                
               </td>
             </tr>
 
             {% endfor %}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
     {% endblock %}

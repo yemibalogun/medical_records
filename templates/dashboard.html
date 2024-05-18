@@ -3,7 +3,7 @@
 {% block title %} dashboard {% endblock %} 
 {% block content %}
 
-<div style="height: 1100px" class="container" style="width: 90%">
+<div style="height: 1100px" class="container-fluid">
   <div
     style="display: flex; flex-wrap: wrap; justify-content: space-between"
     class="row"
@@ -14,16 +14,7 @@
           style="margin: 0; display: flex; justify-content: space-between"
           class="row"
         >
-          <div class="col-md-4">
-            <img id="profilePicture" 
-              src="{% if profile_pics.filename %}/profile_pics/{{ profile_pics.filename }}{% else %}/static/images/image_placeholder.png{% endif %}" 
-              alt="Profile Picture">
-
-            <form id="profileForm" enctype="multipart/form-data">
-              <input type="hidden" id="cadetId" name="id" value="{{selected_cadet.id}}"> <!-- Replace "123" with actual cadet ID -->
-              <input type="file" id="profilePictureInput" name="file" accept="image/*">
-            </form>
-          </div>
+          
           
           <div class="col-md-8">
             <div class="card-body">
@@ -59,7 +50,7 @@
 
     <div class="col" style="max-width: 150px; font-size: small">
       <p>Days Admitted: {{ selected_cadet.admission_count }}</p>
-      <p>Days Confined: </p>
+      <p>Days Confined: {{ days_confined }}</p>
     </div>
     
     <div class="col" style="max-width: 150px; font-size: small">
@@ -74,59 +65,64 @@
   </div>
   <!-- <hr>     -->
   
-  <div style="margin: auto;" class="container">
+  <div style="margin: auto;" class="container-fluid">
     
     <div style="margin: 0;" id="autocomplete-suggestions" class="autocomplete-suggestions">
       <p>Medical Records:</p>
-      <table class="custom-table table-sm table-hover table-borderless">
-        <thead>
-          <tr>
-            <th style="width: 10%" scope="col">Date</th>
-            <th style="width: 20%" scope="col">History</th>
-            <th style="width: 20%" scope="col">Examination</th>
-            <th style="width: 20%" scope="col">Diagnosis</th>
-            <th style="width: 20%" scope="col">Plan</th>
-            <th style="width: 20%" scope="col">Prescription</th>
-            <th style="width: 20%" scope="col">Excuse Duty</th>
-            <th style="width: 20%" scope="col">Days</th>
-          </tr>
-        </thead>
-        <tbody style="font-size: small" id="cadet-table-body">
-          {% for row in rows %}
-          <!-- Initial row for data entry -->
-          <tr class="active-row">
-            
-            <td data-cell="date">{{ row.date_reported_sick.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ') }}</td>
-            <td data-cell="history" class="head-center">
-              {{ row.history }}
-            </td>
-            <td data-cell="examination" class="head-center">
-              {{ row.examination }}
-            </td>
-            <td data-cell="diagnosis" class="head-center">
-              {{ row.diagnosis }}
-            </td>
-            <td data-cell="plan" class="head-center">
-              {{ row.plan }}
-            </td>
-            <td data-cell="prescription" class="head-center">
-              {{ row.prescription }}
-            </td>
-            <td data-cell="excuse_duty" class="head-center">
-              {{ row.excuse_duty.title() }}
-            </td>
-            <td data-cell="days" class="head-center">
-              {{ row.excuse_duty_days }}
-            </td>
-            
-          </tr>
+      <div style="margin: 0; padding: 0;" class="scrollable-table">
+        <table style="margin: 0;" class="custom-table table-sm table-hover table-borderless">
+          <thead style="font-size: smaller;">
+            <tr>
+              <th style="width: 10%" scope="col">Date</th>
+              <th style="width: 20%" scope="col">History</th>
+              <th style="width: 20%" scope="col">Examination</th>
+              <th style="width: 20%" scope="col">Diagnosis</th>
+              <th style="width: 20%" scope="col">Plan</th>
+              <th style="width: 20%" scope="col">Prescription</th>
+              <th style="width: 20%" scope="col">Excuse Duty</th>
+              <th style="width: 20%" scope="col">Days</th>
+            </tr>
+          </thead>
+          <tbody style="font-size: small" id="cadet-table-body">
+            {% for row in rows %}
+            <!-- Initial row for data entry -->
+            <tr class="active-row">
+              
+              <td data-cell="date">{{ row.date_reported_sick.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ') }}</td>
+              <td data-cell="history" class="head-center">
+                {{ row.history }}
+              </td>
+              <td data-cell="examination" class="head-center">
+                {{ row.examination }}
+              </td>
+              <td data-cell="diagnosis" class="head-center">
+                {{ row.diagnosis }}
+              </td>
+              <td data-cell="plan" class="head-center">
+                {{ row.plan }}
+              </td>
+              <td data-cell="prescription" class="head-center">
+                {{ row.prescription }}
+              </td>
+              <td data-cell="excuse_duty" class="head-center">
+                {{ row.excuse_duty.title() }}
+              </td>
+              <td data-cell="days" class="head-center">
+                {{ row.excuse_duty_days }}
+              </td>
+              
+            </tr>
+  
+            {% endfor %}
+            <!-- Additional rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
 
-          {% endfor %}
-          <!-- Additional rows will be dynamically added here -->
-        </tbody>
-      </table>
+      
     </div>
   </div>
+</div>
 
 <!-- </div> -->
 

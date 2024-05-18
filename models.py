@@ -1,10 +1,9 @@
-from sqlalchemy import  Column, String, Integer, ForeignKey, Float, Enum, Table, MetaData, Date
-from sqlalchemy.orm import relationship, validates
-from config import db, app
+from sqlalchemy import  Column, String, Integer, ForeignKey, Float, Enum, Table, MetaData, Date, func, event, create_engine
+from sqlalchemy.orm import relationship, validates, sessionmaker
+from config import db, app # Importing from config.py
 from datetime import datetime, date
 from flask_migrate import Migrate
 from flask_login import UserMixin
-import os
 import uuid
 
 metadata = MetaData()
@@ -116,24 +115,27 @@ class Battalion(db.Model):
     
 
 class Medical(db.Model):
-    __tablename__="medicals"
+    __tablename__ = "medicals"
 
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
-    date_reported_sick = Column("date_reported_sick", Date, nullable=False, default=date.today)
-    history = Column("history", String, nullable=False)
-    examination = Column("examination", String, nullable=False)
-    diagnosis = Column("diagnosis", String, nullable=False)
-    plan = Column("plan", String, nullable=False)
-    prescription = Column("prescription", String, nullable=False)
-    excuse_duty = Column("excuse_duty", String, nullable=False)
-    excuse_duty_days = Column("excuse_duty_days", Integer, nullable=False, default=0)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date_reported_sick = Column(Date, nullable=False, default=func.now())
+    history = Column(String, nullable=False)
+    examination = Column(String, nullable=False)
+    diagnosis = Column(String, nullable=False)
+    plan = Column(String, nullable=False)
+    prescription = Column(String, nullable=False)
+    excuse_duty = Column(String, nullable=False)
+    excuse_duty_days = Column(Integer, nullable=True, default=0)
+    admission_count = Column(Integer, nullable=False, default=0)
     
-    # relationship
-    cadet_id = Column(Integer, ForeignKey("cadets.id"))
+    cadet_id = Column(Integer, ForeignKey("cadets.id"), nullable=False)
     cadet = relationship("Cadet", back_populates="medical")
 
     def __repr__(self):
-        return f"({self.id} {self.date_reported_sick} {self.diagnosis} {self.excuse_duty} {self.excuse_duty_days})"
+        return (f"<Medical(id={self.id}, date_reported_sick={self.date_reported_sick}, "
+                f"diagnosis={self.diagnosis}, excuse_duty={self.excuse_duty}, "
+                f"excuse_duty_days={self.excuse_duty_days}, admission_count={self.admission_count})>")
+
 
 class ProfilePicture(db.Model):
     __tablename__ = "profile_pictures"
@@ -285,7 +287,12 @@ class Cadet(db.Model):
         return sum([course.units for course in self.courses])
 
     def __repr__(self):
-        return f"({self.id} {self.cadet_no} {self.first_name} {self.middle_name} {self.last_name} {self.religion} {self.state} {self.lga} {self.date_of_enlistment} {self.date_of_birth} {self.department_id} {self.bn_id} {self.gender_id} {self.service_id} {self.regular_id})"
+        return (f"<Cadet(id={self.id}, cadet_no={self.cadet_no}, first_name={self.first_name}, "
+                f"middle_name={self.middle_name}, last_name={self.last_name}, "
+                f"religion={self.religion}, state={self.state}, lga={self.lga}, "
+                f"date_of_enlistment={self.date_of_enlistment}, date_of_birth={self.date_of_birth}, "
+                f"department_id={self.department_id}, bn_id={self.bn_id}, gender_id={self.gender_id}, "
+                f"service_id={self.service_id}, regular_id={self.regular_id}, admission_count={self.admission_count})>")
 
 
 # Create the database tables (if they don't exist)

@@ -2,14 +2,14 @@ from flask import render_template, redirect, url_for, send_file, request, jsonif
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user 
 from flask_bcrypt import Bcrypt
 from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm, AdmissionForm, StaffRegisterForm, LoginForm
-from config import app, db, session
+from config import app, db
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical, ProfilePicture, Staff
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import declarative_base, relationship, aliased
+from sqlalchemy.orm import declarative_base, relationship, aliased, joinedload
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
 from concurrent.futures import ThreadPoolExecutor
@@ -443,8 +443,10 @@ def student_info(id):
     cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
     profile_pics = session.query(ProfilePicture).filter(ProfilePicture.cadet_id==id).first()
     
-    days_confined = session.query(Medical).filter(Medical.cadet_id==id, Medical.excuse_duty=="confinement").first()
-    print(days_confined)
+    days_confined = session.query(func.sum(Medical.excuse_duty_days)).filter(
+        Medical.cadet_id==id, 
+        Medical.excuse_duty=="confinement"
+        ).scalar()
 
     try:
         selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id == id, Cadet.bn_id == Battalion.id).first()
@@ -471,6 +473,7 @@ def student_info(id):
                                selected_cadet=selected_cadet,
                                profile_pics=profile_pics,
                                rows=cadet_medical_records,
+                               days_confined=days_confined,
                                cadet_records=cadet_records,
                                cadet_age=cadet_age,
                                formatted_dob=formatted_dob,
@@ -632,7 +635,7 @@ def add_military_score(id):
                            )
 
 
-@app.route('/cadet/medical/<int:id>', methods=['GET','POST'])
+@app.route('/cadet/medical/<int:id>', methods=['GET', 'POST'])
 @login_required
 def add_medical_record(id):
     search_form = SearchForm()
@@ -640,22 +643,27 @@ def add_medical_record(id):
 
     page = request.args.get("page", 1, type=int)
     per_page = 20
-    selected_cadet = session.query(Cadet).filter(Cadet.id==id).first()
-    cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
-    
-    history = medical_record_form.history.data
-    examination = medical_record_form.examination.data
-    diagnosis = medical_record_form.diagnosis.data
-    plan = medical_record_form.plan.data
-    prescription = medical_record_form.prescription.data
-    excuse_duty = medical_record_form.excuse_duty.data 
-    excuse_duty_days = medical_record_form.excuse_duty_days.data
-    
-    # cadet_excuse_duty_days = session.query(Medical).filter(Medical.cadet_id==id, Medical.confinement_count).all()
+    selected_cadet = session.query(Cadet).filter(Cadet.id == id).first()
+    cadet_medical_records = session.query(Medical).filter(Medical.cadet_id == id).all()
 
     if medical_record_form.validate_on_submit():
-        # Create a new MedicalRecord object and add it to the database
-        new_medical_record = Medical(
+        history = medical_record_form.history.data
+        examination = medical_record_form.examination.data
+        diagnosis = medical_record_form.diagnosis.data
+        plan = medical_record_form.plan.data
+        prescription = medical_record_form.prescription.data
+        excuse_duty = medical_record_form.excuse_duty.data
+        excuse_duty_days = medical_record_form.excuse_duty_days.data
+        admission_count_value = int(medical_record_form.admission_count.data)
+
+        # Ensure date_reported_sick is a proper date object
+        date_reported_sick = medical_record_form.date_reported_sick.data
+        if isinstance(date_reported_sick, datetime):
+            date_reported_sick = date_reported_sick.date()
+
+        # Check for duplicate record
+        existing_record = db.session.query(Medical).filter_by(
+            date_reported_sick=date_reported_sick,
             history=history,
             examination=examination,
             diagnosis=diagnosis,
@@ -663,25 +671,57 @@ def add_medical_record(id):
             prescription=prescription,
             excuse_duty=excuse_duty,
             excuse_duty_days=excuse_duty_days,
-            cadet_id=id,
-        )
+            cadet_id=id
+        ).first()
 
-        session.add(new_medical_record)
-        session.commit()
-        flash(f"Medical record was added successfully.")
-        return redirect(url_for('add_medical_record', id=id))
-    
+        if existing_record:
+            flash('A similar medical record already exists.', 'error')
+        else:
+            # Check if the cadet has already been admitted on the same day
+            same_day_admission = db.session.query(Medical).filter(
+                Medical.cadet_id == id,
+                func.date(Medical.date_reported_sick) == date_reported_sick
+            ).first()
+
+            admission_count_value = 0
+
+            # Create a new MedicalRecord object and add it to the database
+            new_medical_record = Medical(
+                date_reported_sick=date_reported_sick,
+                history=history,
+                examination=examination,
+                diagnosis=diagnosis,
+                plan=plan,
+                prescription=prescription,
+                excuse_duty=excuse_duty,
+                excuse_duty_days=excuse_duty_days,
+                admission_count=admission_count_value,
+                cadet_id=id,
+            )
+
+            # If the cadet has not been admitted on the same day, increment admission count
+            if not same_day_admission:
+                selected_cadet.admission_count += 1
+                selected_cadet.admission_date = datetime.now().date()
+                new_medical_record.admission_count = selected_cadet.admission_count
+
+            db.session.add(new_medical_record)
+            db.session.add(selected_cadet)  # Ensure cadet updates are included
+            db.session.commit()
+            flash('Medical record was added successfully.', 'success')
+            return redirect(url_for('add_medical_record', id=id))
+        
     return render_template('add_medical_record.html',
-                           search_form=search_form,
                            cadet=selected_cadet,
                            rows=cadet_medical_records,
-                           id=id,
+                           id=id, 
                            medical_record_form=medical_record_form,
                            year=year,
                            page=page,
-                           per_page=per_page
+                           per_page=per_page,
+                           search_form=search_form
                            )
-
+        
 
 @app.route('/admit_cadet', methods=['GET', 'POST'])
 @login_required
@@ -717,6 +757,7 @@ def admit_cadet():
 
     # Handle GET request to render the template
     return render_template('add_admitted.html', search_form=search_form)
+
 
 @app.route('/admitted_cadets')
 def admitted_cadets():
@@ -829,37 +870,25 @@ def remove_medical_record(id, cadet_id):
 
     page = request.args.get("page", 1, type=int)
     per_page = 20
-    # Begin a new session
-    with db.session.begin():
-        # Retrieve the score to be deleted from the database
-        record_to_delete = session.query(Medical).filter(Medical.id==id).first()
-        # Query the cadet and scores 
-    
-        selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
-        cadet_medical_record = session.query(Medical).filter(Medical.cadet_id==cadet_id).all()
-    
-        if record_to_delete:
-            # Delete the cadet from the database
-            db.session.delete(record_to_delete)
-            db.session.commit()
-            flash('Medical record deleted successfully.')
-        else:
-            flash('Record not found')
-        # Redirect to a page after deleton
-            return redirect(url_for('add_medical_record', id=cadet_id))
-        
-    # Render the template with updated data
-    return render_template('add_medical_record.html', 
-                           id=selected_cadet.id, 
-                           search_form=search_form,
-                           rows=cadet_medical_record, 
-                           cadet=selected_cadet,
-                           medical_record_form=medical_record_form,
-                           year=year,
-                           page=page,
-                           per_page=per_page
-                           )
 
+    # Query the cadet and medical record 
+    selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
+    cadet_medical_record = session.query(Medical).filter(Medical.cadet_id==cadet_id).all()
+    
+    # Retrieve the score to be deleted from the database
+    record_to_delete = session.query(Medical).filter(Medical.id==id).first()
+    
+    if record_to_delete:
+        # Delete the record from the database
+        session.delete(record_to_delete)
+        session.commit()
+        flash('Medical record deleted successfully.')
+    else:
+        flash('Record not found')
+
+    # Redirect to a page after deleton
+    return redirect(url_for('add_medical_record', id=cadet_id))
+   
 
 @app.route('/upload', methods=['POST'])
 def upload_profile_picture():

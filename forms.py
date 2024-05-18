@@ -2,7 +2,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, DateField, RadioField, SelectField, IntegerField, FloatField, TextAreaField, EmailField, TelField
 from wtforms.validators import DataRequired, InputRequired, ValidationError, EqualTo
 from course_code import choices
+from models import Medical
+from config import db, session
 import datetime
+
+session = db.session
 
 class EditForm(FlaskForm):
     cadet_no = StringField('Cadet Number', validators=[DataRequired()])
@@ -39,7 +43,11 @@ class EditForm(FlaskForm):
                                                     ('mathematical sciences', 'Mathematical Sciences'), 
                                                     ('physics', 'Physics')], 
                                                     validators=[DataRequired()])
-    bn = SelectField('Battalion', choices=[('mogadishu', 'Mogadishu'), ('dalet', 'Dalet'), ('abyssinia', 'Abyssinia'), ('burma', 'Burma')], validators=[InputRequired()])
+    bn = SelectField('Battalion', choices=[('mogadishu', 'Mogadishu'), 
+                                           ('dalet', 'Dalet'), 
+                                           ('abyssinia', 'Abyssinia'), 
+                                           ('burma', 'Burma')], 
+                                           validators=[InputRequired()])
     service = SelectField('Arm of Service', choices=[('army', 'Army'), ('navy', 'Navy'), ('airforce', 'Airforce')], validators=[DataRequired()])
     regular_course = IntegerField('Course', validators=[DataRequired()])
     submit = SubmitField('Submit')
@@ -53,7 +61,9 @@ class AddCadetForm(FlaskForm):
     first_name = StringField('Name', validators=[DataRequired()])
     middle_name = StringField('', validators=[DataRequired()])
     last_name = StringField('', validators=[DataRequired()])
-    religion = RadioField('Religion', choices=[('christianity', 'Christianity'), ('islam', 'Islam')], validators=[DataRequired()])
+    religion = RadioField('Religion', choices=[('christianity', 'Christianity'), 
+                                               ('islam', 'Islam')], 
+                                               validators=[InputRequired()])
     gender = RadioField('Gender', choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired()])
     state = StringField('State of Origin', validators=[DataRequired()])
     lga = StringField('LGA', validators=[DataRequired()])
@@ -113,14 +123,22 @@ class MilScoreForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class MedicalRecordForm(FlaskForm):
-    date_reported_sick = DateField('Date Reported Sick', default= datetime.date.today, validators=[DataRequired()])
+    date_reported_sick = DateField('Date Reported Sick', 
+                                   default=lambda: datetime.date.today(), 
+                                   validators=[DataRequired()])
     history = TextAreaField('History', validators=[DataRequired()])
     examination = TextAreaField('Examination', validators=[DataRequired()])
     diagnosis = TextAreaField('Diagnosis', validators=[DataRequired()])
     plan = TextAreaField('Plan', validators=[DataRequired()])
     prescription = TextAreaField('Prescription', validators=[DataRequired()])
-    excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), ('excused boot', 'Excused Boot'), ('excused all parades', 'Excused all Parades'), ('excused marching', 'Excused Marching'), ('confinement', 'Confinement')], validators=[InputRequired()])
-    excuse_duty_days = IntegerField('Days', validators=[DataRequired()])
+    excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), 
+                                                      ('excused boot', 'Excused Boot'), 
+                                                      ('excused all parades', 'Excused all Parades'), 
+                                                      ('excused marching', 'Excused Marching'), 
+                                                      ('confinement', 'Confinement')], 
+                                                      validators=[InputRequired()])
+    excuse_duty_days = IntegerField('Days')
+    admission_count = RadioField('Admit', choices=[('1', 'Yes'), ('0', 'No')], validators=[InputRequired()])
 
     submit = SubmitField('Submit')
 
@@ -137,7 +155,9 @@ class StaffRegisterForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     phone = TelField('Phone Number', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
-    gender = RadioField('Gender', choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired()])
+    gender = RadioField('Gender', choices=[('male', 'Male'), 
+                                           ('female', 'Female')], 
+                                           validators=[InputRequired()])
     role = SelectField('Role', choices=[('admin', 'Admin'), 
                                         ('doctor', 'Doctor'), 
                                         ('nurse', 'Nurse'), 

@@ -132,22 +132,30 @@
 
       <div class="col">
         {{ staff_register_form.role.label(class="form-label") }} <br>
-        {% for subfield in staff_register_form.role %} {{ subfield }} {{
-        subfield.label }}
-        <br />
-        {% endfor %}
-        <br>
-      </div>
-      
-      <div class="col">
-        {{ staff_register_form.status.label(class="form-label") }} <br>
-        {% for subfield in staff_register_form.status %} {{ subfield }} {{ subfield.label }}
-        <br />
-        {% endfor %}
-        <br>
+        {{ staff_register_form.role(class="form-control", placeholder="role") }} 
+        {% if staff_register_form.role.errors %}
+        <ul class="errors">
+          {% for error in staff_register_form.role.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
       </div>
 
       <div class="col">
+        {{ staff_register_form.status.label(class="form-label") }} <br>
+        {{ staff_register_form.status(class="form-control", placeholder="status") }} 
+        {% if staff_register_form.status.errors %}
+        <ul class="errors">
+          {% for error in staff_register_form.status.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+
+      <div class="col">
+        {{ staff_register_form.appointment.label(class="form-label") }} <br>
         {{ staff_register_form.appointment(class="form-control", placeholder="appointment") }} {% if staff_register_form.appointment.errors %}
         <ul class="errors">
           {% for error in staff_register_form.appointment.errors %}

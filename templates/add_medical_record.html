@@ -6,10 +6,30 @@
     class="row"
     style="display: flex; justify-content: space-between; margin: 0"
   >
-    <h4 style="color: rgb(0, 68, 171)">
-      <a href="{{ url_for('student_info', id=cadet.id )}}"
-        >{{ cadet.first_name }} {{ cadet.middle_name }} {{ cadet.last_name }}</a
+    <div class="col">
+      <h5 style="color: rgb(0, 68, 171)">
+        <a href="{{ url_for('student_info', id=cadet.id )}}"
+          >{{ cadet.first_name }} {{ cadet.middle_name }} {{ cadet.last_name
+          }}</a
+        >
+      </h5>
+
+      <p
+        style="font-size: small"
+        class="card-subtitle mb-2 text-body-secondary"
       >
+        {{ cadet.bn.bn.capitalize() }} ({{ cadet.service.service_type.upper()
+        }})
+      </p>
+      <p class="card-text" style="font-size: small;">
+        Department |
+        <b style="color: rgb(0, 68, 171); font-size: small;"
+          >{{ cadet.department.department_name.title() }}</b
+        >
+      </p>
+    </div>
+
+    <div class="col">
       <span>
         <a
           type="btn"
@@ -18,23 +38,11 @@
           class="card-link"
           >Back to Dashboard</a
         >
+        <br />
       </span>
-    </h4>
-
-    <p class="card-subtitle mb-2 text-body-secondary">
-      {{ cadet.bn.bn.capitalize() }} ({{ cadet.service.service_type.upper() }})
-    </p>
-    <p class="card-text">
-      Department |
-      <b style="color: rgb(0, 68, 171)"
-        >{{ cadet.department.department_name.title() }}</b
-      >
-    </p>
-    <!-- <p>
-      Diagnosis:
-      <b style="color: #f90b31"></b>
-    </p> -->
+    </div>
   </div>
+  <br>
 
   <div class="row">
     {% with messages = get_flashed_messages() %} {% if messages %}
@@ -44,102 +52,120 @@
       {% endfor %}
     </ul>
     {% endif %} {% endwith %}
-    <div style="padding: 2em; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);" class="col">
+    <div
+      style="padding: 2em; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15)"
+      class="col"
+    >
       <!-- Form for entering academic scores -->
       <form
+        style="font-size: smaller;"
         id="medial-record-form"
         method="POST"
         action="{{ url_for('add_medical_record', id=cadet.id) }}"
       >
         {{ medical_record_form.csrf_token() }}
-        <p>Enter Record:</p>
+        <p>Enter Patient's Record:</p>
 
-          {{ medical_record_form.history(class="form-control",
-          placeholder="history") }} {% if medical_record_form.history.errors
-          %}
-          <ul class="errors">
-            {% for error in medical_record_form.history.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
-          {{ medical_record_form.examination(class="form-control",
-          placeholder="examination") }} {% if medical_record_form.examination.errors
-          %}
-          <ul class="errors">
-            {% for error in medical_record_form.examination.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
+        {{ medical_record_form.history(class="form-control",
+        placeholder="history") }} {% if medical_record_form.history.errors %}
+        <ul class="errors">
+          {% for error in medical_record_form.history.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
+        {{ medical_record_form.examination(class="form-control",
+        placeholder="examination") }} {% if
+        medical_record_form.examination.errors %}
+        <ul class="errors">
+          {% for error in medical_record_form.examination.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
 
-          {{ medical_record_form.diagnosis(class="form-control",
-          placeholder="diagnosis") }} {% if medical_record_form.diagnosis.errors
-          %}
-          <ul class="errors">
-            {% for error in medical_record_form.diagnosis.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
+        {{ medical_record_form.diagnosis(class="form-control",
+        placeholder="diagnosis") }} {% if medical_record_form.diagnosis.errors
+        %}
+        <ul class="errors">
+          {% for error in medical_record_form.diagnosis.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
 
-          {{ medical_record_form.plan(class="form-control",
-          placeholder="plan") }} {% if
-          medical_record_form.plan.errors %}
-          <ul class="errors">
-            {% for error in medical_record_form.plan.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
+        {{ medical_record_form.plan(class="form-control", placeholder="plan") }}
+        {% if medical_record_form.plan.errors %}
+        <ul class="errors">
+          {% for error in medical_record_form.plan.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
 
-          {{ medical_record_form.prescription(class="form-control",
-          placeholder="prescription") }} {% if
-          medical_record_form.prescription.errors %}
-          <ul class="errors">
-            {% for error in medical_record_form.prescription.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
+        {{ medical_record_form.prescription(class="form-control",
+        placeholder="prescription") }} {% if
+        medical_record_form.prescription.errors %}
+        <ul class="errors">
+          {% for error in medical_record_form.prescription.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
 
-          {{ medical_record_form.excuse_duty.label(class="form-label") }}
-          {{ medical_record_form.excuse_duty(class="form-control",
-          placeholder="days") }} {% if medical_record_form.excuse_duty.errors %}
-          <ul class="errors">
-            {% for error in medical_record_form.excuse_duty.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
-
-          {{ medical_record_form.excuse_duty_days(class="form-control",
-          placeholder="days") }} {% if
-          medical_record_form.excuse_duty_days.errors %}
-          <ul class="errors">
-            {% for error in medical_record_form.excuse_duty_days.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          <br />
-
-          <br />
-          <div class="form-group" style="text-align: center">
-            {{ medical_record_form.submit( class="btn btn-primary") }}
+        <div class="row">
+          <div class="col">
+            {{ medical_record_form.excuse_duty.label(class="form-label") }} 
+            {{ medical_record_form.excuse_duty(class="form-control",
+              placeholder="days") }} {% if medical_record_form.excuse_duty.errors %}
+              <ul class="errors">
+                {% for error in medical_record_form.excuse_duty.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+          </div>
+          
+          <div class="col">
+            {{ medical_record_form.excuse_duty_days.label(class="form-label") }} 
+            {{ medical_record_form.excuse_duty_days(class="form-control",
+            placeholder="days") }} {% if medical_record_form.excuse_duty_days.errors
+            %}
+            <ul class="errors">
+              {% for error in medical_record_form.excuse_duty_days.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <br>
           </div>
 
+          <div class="col">
+            {{ medical_record_form.admission_count.label(class="form-label") }} <br>
+            {% for subfield in medical_record_form.admission_count %} 
+            {{ subfield }} 
+            {{ subfield.label }}
+            <br />
+            {% endfor %}
+            <br>
+          </div>
+        </div>
+    
+        <br />
+        <div class="form-group" style="text-align: center">
+          {{ medical_record_form.submit( class="btn btn-primary") }}
+        </div>
       </form>
     </div>
 
     <div class="col">
-      <p>Medical Records:</p>
+      <p style="font-size: small;">Medical Records:</p>
+      <div style="margin: 0; padding: 0;" class="scrollable-table">
       <table class="custom-table table-sm table-hover table-borderless">
         <thead style="font-size: small; text-align: center">
           <tr>
@@ -185,6 +211,7 @@
           <!-- Additional rows will be dynamically added here -->
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 
