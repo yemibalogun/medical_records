@@ -194,7 +194,7 @@ def select_course(id):
 
     course_cadets = session.query(Cadet).filter(Cadet.regular_id == id).all()
     course_no = session.query(RegularCourse).filter(RegularCourse.id == id).first()
-    
+
     start = (page - 1) * per_page
     end = start + per_page
     paginated_cadets = course_cadets[start:end]
@@ -766,7 +766,11 @@ def admitted_cadets():
     page = request.args.get("page", 1, type=int)
     per_page = 20
     today_date = date.today()
-    admitted_cadets = session.query(Cadet).filter(Cadet.admission_date == today_date).all()
+    admitted_cadets = db.session.query(Cadet).filter(Cadet.admission_date==today_date).options(
+        joinedload(Cadet.service), 
+        joinedload(Cadet.bn), 
+        joinedload(Cadet.regular_course)
+        ).all()
     today_date = str(today_date)
 
     today_date_obj = datetime.strptime(today_date, '%Y-%m-%d')

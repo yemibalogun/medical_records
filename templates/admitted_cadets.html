@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-{% extends "base.html" %} {% block title %}Admitted Cadets{% endblock %} {%
-block content %}
+{% extends "base.html" %} 
+{% block title %}Admitted Cadets{% endblock %} 
+{% block content %}
 
 <div style="margin: auto" class="container">
   <h3 style="color: rgb(0, 68, 171)">Admitted Cadets</h3>
@@ -31,7 +32,7 @@ block content %}
               <th style="width: 30%" scope="col">Name</th>
               <th style="width: 10%" scope="col">Service</th>
               <th style="width: 10%" scope="col">Battalion</th>
-              <th style="width: 30%" scope="col">Department</th>
+              <th style="width: 30%" scope="col">Course</th>
             </tr>
           </thead>
 
@@ -47,28 +48,29 @@ block content %}
                 <a
                   style="text-decoration: none; color: rgb(0, 68, 171)"
                   href="{{ url_for('student_info', id=row.id) }}"
-                  >{{ row.first_name }} {{ row.middle_name }} {{ row.last_name
-                  }}</a
-                >
+                  >{{ row.first_name }} {{ row.middle_name }} {{ row.last_name }}
+                </a>
               </td>
               <td data-cell="Service">
-                
+                {{ row.service.service_type.title() }}
               </td>
+
               <td data-cell="Battalion">
-                
-
+                {{ row.bn.bn.title() }}
               </td>
-              <td data-cell="Department">
-                
+              
+              <td data-cell="Course">
+                {{ row.regular_course.course_no }}
               </td>
+              
             </tr>
-
             {% endfor %}
           </tbody>
         </table>
       </div>
       </div>
     </div>
-    {% endblock %}
+    
   </div>
 </div>
+{% endblock %}
