@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% extends "base.html" %} {% block content %}
+
+<div
+  style="font-size: smaller; height: 1100px"
+  class="container-fluid text-center"
+>
+  <!-- <button class="btn btn-primary" id="openExcelBtn">Add Excel</button> -->
+
+  <div
+    class="row form-container"
+    style="text-align: left; width: 60%; padding: 20px; margin: auto"
+  >
+    <h4 style="color: rgb(0, 68, 171); text-align: center">Check in new patient</h4>
+    {% with messages = get_flashed_messages() %} 
+    {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} 
+    {% endwith %}
+    <form method="POST" action="{{ url_for('check_in') }}">
+      {{ check_in_form.csrf_token() }}
+
+      <div class="row">
+        <div class="col">
+          {{ check_in_form.cadet_id(class="form-control", placeholder="Cadet no") }} 
+          {% if check_in_form.cadet_id.errors %}
+          <ul class="errors">
+            {% for error in check_in_form.cadet_id.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+          
+        <div class="col">
+          {{ check_in_form.reason(class="form-control", placeholder="reason") }} 
+          {% if check_in_form.reason.errors %}
+          <ul class="errors">
+            {% for error in check_in_form.reason.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <br />
+        </div>
+
+      </div>
+
+    <div class="row">
+      <div class="col">
+        {{ check_in_form.doctor_id(class="form-control", placeholder="doctor_id") }} 
+        {% if check_in_form.doctor_id.errors %}
+        <ul class="errors">
+          {% for error in check_in_form.doctor_id.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
+      </div>
+
+      <div class="col">
+        {{ check_in_form.status(class="form-control", placeholder="status") }} 
+        {% if check_in_form.status.errors %}
+        <ul class="errors">
+          {% for error in check_in_form.status.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br />
+      </div>
+      
+    </div>
+
+    <br />
+    <div class="form-group" style="text-align: center">
+      {{ check_in_form.submit( class="btn btn-primary") }}
+    </div>
+    </div>
+        
+      </div>
+
+        
+    </form>
+  </div>
+</div>
+
+{% endblock %}

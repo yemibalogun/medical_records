@@ -7,7 +7,8 @@
   <h3 style="color: rgb(0, 68, 171)">Admitted Cadets</h3>
   <h5 style="font-size: small; color: grey">{{ today }}</h5>
   <div style="font-size: small;" class="div">
-    {% with messages = get_flashed_messages() %} {% if messages %}
+    {% with messages = get_flashed_messages() %} 
+    {% if messages %}
   <ul class="flashes">
     {% for message in messages %}
     <li>{{ message }}</li>

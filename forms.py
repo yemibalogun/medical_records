@@ -1,9 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, DateField, RadioField, SelectField, IntegerField, FloatField, TextAreaField, EmailField, TelField
-from wtforms.validators import DataRequired, InputRequired, ValidationError, EqualTo
+from wtforms.validators import DataRequired, InputRequired, ValidationError, EqualTo, Optional
 from course_code import choices
-from models import Medical
-from config import db, session
+from config import db
 import datetime
 
 session = db.session
@@ -161,7 +160,8 @@ class StaffRegisterForm(FlaskForm):
     role = SelectField('Role', choices=[('admin', 'Admin'), 
                                         ('doctor', 'Doctor'), 
                                         ('nurse', 'Nurse'), 
-                                        ('cadets brigade', 'Cadets Brigade')
+                                        ('cadets_brigade', 'Cadets Brigade'),
+                                        ('front_desk', 'Front Desk')
                                         ], validators=[DataRequired()])
     
     status = SelectField('Status', choices=[('active', 'Active'), 
@@ -178,3 +178,17 @@ class LoginForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Login")
+
+class CheckInForm(FlaskForm):
+    cadet_id = StringField('Cadet ID', validators=[DataRequired()])
+    check_in_time = DateField('Check-In Time', default=lambda: datetime.date.today(), validators=[DataRequired()])
+    reason = TextAreaField('Reason for Visit', validators=[Optional()])
+    doctor_id = SelectField('Assigned Doctor', choices=[], coerce=int, validators=[Optional()])
+    status = SelectField('Status', choices=[('waiting', 'Waiting'), ('in progress', 'In Progress'), ('completed', 'Completed')], default='waiting', validators=[DataRequired()])
+    
+    submit = SubmitField('Check In')
+
+    def __init__(self, doctors=None, *args, **kwargs):
+        super(CheckInForm, self).__init__(*args, **kwargs)
+        if doctors:
+            self.doctor_id.choices = [(doctor.staff_id, f"{doctor.firstname} {doctor.lastname}") for doctor in doctors]

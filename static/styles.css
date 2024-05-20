@@ -222,7 +222,7 @@ table {
 .custom-table {
   border-collapse: collapse;
   margin: 0;
-  font-size: 0.9em;
+  font-size: 1em;
   width: fit-content;
   border-radius: 5px 5px 0 0;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -255,8 +255,8 @@ table {
 } */
 
 .active-row:hover {
-  color: rgb(0, 68, 171);
-  transition: 0.1s;
+  background-color: #f3f3f3;
+  transition: 0.2s;
 }
 
 .custom-table tbody tr:nth-of-type(even) {
@@ -288,9 +288,7 @@ nav {
 }
 
 .card-body {
-  padding: 10px;
-  /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); */
-  background-color: #fafafa;
+  padding: 1em;
 }
 
 .card-link {
@@ -436,4 +434,24 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg,  rgb(195, 195, 195) 0%, rgb(153, 153, 153) 100%);
   border-radius: 10px;
+}
+
+/* Fade-in animation for new rows */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+/* Fade-out animation for removed rows */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-out {
+  animation: fadeOut 0.5s;
 }

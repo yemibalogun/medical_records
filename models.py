@@ -9,51 +9,6 @@ import uuid
 metadata = MetaData()
 migrate = Migrate(app, db)
 
-score_table = Table('score_table', metadata,
-    Column('first_semester_score', Float, default=0.0),
-    Column('second_semester_score', Float, default=0.0),
-    Column('academic_year', Integer, default=lambda: datetime.now().year if datetime.now().month >= 9 else datetime.now().year - 1),
-    Column('course_id', Integer, ForeignKey('courses.id')),
-    Column('cadet_id', Integer, ForeignKey('cadets.id'))
-)
-
-
-class Score(db.Model):
-    __tablename__ = "scores"
-
-    id = Column(Integer, primary_key=True)
-    first_semester_score = Column(Float, default=0.0)
-    second_semester_score = Column(Float, default=0.0)
-    academic_year = Column(Integer, default=lambda: datetime.now().year if datetime.now().month >= 9 else datetime.now().year - 1)
-
-    course_id = Column(Integer, ForeignKey('courses.id'))
-    course = relationship('Course', back_populates='scores')
-
-    cadet_id = Column(Integer, ForeignKey('cadets.id'))
-    cadet = relationship('Cadet', back_populates='scores')
-
-    def __repr__(self):
-        return f"({self.id} {self.first_semester_score} {self.second_semester_score} {self.academic_year} {self.course_id} {self.cadet_id})"
-
-
-class Course(db.Model):
-    __tablename__="courses"
-    
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
-    course_code = Column("course_code", String(10))
-    course_title = Column("course_title", String(255), nullable=False)
-    units = Column("units", Integer, nullable=False)
-    status = Column(Enum('core', 'elective'), nullable=False) # Enum for course status (Core or Elective)
-
-    department_id = Column("department_id", ForeignKey('departments.id'), nullable=False)
-    department = relationship('Department', back_populates='courses')
-
-    scores = relationship("Score", back_populates='course', uselist=False)
-    cadet_id = Column(Integer, ForeignKey("cadets.id"))
-    cadet = relationship("Cadet", back_populates="courses")
-    def __repr__(self):
-        return f"({self.course_code} {self.course_title} {self.units} {self.status})"
-
 
 class RegularCourse(db.Model):
     __tablename__="regular_courses"
@@ -64,17 +19,6 @@ class RegularCourse(db.Model):
 
     def __repr__(self):
         return f"({self.id} {self.course_no})"
-
-class Faculty(db.Model):
-    __tablename__="faculties"
-
-    id = Column("id", Integer, primary_key=True)
-    faculty_name = Column("faculty_name", String, nullable=False)
-    departments = relationship('Department', back_populates='faculty')
-
-    def __repr__(self):
-        return f"({self.id} {self.faculty_name})"
-
 
 class Department(db.Model):
     __tablename__="departments"
@@ -136,20 +80,6 @@ class Medical(db.Model):
                 f"diagnosis={self.diagnosis}, excuse_duty={self.excuse_duty}, "
                 f"excuse_duty_days={self.excuse_duty_days}, admission_count={self.admission_count})>")
 
-
-class ProfilePicture(db.Model):
-    __tablename__ = "profile_pictures"
-
-    id = Column("id", String(255), primary_key=True,default=str(uuid.uuid4())) # Unique ID for each picture
-    filename = Column("filename", String(255), nullable=False) # Filename of the picture
-    # Define the foreign key relationship with Cadet
-    cadet_id = Column(Integer, ForeignKey('cadets.id'))
-    cadet = relationship("Cadet", back_populates='profile_picture')
-    
-    def __repr__(self):
-        return f"({self.id} {self.filename} {self.cadet_id})"
-
-
 class Service(db.Model):
     __tablename__="services"
 
@@ -161,7 +91,212 @@ class Service(db.Model):
 
     def __repr__(self):
         return f"({self.id} {self.service_type})"
+    
+class Visit(db.Model):
+    __tablename__= "visits"
 
+    id = Column("id", Integer, primary_key=True)
+    cadet_id = Column(Integer, ForeignKey('cadets.id'), nullable=False)
+    check_in_time = Column("check_in_time", Date, nullable=False, default=func.now())
+    status = Column(String(50), nullable=False, default='waiting')  # 'waiting', 'in progress', 'completed'
+    reason = db.Column(db.String(255), nullable=True)  # Reason for the visit
+    doctor_id = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'), nullable=True)  # Assigned doctor's ID
+    
+    cadet = relationship('Cadet', back_populates='visit')
+    assigned_doctor = relationship('Staff', backref='assigned_visits', foreign_keys=[doctor_id])
+
+    def __repr__(self):
+        return f"({self.id} {self.cadet_id} {self.check_in_time} {self.status} {self.reason} {self.doctor_id} )"
+
+
+class Staff(db.Model, UserMixin):
+    __tablename__ = "staffs"
+
+    staff_id = Column("staff_id", Integer, primary_key=True, autoincrement=True)
+    firstname = Column("firstname", String(255), nullable=False)
+    middlename = Column("middlename", String(255), nullable=True)
+    lastname = Column("lastname", String(255), nullable=False)
+    email = Column("email", String(255), nullable=False, unique=True)
+    password = Column("password", String(255), nullable=False)
+    phone = Column("phone", String(255), nullable=False, unique=True)
+    address = Column("address", String(255), nullable=False)
+    gender_id = Column("gender_id", ForeignKey('genders.id'), nullable=False)
+    gender = relationship('Gender', back_populates='staff')
+    role = Column('role', String(50), nullable=False) 
+    status = Column('status', String(20), nullable=False) 
+    appointment = Column("appointment", String(255), nullable=False)
+    date_of_birth = Column("date_of_birth", Date, nullable=False)
+    date_tos = Column("date_tos", Date, nullable=False)
+    date_of_joining = Column("date_of_joining", Date, nullable=False, default=date.today)
+    visit_id = Column("visit_id", Integer, ForeignKey('visits.id'), nullable=True)
+
+    def get_id(self):
+        return str(self.staff_id)
+    
+    def __repr__(self):
+        return f"({self.staff_id} {self.firstname} {self.middlename} {self.lastname} {self.email} {self.password} {self.phone} {self.address} {self.gender_id} {self.role} {self.status} {self.appointment} {self.date_of_birth} {self.date_tos} {self.date_of_joining})"
+
+class Cadet(db.Model):
+    __tablename__= "cadets"
+    
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    cadet_no = Column("cadet_no", String, unique=True, nullable=False)
+    first_name = Column("first_name", String, nullable=False)
+    middle_name = Column("middle_name", String, nullable=True)
+    last_name = Column("last_name", String, nullable=False)
+    religion = Column("religion", String, nullable=False)
+    state = Column("state", String, nullable=False)
+    lga = Column("lga", String, nullable=False)
+    date_of_enlistment = Column("date_of_enlistment", String, nullable=False)
+    date_of_birth = Column("date_of_birth", String, nullable=False)
+    department_id = Column('department_id', ForeignKey('departments.id'), nullable=False)
+    department = relationship('Department', back_populates='cadets')
+    bn_id = Column("bn_id", ForeignKey('battalions.id'), nullable=False)
+    bn = relationship('Battalion', back_populates='cadet')
+    gender_id = Column("gender_id", ForeignKey('genders.id'), nullable=False)
+    gender = relationship('Gender', back_populates='cadet')
+    service_id = Column("service_id", ForeignKey('services.id'), nullable=False)
+    service = relationship('Service', back_populates='cadet')
+    regular_id = Column("regular_id", ForeignKey('regular_courses.id'), nullable=False)
+    regular_course = relationship('RegularCourse', back_populates='cadet')
+    medical = relationship('Medical', back_populates='cadet', lazy='dynamic')
+    admission_count = Column("admission_count", Integer, nullable=False, default=0)
+    board_status = Column("board_status", String, nullable=False, default='')
+    admission_date = Column(Date, nullable=True)  # New field for admission date
+    visit = relationship('Visit', back_populates='cadet')
+
+    @property
+    def confinement(self):
+        return sum(medical.excuse_duty_days for medical in self.medical if medical.excuse_duty == 'confinement')
+    
+    @property
+    def total_days(self):
+        return self.admission_count + self.confinement
+    
+    def update_board_status(self):
+        if self.total_days >= 42:
+            self.board_status = 'board'
+        else:
+            self.board_status = ''
+
+    def set_admission_count(self, count):
+        self.admission_count = count
+        self.update_board_status()
+
+    #   Initialize and update the board status
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.update_board_status()
+
+    @classmethod
+    def admit_cadets(cls, cadet_ids):
+        cadets = cls.query.filter(cls.id.in_(cadet_ids)).all()
+        for cadet in cadets:
+            cadet.admission_count += 1
+            cadet.admission_date = datetime.now().date()  # Set admission date
+            cadet.update_board_status()
+
+        db.session.commit()
+
+    # Establish relationships with Score and ServiceScore tables
+    scores = relationship("Score", back_populates='cadet', uselist=False)
+    service_scores = relationship("ServiceScore", back_populates='cadet', uselist=False)
+
+    courses = relationship("Course", back_populates="cadet")
+    profile_picture = relationship('ProfilePicture', back_populates='cadet')
+
+    @validates('admission_count')
+    def validate_admission_count(self, key, admission_count):
+        if admission_count < 0:
+            raise ValueError('Admission count cannot be negative.')
+        return admission_count
+
+    def __repr__(self):
+        return (f"{self.id}, {self.cadet_no}, {self.first_name}, "
+                f"{self.middle_name}, {self.last_name}, "
+                f"{self.religion}, {self.state}, {self.lga}, "
+                f"{self.date_of_enlistment}, {self.date_of_birth}, "
+                f"{self.department_id}, {self.bn_id}, {self.gender_id}, "
+                f"{self.service_id}, {self.regular_id}, {self.admission_count})")
+
+# Listen for changes on admission_count and medical relationships
+def after_insert_update_board_status(mapper, connection, target):
+    if target.cadet:
+        target.cadet.update_board_status()
+
+def after_update_update_board_status(mapper, connection,target):
+    if target.cadet:
+        target.cadet.update_board_status()
+
+# Attach event listeners to the Medical model
+event.listen(Medical, 'after_insert', after_insert_update_board_status)
+event.listen(Medical, 'after_update', after_update_update_board_status)
+
+score_table = Table('score_table', metadata,
+    Column('first_semester_score', Float, default=0.0),
+    Column('second_semester_score', Float, default=0.0),
+    Column('academic_year', Integer, default=lambda: datetime.now().year if datetime.now().month >= 9 else datetime.now().year - 1),
+    Column('course_id', Integer, ForeignKey('courses.id')),
+    Column('cadet_id', Integer, ForeignKey('cadets.id'))
+)
+
+
+class Score(db.Model):
+    __tablename__ = "scores"
+
+    id = Column(Integer, primary_key=True)
+    first_semester_score = Column(Float, default=0.0)
+    second_semester_score = Column(Float, default=0.0)
+    academic_year = Column(Integer, default=lambda: datetime.now().year if datetime.now().month >= 9 else datetime.now().year - 1)
+
+    course_id = Column(Integer, ForeignKey('courses.id'))
+    course = relationship('Course', back_populates='scores')
+
+    cadet_id = Column(Integer, ForeignKey('cadets.id'))
+    cadet = relationship('Cadet', back_populates='scores')
+
+    def __repr__(self):
+        return f"({self.id} {self.first_semester_score} {self.second_semester_score} {self.academic_year} {self.course_id} {self.cadet_id})"
+
+class Course(db.Model):
+    __tablename__="courses"
+    
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    course_code = Column("course_code", String(10))
+    course_title = Column("course_title", String(255), nullable=False)
+    units = Column("units", Integer, nullable=False)
+    status = Column(Enum('core', 'elective'), nullable=False) # Enum for course status (Core or Elective)
+
+    department_id = Column("department_id", ForeignKey('departments.id'), nullable=False)
+    department = relationship('Department', back_populates='courses')
+
+    scores = relationship("Score", back_populates='course', uselist=False)
+    cadet_id = Column(Integer, ForeignKey("cadets.id"))
+    cadet = relationship("Cadet", back_populates="courses")
+    def __repr__(self):
+        return f"({self.course_code} {self.course_title} {self.units} {self.status})"
+
+class Faculty(db.Model):
+    __tablename__="faculties"
+
+    id = Column("id", Integer, primary_key=True)
+    faculty_name = Column("faculty_name", String, nullable=False)
+    departments = relationship('Department', back_populates='faculty')
+
+    def __repr__(self):
+        return f"({self.id} {self.faculty_name})"
+    
+class ProfilePicture(db.Model):
+    __tablename__ = "profile_pictures"
+
+    id = Column("id", String(255), primary_key=True,default=str(uuid.uuid4())) # Unique ID for each picture
+    filename = Column("filename", String(255), nullable=False) # Filename of the picture
+    # Define the foreign key relationship with Cadet
+    cadet_id = Column(Integer, ForeignKey('cadets.id'))
+    cadet = relationship("Cadet", back_populates='profile_picture')
+    
+    def __repr__(self):
+        return f"({self.id} {self.filename} {self.cadet_id})"
 
 class ServiceSubject(db.Model):
     __tablename__="service_subjects"
@@ -203,97 +338,6 @@ class ServiceScore(db.Model):
 
     def __repr__(self):
         return f"({self.id} {self.first_term_score} {self.second_term_score} {self.service_year} {self.service_subject_id} {self.cadet_id})"
-
-class Staff(db.Model, UserMixin):
-    __tablename__ = "staffs"
-
-    staff_id = Column("staff_id", Integer, primary_key=True, autoincrement=True)
-    firstname = Column("firstname", String(255), nullable=False)
-    middlename = Column("middlename", String(255), nullable=True)
-    lastname = Column("lastname", String(255), nullable=False)
-    email = Column("email", String(255), nullable=False, unique=True)
-    password = Column("password", String(255), nullable=False)
-    phone = Column("phone", String(255), nullable=False, unique=True)
-    address = Column("address", String(255), nullable=False)
-    gender_id = Column("gender_id", ForeignKey('genders.id'), nullable=False)
-    gender = relationship('Gender', back_populates='staff')
-    role = Column('role', String(50), nullable=False) 
-    status = Column('status', String(20), nullable=False) 
-    appointment = Column("appointment", String(255), nullable=False)
-    date_of_birth = Column("date_of_birth", Date, nullable=False)
-    date_tos = Column("date_tos", Date, nullable=False)
-    date_of_joining = Column("date_of_joining", Date, nullable=False, default=date.today)
-
-    def get_id(self):
-        return str(self.staff_id)
-    
-    def __repr__(self):
-        return f"({self.staff_id} {self.firstname} {self.middlename} {self.lastname} {self.email} {self.password} {self.phone} {self.address} {self.gender_id} {self.role} {self.status} {self.appointment} {self.date_of_birth} {self.date_tos} {self.date_of_joining})"
-
-
-
-class Cadet(db.Model):
-    __tablename__= "cadets"
-    
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
-    cadet_no = Column("cadet_no", String, unique=True, nullable=False)
-    first_name = Column("first_name", String, nullable=False)
-    middle_name = Column("middle_name", String, nullable=True)
-    last_name = Column("last_name", String, nullable=False)
-    religion = Column("religion", String, nullable=False)
-    state = Column("state", String, nullable=False)
-    lga = Column("lga", String, nullable=False)
-    date_of_enlistment = Column("date_of_enlistment", String, nullable=False)
-    date_of_birth = Column("date_of_birth", String, nullable=False)
-    department_id = Column('department_id', ForeignKey('departments.id'), nullable=False)
-    department = relationship('Department', back_populates='cadets')
-    bn_id = Column("bn_id", ForeignKey('battalions.id'), nullable=False)
-    bn = relationship('Battalion', back_populates='cadet')
-    gender_id = Column("gender_id", ForeignKey('genders.id'), nullable=False)
-    gender = relationship('Gender', back_populates='cadet')
-    service_id = Column("service_id", ForeignKey('services.id'), nullable=False)
-    service = relationship('Service', back_populates='cadet')
-    regular_id = Column("regular_id", ForeignKey('regular_courses.id'), nullable=False)
-    regular_course = relationship('RegularCourse', back_populates='cadet')
-    medical = relationship('Medical', back_populates='cadet')
-    admission_count = Column("admission_count", Integer, nullable=False, default=0)
-    admission_date = Column(Date, nullable=True)  # New field for admission date
-
-    @classmethod
-    def admit_cadets(cls, cadet_ids):
-        cadets = cls.query.filter(cls.id.in_(cadet_ids)).all()
-        for cadet in cadets:
-            cadet.admission_count += 1
-            cadet.admission_date = datetime.now().date()  # Set admission date
-
-        db.session.commit()
-
-    # Establish relationships with Score and ServiceScore tables
-    scores = relationship("Score", back_populates='cadet', uselist=False)
-    service_scores = relationship("ServiceScore", back_populates='cadet', uselist=False)
-
-    courses = relationship("Course", back_populates="cadet")
-    profile_picture = relationship('ProfilePicture', back_populates='cadet')
-
-    @validates('admission_count')
-    def validate_admission_count(self, key, admission_count):
-        if admission_count < 0:
-            raise ValueError('Admission count cannot be negative.')
-        return admission_count
-
-    @property
-    def total_units(self):
-        # Calculate total units based on related models or other criteria
-        return sum([course.units for course in self.courses])
-
-    def __repr__(self):
-        return (f"<Cadet(id={self.id}, cadet_no={self.cadet_no}, first_name={self.first_name}, "
-                f"middle_name={self.middle_name}, last_name={self.last_name}, "
-                f"religion={self.religion}, state={self.state}, lga={self.lga}, "
-                f"date_of_enlistment={self.date_of_enlistment}, date_of_birth={self.date_of_birth}, "
-                f"department_id={self.department_id}, bn_id={self.bn_id}, gender_id={self.gender_id}, "
-                f"service_id={self.service_id}, regular_id={self.regular_id}, admission_count={self.admission_count})>")
-
 
 # Create the database tables (if they don't exist)
 with app.app_context():
