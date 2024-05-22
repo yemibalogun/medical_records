@@ -7,9 +7,10 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical, ProfilePicture, Staff, Visit
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import declarative_base, relationship, aliased, joinedload
+from sqlalchemy.orm import declarative_base, relationship, aliased, joinedload, Session
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import or_, func
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_, func, event
 from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
 from flask_socketio import SocketIO, emit
@@ -21,7 +22,7 @@ import uuid
 from datetime import datetime, date
 from utils import regular_courses, filtered_subjects, get_total_first_term_score, get_total_second_term_score, log_score_change, calculate_gpa_cpga
 
-
+    
 year = datetime.now().year
 migrate = Migrate(app, db)
 Bootstrap(app)
@@ -29,7 +30,7 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-login_manager.login_message_category = 'success'
+login_manager.login_message_category = 'info'
 socketio = SocketIO(app)
 scheduler = APScheduler()
 scheduler.init_app(app)
@@ -50,6 +51,24 @@ def reset_admission_count():
         print(f"Reset admission count for all cadets on {datetime.now()}")
 
 scheduler.start()
+
+@event.listens_for(Session, 'after_commit')
+def after_commit_update_board_status(session):
+    updated_cadets = set()
+    for obj in session.dirty:
+        if isinstance(obj, Medical):
+            cadet = obj.cadet
+            if cadet:
+                print(f"Updating board status for Cadet {cadet.id}")
+                cadet.update_board_status()
+                updated_cadets.add(cadet)
+
+    if updated_cadets:
+        with session.no_autoflush:
+            for cadet in updated_cadets:
+                session.add(cadet)
+            session.commit()
+
 
 # Get the current working directory
 current_directory = os.getcwd()
@@ -103,7 +122,7 @@ def autocomplete():
                 Cadet.cadet_no.ilike(f'%{query}%')
             )
         ).all()
-
+    # app.logger.debug(f"Cadets found: {cadets}")  # Logging the cadets found for debugging
     if cadets:
         # Convert each tuple to a dictionary and add to a new list
         results = []
@@ -120,19 +139,15 @@ def autocomplete():
                 'religion': cadet.religion,
                 'state': cadet.state,
                 'lga': cadet.lga,
-                'enlistment_date': cadet.date_of_enlistment,
-                'dob': cadet.date_of_birth,
+                'enlistment_date': cadet.date_of_enlistment.isoformat(),
+                'dob': cadet.date_of_birth.isoformat(),
                 'department': cadet.department.department_name.title(),
                 'course': cadet.regular_course.course_no,
                 'student_info_url':  url_for('student_info',  id=cadet.id)
             }
-
             results.append(cadet_dict)
-        # Serialize the list of dictionaries to JSON format
         cadets_json = json.dumps(results)
-
         return cadets_json
-            
     else:
         # Return an empty array if no results found
         return jsonify([]) 
@@ -176,13 +191,14 @@ def login():
         
         staff = Staff.query.filter_by(email=email).first()
         if not staff:
-            flash('This email does not exist!', 'info')
+            flash('Incorrect credentials!', 'warning')
             return redirect(url_for('login'))
         elif not bcrypt.check_password_hash(staff.password, password):
-                flash('Password incorrect, please try again.')
+                flash('Incorrect credentials!, please try again.', 'warning')
                 return redirect(url_for('login'))
         else:
             login_user(staff)
+            flash('You have been logged in successfully!', 'success')
             next_page = request.args.get('next')
 
             if next_page:
@@ -201,7 +217,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("You have been logged out!")
+    flash("You have been logged out!", 'success')
     return redirect(url_for('login'))
 
 @app.route("/")
@@ -359,23 +375,25 @@ def student_info(id):
     page = request.args.get("page", 1, type=int)
     per_page = 20
     
+    if current_user.role != 'doctor':
+        flash("Access denied!", 'danger')
+        return redirect(url_for('home'))
+    
     cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
     cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
-    profile_pics = session.query(ProfilePicture).filter(ProfilePicture.cadet_id==id).first()
     
     days_confined = session.query(func.sum(Medical.excuse_duty_days)).filter(
         Medical.cadet_id==id, 
         Medical.excuse_duty=="confinement"
         ).scalar()
-
+    
     try:
         selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id == id, Cadet.bn_id == Battalion.id).first()
+        days_admitted=selected_cadet.admission_count
         
-        dob_str = selected_cadet.date_of_birth
-        doe_str = selected_cadet.date_of_enlistment
+        dob_obj = selected_cadet.date_of_birth
+        doe_obj = selected_cadet.date_of_enlistment
 
-        dob_obj = datetime.strptime(dob_str, '%Y-%m-%d')
-        doe_obj = datetime.strptime(doe_str, '%Y-%m-%d')
         dob_year = dob_obj.year
         current_year = datetime.now().year
         cadet_age = current_year - dob_year
@@ -387,13 +405,17 @@ def student_info(id):
         return "Cadet not found", 404
     except ValueError as e:
         return f"Error: {e}", 500
-    
+    if days_confined is None:
+        days_confined = 0
+
+    training_days = 365 - days_confined + days_admitted
     return render_template("dashboard.html",
                                search_form=search_form,
                                selected_cadet=selected_cadet,
-                               profile_pics=profile_pics,
                                rows=cadet_medical_records,
+                               days_admitted=days_admitted,
                                days_confined=days_confined,
+                               training_days=training_days,
                                cadet_records=cadet_records,
                                cadet_age=cadet_age,
                                formatted_dob=formatted_dob,
@@ -443,8 +465,8 @@ def register_staff():
                 date_of_birth=staff_register_form.date_of_birth.data,
                 date_tos=staff_register_form.date_tos.data,
                 )
-            db.session.add(new_staff)
-            db.session.commit()
+            session.add(new_staff)
+            session.commit()
         
             # This next line will authenticate the user with Flask-Login
             login_user(new_staff)
@@ -516,10 +538,13 @@ def doctor_dashboard():
     per_page = 20
     search_form = SearchForm()
     if current_user.role != 'doctor':
-        flash("Access denied!")
-        return redirect(url_for('index'))
-    waiting_patients = Visit.query.filter_by(status='waiting').order_by(Visit.check_in_time).all()
-    waiting_patients_count = Visit.query.filter_by(status='waiting').order_by(Visit.check_in_time).count()
+        flash("Access denied!", 'danger')
+        return redirect(url_for('login'))
+    try:
+        waiting_patients = Visit.query.filter_by(status='waiting').order_by(Visit.check_in_time).all()
+        waiting_patients_count = Visit.query.filter_by(status='waiting').order_by(Visit.check_in_time).count()
+    except IntegrityError as e:  # Handle specific exceptions
+        flash(f'Error updating dashboard: {str(e)}', 'danger')
     return render_template('doctor_dashboard.html', 
                            waiting_patients=waiting_patients, 
                            waiting_patients_count=waiting_patients_count,
@@ -530,27 +555,81 @@ def doctor_dashboard():
                            per_page=per_page,
                            )
 
+@app.route('/pharmacy_dashboard')
+@login_required
+def pharmacy_dashboard():
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+    search_form = SearchForm()
+    today = date.today()
+    if current_user.role != 'pharmacist':
+        flash("Access denied!", 'danger')
+        return redirect(url_for('login'))
+    try:
+        waiting_patients = Medical.query.filter_by(prescription_status='waiting').order_by(Medical.date_reported_sick).all()
+    except IntegrityError as e:  # Handle specific exceptions
+        flash(f'Error updating dashboard: {str(e)}', 'danger')
+    return render_template('pharmacy_dashboard.html', 
+                           waiting_patients=waiting_patients, 
+                           current_user=current_user, 
+                           search_form=search_form,
+                           today=today,
+                           year=year,
+                           page=page,
+                           per_page=per_page,
+                           )
+
 @app.route('/update_visit_status/<int:visit_id>', methods=['POST'])
 @login_required
 def update_visit_status(visit_id):
     visit = Visit.query.get_or_404(visit_id)
     if current_user.role != 'doctor':
-        flash('You are not authorized to perform this action.')
+        flash('You are not authorized to perform this action.', 'danger')
         return redirect(url_for('doctor_dashboard'))
 
     new_status = request.form.get('status')
     if new_status not in ['waiting', 'in progress', 'completed']:
-        flash('Invalid status update.')
+        flash('Invalid status update.', 'warning')
         return redirect(url_for('doctor_dashboard'))
     
     visit.status = new_status
-    db.session.commit()
 
-    # Emit an event to update the visit status on the frontend
-    socketio.emit('update_visit_status', {'id': visit.id, 'status': new_status})
+    try:
+        db.session.commit()  # Commit transaction explicitly
+        socketio.emit('update_visit_status', {'id': visit.id, 'status': new_status})
+        flash('Patient status updated successfully.', 'success')
+    except IntegrityError as e:  # Handle specific exceptions
+        db.session.rollback()  # Rollback transaction on error
+        flash(f'Error updating status: {str(e)}', 'danger')
 
-    flash('Patient status updated successfully.')
     return redirect(url_for('doctor_dashboard'))
+
+
+@app.route('/update_prescription_status/<int:id>', methods=['POST'])
+@login_required
+def update_prescription_status(id):
+    prescription = Medical.query.get_or_404(id)
+    if current_user.role != 'pharmacist':
+        flash('You are not authorized to perform this action.', 'danger')
+        return redirect(url_for('home'))
+
+    new_status = request.form.get('prescription_status')
+    if new_status not in ['waiting', 'in progress', 'completed']:
+        print(new_status)
+        flash('Invalid status update.', 'warning')
+        return redirect(url_for('pharmacy_dashboard'))
+    
+    prescription.prescription_status = new_status
+
+    try:
+        db.session.commit()  # Commit transaction explicitly
+        socketio.emit('update_prescription_status', {'id': prescription.id, 'status': new_status})
+        flash('Patient status updated successfully.', 'success')
+    except IntegrityError as e:  # Handle specific exceptions
+        db.session.rollback()  # Rollback transaction on error
+        flash(f'Error updating status: {str(e)}', 'danger')
+
+    return redirect(url_for('pharmacy_dashboard'))
 
 
 @app.route('/cadet/medical/<int:id>', methods=['GET', 'POST'])
@@ -601,8 +680,6 @@ def add_medical_record(id):
                 func.date(Medical.date_reported_sick) == date_reported_sick
             ).first()
 
-            admission_count_value = 0
-
             # Create a new MedicalRecord object and add it to the database
             new_medical_record = Medical(
                 date_reported_sick=date_reported_sick,
@@ -623,9 +700,9 @@ def add_medical_record(id):
                 selected_cadet.admission_date = datetime.now().date()
                 new_medical_record.admission_count = selected_cadet.admission_count
 
-            db.session.add(new_medical_record)
-            db.session.add(selected_cadet)  # Ensure cadet updates are included
-            db.session.commit()
+            session.add(new_medical_record)
+            session.add(selected_cadet)  # Ensure cadet updates are included
+            session.commit()
             flash('Medical record was added successfully.', 'success')
             return redirect(url_for('add_medical_record', id=id))
         
@@ -1167,63 +1244,63 @@ def uploaded_file(filename):
 #     #         executor.map(insert_cadet, csv_reader)     
 
 
-# @app.route("/department")
-# def add_department():
-#     try:
-#         with open("departments.csv", 'r') as file:
-#             csv_reader = csv.reader(file)
-#             for row in csv_reader:
-#                 department_id = int(row[0])
-#                 department_name = row[1]
-#                 faculty_id = int(row[2])
+@app.route("/department")
+def add_department():
+    try:
+        with open("departments.csv", 'r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                department_id = int(row[0])
+                department_name = row[1]
+                faculty_id = int(row[2])
 
-#                 new_department = Department(
-#                     id=department_id,
-#                     department_name=department_name,
-#                     faculty_id=faculty_id
-#                 )
+                new_department = Department(
+                    id=department_id,
+                    department_name=department_name,
+                    faculty_id=faculty_id
+                )
                     
-#                 session.add(new_department)
-#                 session.commit()
+                session.add(new_department)
+                session.commit()
 
-#         return redirect(url_for('home'))
-#     except FileNotFoundError:
-#         return "csv file not found"
-#     except Exception as e:
-#         db.session.rollback()
-#         return f"An error occurred: {e}"
+        return redirect(url_for('home'))
+    except FileNotFoundError:
+        return "csv file not found"
+    except Exception as e:
+        db.session.rollback()
+        return f"An error occurred: {e}"
     
-# @app.route("/allcourse")
-# def add_course():
-#     try:
-#         with open("courses.csv", 'r') as file:
-#             csv_reader = csv.reader(file)
-#             for row in csv_reader:
-#                 course_id = int(row[0])
-#                 course_code = row[1]
-#                 course_title = row[2]
-#                 units = int(row[3])
-#                 status = row[4]
-#                 department_id = int(row[5])
+@app.route("/allcourse")
+def add_course():
+    try:
+        with open("courses.csv", 'r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                course_id = int(row[0])
+                course_code = row[1]
+                course_title = row[2]
+                units = int(row[3])
+                status = row[4]
+                department_id = int(row[5])
 
-#                 new_course = Course(
-#                     id=course_id,
-#                     course_code=course_code,
-#                     course_title=course_title,
-#                     units=units,
-#                     status=status,
-#                     department_id=department_id
-#                 )
+                new_course = Course(
+                    id=course_id,
+                    course_code=course_code,
+                    course_title=course_title,
+                    units=units,
+                    status=status,
+                    department_id=department_id
+                )
                     
-#                 session.add(new_course)
-#                 session.commit()
+                session.add(new_course)
+                session.commit()
 
-#         return redirect(url_for('home'))
-#     except FileNotFoundError:
-#         return "csv file not found"
-#     except Exception as e:
-#         db.session.rollback()
-#         return f"An error occurred: {e}"
+        return redirect(url_for('home'))
+    except FileNotFoundError:
+        return "csv file not found"
+    except Exception as e:
+        db.session.rollback()
+        return f"An error occurred: {e}"
 
 
 # @app.route("/all_military_subject")
@@ -1257,55 +1334,55 @@ def uploaded_file(filename):
 #         return f"An error occurred: {e}"
     
     
-# @app.route("/addallcadets")
-# def add_all_cadets():
-#     try:
-#         with open("cadets_nom.csv", 'r') as file:
-#             csv_reader = csv.reader(file)
-#             for row in csv_reader:
-#                 cadet_id = int(row[0])
-#                 cadet_no = row[1]
-#                 first_name = row[2]
-#                 middle_name = row[3]
-#                 last_name = row[4]
-#                 religion = row[5]
-#                 state = row[6]
-#                 lga = row[7]
-#                 date_of_enlistment = row[8]
-#                 date_of_birth = row[9]
-#                 department_id = int(row[10])
-#                 bn_id = int(row[11])
-#                 gender_id = int(row[12])
-#                 service_id = int(row[13])
-#                 regular_id = int(row[14])
+@app.route("/addallcadets")
+def add_all_cadets():
+    try:
+        with open("cadets_nom.csv", 'r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                cadet_id = int(row[0])
+                cadet_no = row[1]
+                first_name = row[2]
+                middle_name = row[3]
+                last_name = row[4]
+                religion = row[5]
+                state = row[6]
+                lga = row[7]
+                date_of_enlistment = row[8]
+                date_of_birth = row[9]
+                department_id = int(row[10])
+                bn_id = int(row[11])
+                gender_id = int(row[12])
+                service_id = int(row[13])
+                regular_id = int(row[14])
 
-#                 new_cadet = Cadet(
-#                     id=cadet_id,
-#                     cadet_no=cadet_no,
-#                     first_name=first_name,
-#                     middle_name=middle_name,
-#                     last_name=last_name,
-#                     religion=religion,
-#                     state=state,
-#                     lga=lga,
-#                     date_of_enlistment=date_of_enlistment,
-#                     date_of_birth=date_of_birth,
-#                     department_id=department_id,
-#                     bn_id=bn_id,
-#                     gender_id=gender_id,
-#                     service_id=service_id,
-#                     regular_id=regular_id
-#                 )
+                new_cadet = Cadet(
+                    id=cadet_id,
+                    cadet_no=cadet_no,
+                    first_name=first_name,
+                    middle_name=middle_name,
+                    last_name=last_name,
+                    religion=religion,
+                    state=state,
+                    lga=lga,
+                    date_of_enlistment=date_of_enlistment,
+                    date_of_birth=date_of_birth,
+                    department_id=department_id,
+                    bn_id=bn_id,
+                    gender_id=gender_id,
+                    service_id=service_id,
+                    regular_id=regular_id
+                )
                     
-#                 session.add(new_cadet)
-#                 session.commit()
+                session.add(new_cadet)
+                session.commit()
 
-#         return redirect(url_for('home'))
-#     except FileNotFoundError:
-#         return "csv file not found"
-#     except Exception as e:
-#         db.session.rollback()
-#         return f"An error occurred: {e}"
+        return redirect(url_for('home'))
+    except FileNotFoundError:
+        return "csv file not found"
+    except Exception as e:
+        db.session.rollback()
+        return f"An error occurred: {e}"
         
 
 # @app.route("/delete_cadet/<int:id>", methods=['GET','POST'])

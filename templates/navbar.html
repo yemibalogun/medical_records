@@ -66,6 +66,12 @@
                 >Check-In patient</a
               >
             </li>
+            
+            <li>
+              <a class="dropdown-item" href="{{ url_for('pharmacy_dashboard') }}"
+                >Pharmacy</a
+              >
+            </li>
           </ul>
         </li>
 
@@ -136,7 +142,8 @@
         action="{{ url_for('search') }}"
         role="search"
       >
-        {{ search_form.csrf_token }} {{ search_form.searched(id="searched",
+        {{ search_form.csrf_token }} 
+        {{ search_form.searched(id="searched",
         class="form-control input-sm", type="search", placeholder="Search",
         aria_label="Search", oninput="autocompleteSearch()") }} 
         <button class="btn btn-outline-primary btn-sm" style="border-radius: 30%; font-size: .6rem; margin-left: 20px; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
@@ -146,10 +153,16 @@
       </form>
 
       {% if current_user.is_authenticated %}
+      
       <div class="div">
         <li style="list-style-type: none; padding: 10px; font-size: small; margin-left: 20px;" class="nav-item">
+          {% if current_user.role == 'doctor' %}
           <a href="{{ url_for('doctor_dashboard') }}">Welcome, {{ current_user.firstname.title() }}</a>
-          
+          {% elif current_user.role == 'pharmacist' %}
+          <a href="{{ url_for('pharmacy_dashboard') }}">Welcome, {{ current_user.firstname.title() }}</a>
+          {% elif current_user.role == 'front_desk' %}
+          <a href="{{ url_for('check_in') }}">Welcome, {{ current_user.firstname.title() }}</a>
+          {% endif %}
         </li>
       </div>
       {% endif %}

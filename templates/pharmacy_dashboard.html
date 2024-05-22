@@ -10,7 +10,7 @@
     style="text-align: left; width: 60%; padding: 20px; margin: auto"
   >
     <h4 style="color: rgb(0, 68, 171); text-align: center">
-      Hello, Dr {{ current_user.firstname.title() }}
+      Hello, {{ current_user.firstname.title() }}
     </h4>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -31,7 +31,7 @@
   <div class="container">
     <!-- <h1>Doctor Dashboard</h1> -->
     <h3 class="card-subtitle mb-2 text-body-secondary">
-      Waiting Patients ({{ waiting_patients_count }})
+      Prescriptions <h5 style="font-size: small; color: grey">{{ today }}</h5>
     </h3>
     <div style="margin: 0; padding: 0" class="scrollable-table">
       <table id="visits-table" class="custom-table table-sm table-hover">
@@ -40,42 +40,39 @@
             <th style="width: 5%" scope="col">Index</th>
             <th style="width: 5%" scope="col">Cadet No</th>
             <th style="width: 10%" scope="col">Patient Name</th>
-            <th style="width: 10%" scope="col">Check-In Time</th>
-            <th style="width: 10%" scope="col">Reason for Visit</th>
-            <th style="width: 5%" scope="col">Status</th>
-            <th style="width: 5%" scope="col">Action</th>
+            <th style="width: 10%" scope="col">Date</th>
+            <th style="width: 20%" scope="col">Prescriptions</th>
+            <th style="width: 10%" scope="col">Action</th>
           </tr>
         </thead>
 
         <tbody style="text-align: left" id="cadet-table-body">
-          {% for visit in waiting_patients %}
-          <tr id="visit-{{ visit.id }}" class="active-row">
+        {% for medical in waiting_patients %}
+          <tr id="medical-{{ medical.id }}" class="active-row">
             <th class="card-heading-text" scope="row">
               {{ (page - 1) * per_page + loop.index }}
             </th>
 
-            <td data-cell="Cadet No">{{ visit.cadet.cadet_no }}</td>
+            <td data-cell="Cadet No">{{ medical.cadet.cadet_no }}</td>
             <td data-cell="Name">
               <a
                 style="text-decoration: none; color: rgb(0, 68, 171)"
-                href="{{ url_for('student_info', id=visit.cadet_id) }}"
-                >{{ visit.cadet.first_name }} {{ visit.cadet.middle_name }} {{
-                visit.cadet.last_name }}
+                href="{{ url_for('student_info', id=medical.cadet_id) }}"
+                >{{ medical.cadet.first_name }} {{ medical.cadet.middle_name }} {{
+                medical.cadet.last_name }}
               </a>
             </td>
-            <td data-cell="Check-In time">{{ visit.check_in_time }}</td>
+            <td data-cell="Check-In time">{{ medical.date_reported_sick }}</td>
 
-            <td data-cell="Reason">{{ visit.reason }}</td>
-
-            <td data-cell="Status">{{ visit.status }}</td>
+            <td data-cell="Prescriptions">{{ medical.prescription }}</td>
 
             <td data-cell="Action">
-              {% if visit.status == 'waiting' %}
+            {% if medical.prescription_status == 'waiting' %}
               <form
-                action="{{ url_for('update_visit_status', visit_id=visit.id) }}"
+                action="{{ url_for('update_prescription_status', id=medical.id) }}"
                 method="post"
               >
-                <input type="hidden" name="status" value="completed" />
+                <input type="hidden" name="prescription_status" value="completed" />
                 <button
                   style="font-size: small"
                   class="btn btn-primary btn-sm"
@@ -84,7 +81,7 @@
                   Mark as Completed
                 </button>
               </form>
-              {% endif %}
+            {% endif %}
             </td>
           </tr>
           {% endfor %}

@@ -1,5 +1,6 @@
 from sqlalchemy import  Column, String, Integer, ForeignKey, Float, Enum, Table, MetaData, Date, func, event, create_engine
-from sqlalchemy.orm import relationship, validates, sessionmaker
+from sqlalchemy.orm import relationship, validates
+from sqlalchemy.exc import IntegrityError
 from config import db, app # Importing from config.py
 from datetime import datetime, date
 from flask_migrate import Migrate
@@ -68,16 +69,49 @@ class Medical(db.Model):
     diagnosis = Column(String, nullable=False)
     plan = Column(String, nullable=False)
     prescription = Column(String, nullable=False)
+    prescription_status = Column(String(50), nullable=False, default='waiting') 
     excuse_duty = Column(String, nullable=False)
     excuse_duty_days = Column(Integer, nullable=True, default=0)
     admission_count = Column(Integer, nullable=False, default=0)
     
-    cadet_id = Column(Integer, ForeignKey("cadets.id"), nullable=False)
+    cadet_id = Column(Integer, ForeignKey("cadets.id"))
     cadet = relationship("Cadet", back_populates="medical")
+
+    @property
+    def is_confinement(self):
+        return self.excuse_duty == 'confinement'
+    
+    @property
+    def confinement_days(self):
+        if self.is_confinement:
+            return self.excuse_duty_days
+        return 0
+    
+    def update_cadet_board_status(self):
+        if self.cadet:
+            total_confinement_days = sum(med.confinement_days for med in self.cadet.medical)
+            self.cadet.update_board_status(total_confinement_days)
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+            self.update_cadet_board_status()
+        except IntegrityError:
+            db.session.rollback()
+            raise
+
+    def update(self):
+        try:
+            db.session.commit()
+            self.update_cadet_board_status()
+        except IntegrityError:
+            db.session.rollback()
+            raise
 
     def __repr__(self):
         return (f"<Medical(id={self.id}, date_reported_sick={self.date_reported_sick}, "
-                f"diagnosis={self.diagnosis}, excuse_duty={self.excuse_duty}, "
+                f"diagnosis={self.diagnosis}, prescription={self.prescription}, prescription_status={self.prescription_status}, excuse_duty={self.excuse_duty}, "
                 f"excuse_duty_days={self.excuse_duty_days}, admission_count={self.admission_count})>")
 
 class Service(db.Model):
@@ -112,7 +146,7 @@ class Visit(db.Model):
 class Staff(db.Model, UserMixin):
     __tablename__ = "staffs"
 
-    staff_id = Column("staff_id", Integer, primary_key=True, autoincrement=True)
+    staff_id = Column("staff_id", Integer, primary_key=True, autoincrement=True, nullable=False)
     firstname = Column("firstname", String(255), nullable=False)
     middlename = Column("middlename", String(255), nullable=True)
     lastname = Column("lastname", String(255), nullable=False)
@@ -127,7 +161,7 @@ class Staff(db.Model, UserMixin):
     appointment = Column("appointment", String(255), nullable=False)
     date_of_birth = Column("date_of_birth", Date, nullable=False)
     date_tos = Column("date_tos", Date, nullable=False)
-    date_of_joining = Column("date_of_joining", Date, nullable=False, default=date.today)
+    date_of_joining = Column("date_of_joining", Date, nullable=False, default=date.today())
     visit_id = Column("visit_id", Integer, ForeignKey('visits.id'), nullable=True)
 
     def get_id(self):
@@ -147,8 +181,8 @@ class Cadet(db.Model):
     religion = Column("religion", String, nullable=False)
     state = Column("state", String, nullable=False)
     lga = Column("lga", String, nullable=False)
-    date_of_enlistment = Column("date_of_enlistment", String, nullable=False)
-    date_of_birth = Column("date_of_birth", String, nullable=False)
+    date_of_enlistment = Column("date_of_enlistment", Date, nullable=False)
+    date_of_birth = Column("date_of_birth", Date, nullable=False)
     department_id = Column('department_id', ForeignKey('departments.id'), nullable=False)
     department = relationship('Department', back_populates='cadets')
     bn_id = Column("bn_id", ForeignKey('battalions.id'), nullable=False)
@@ -159,34 +193,34 @@ class Cadet(db.Model):
     service = relationship('Service', back_populates='cadet')
     regular_id = Column("regular_id", ForeignKey('regular_courses.id'), nullable=False)
     regular_course = relationship('RegularCourse', back_populates='cadet')
-    medical = relationship('Medical', back_populates='cadet', lazy='dynamic')
+    medical = relationship('Medical', back_populates='cadet', lazy='joined')
     admission_count = Column("admission_count", Integer, nullable=False, default=0)
-    board_status = Column("board_status", String, nullable=False, default='')
+    board_status = Column("board_status", String, default='')
     admission_date = Column(Date, nullable=True)  # New field for admission date
     visit = relationship('Visit', back_populates='cadet')
 
     @property
-    def confinement(self):
-        return sum(medical.excuse_duty_days for medical in self.medical if medical.excuse_duty == 'confinement')
-    
-    @property
     def total_days(self):
-        return self.admission_count + self.confinement
+        # Sum up the confinement days from all related Medical records
+        confinement_days = sum(med.confinement_days for med in self.medical)
+        return self.admission_count + confinement_days
     
     def update_board_status(self):
-        if self.total_days >= 42:
+        print(f"Updating board status for Cadet {self.id}: total_days={self.total_days}")
+        if self.total_days > 42:
             self.board_status = 'board'
         else:
             self.board_status = ''
+        print(f"Board status for Cadet {self.id} set to: {self.board_status}")
 
     def set_admission_count(self, count):
         self.admission_count = count
-        self.update_board_status()
+        self.update_board_status(self.confinement_days)
 
     #   Initialize and update the board status
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.update_board_status()
+        self.update_board_status(self.confinement_days)
 
     @classmethod
     def admit_cadets(cls, cadet_ids):
@@ -194,7 +228,7 @@ class Cadet(db.Model):
         for cadet in cadets:
             cadet.admission_count += 1
             cadet.admission_date = datetime.now().date()  # Set admission date
-            cadet.update_board_status()
+            cadet.update_board_status(cadet.confinement_days)
 
         db.session.commit()
 
@@ -219,18 +253,6 @@ class Cadet(db.Model):
                 f"{self.department_id}, {self.bn_id}, {self.gender_id}, "
                 f"{self.service_id}, {self.regular_id}, {self.admission_count})")
 
-# Listen for changes on admission_count and medical relationships
-def after_insert_update_board_status(mapper, connection, target):
-    if target.cadet:
-        target.cadet.update_board_status()
-
-def after_update_update_board_status(mapper, connection,target):
-    if target.cadet:
-        target.cadet.update_board_status()
-
-# Attach event listeners to the Medical model
-event.listen(Medical, 'after_insert', after_insert_update_board_status)
-event.listen(Medical, 'after_update', after_update_update_board_status)
 
 score_table = Table('score_table', metadata,
     Column('first_semester_score', Float, default=0.0),
@@ -265,7 +287,7 @@ class Course(db.Model):
     course_code = Column("course_code", String(10))
     course_title = Column("course_title", String(255), nullable=False)
     units = Column("units", Integer, nullable=False)
-    status = Column(Enum('core', 'elective'), nullable=False) # Enum for course status (Core or Elective)
+    status = Column(Enum('core', 'elective', name="course_status_enum"), nullable=False) # Enum for course status (Core or Elective)
 
     department_id = Column("department_id", ForeignKey('departments.id'), nullable=False)
     department = relationship('Department', back_populates='courses')
@@ -304,7 +326,7 @@ class ServiceSubject(db.Model):
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     subject_code = Column("subject_code", String(10))
     subject_title = Column("subject_title", String(255), nullable=False)
-    status = Column(Enum('major', 'minor', 'tour', 'camp'), nullable=False) # Enum for course status (major or minor)
+    status = Column(Enum('major', 'minor', 'tour', 'camp', name="service_subject_status_enum"), nullable=False) # Enum for course status (major or minor)
 
     service_id = Column("service_id", ForeignKey('services.id'))
     service = relationship('Service', back_populates='service_subjects')

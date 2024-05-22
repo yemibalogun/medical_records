@@ -130,6 +130,7 @@ class MedicalRecordForm(FlaskForm):
     diagnosis = TextAreaField('Diagnosis', validators=[DataRequired()])
     plan = TextAreaField('Plan', validators=[DataRequired()])
     prescription = TextAreaField('Prescription', validators=[DataRequired()])
+    prescription_status = SelectField('Status', choices=[('waiting', 'Waiting'), ('in progress', 'In Progress'), ('completed', 'Completed')], default='waiting', validators=[DataRequired()])
     excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), 
                                                       ('excused boot', 'Excused Boot'), 
                                                       ('excused all parades', 'Excused all Parades'), 
@@ -160,9 +161,10 @@ class StaffRegisterForm(FlaskForm):
     role = SelectField('Role', choices=[('admin', 'Admin'), 
                                         ('doctor', 'Doctor'), 
                                         ('nurse', 'Nurse'), 
+                                        ('pharmacist', 'Pharmacist'),
                                         ('cadets_brigade', 'Cadets Brigade'),
-                                        ('front_desk', 'Front Desk')
-                                        ], validators=[DataRequired()])
+                                        ('front_desk', 'Front Desk')],
+                                        validators=[DataRequired()])
     
     status = SelectField('Status', choices=[('active', 'Active'), 
                                             ('inactive', 'Inactive')

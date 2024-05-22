@@ -1,10 +1,11 @@
 from models import Cadet, RegularCourse, ServiceScore
 from config import app, db
 from sqlalchemy.sql import func
+from sqlalchemy.orm import Session
 import time
 from datetime import datetime
 import os
-from models import ServiceSubject, Score
+from models import ServiceSubject, Score, Cadet
 
 
 MAX_RETRIES = 3
@@ -198,7 +199,6 @@ def calculate_gpa_cpga(cadet_id):
     return gpa, new_cgpa
 
 
-
 # # Function to calc CGPA
 # def calc_cgpa():
 #     grade_point= {
@@ -210,3 +210,4 @@ def calculate_gpa_cpga(cadet_id):
 #         'F': '0'
 #         }
 #     grade_point_average =
+

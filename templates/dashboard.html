@@ -8,21 +8,16 @@
     style="display: flex; flex-wrap: wrap; justify-content: space-between"
     class="row"
   >
-    <div class="col-md-6 col-sm-8">
-      <div class="card" style="margin-bottom: 20px;">
-        <div
-          style="margin: 0; display: flex; justify-content: space-between"
-          class="row"
-        >
-          
-          <div class="col-md-8">
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+        
             <div class="card-body">
               <h5 style="color: rgb(0, 68, 171)" class="card-title">
                 {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name
                 + ' ' + selected_cadet.last_name }}
                 <a
                   href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
-                  style="color: rgb(171, 68, 0)"
+                  style="color: #f90b3f"
                   >({{ selected_cadet.regular_course.course_no }}RC)</a
                 >
               </h5>
@@ -42,15 +37,18 @@
                 <b style="color: rgb(0, 68, 171)">{{ cadet_age }}</b>
               </p>
             </div>
-          </div>
-
-        </div>
+            
       </div>
+      <br>
     </div>
 
+    <!-- <div class="col">
+      <canvas id="myChart"></canvas>
+    </div> -->
+
     <div class="col" style="max-width: 150px; font-size: small">
-      <p>Days Admitted: {{ selected_cadet.admission_count }}</p>
-      <p>Days Confined: {{ days_confined }}</p>
+      <p class="text-body-secondary">Days Admitted: <span style="color: #f90b3f; font-weight: 500;">{{ days_admitted }}</span></p>
+      <p class="text-body-secondary">Days Confined: <span style="color: #f90b3f; font-weight: 500;">{{ days_confined }}</span></p>
     </div>
     
     <div class="col" style="max-width: 150px; font-size: small">
@@ -66,7 +64,6 @@
         class="card-link"
         >Course list</a
       >
-    
     </div>
   </div>
   <!-- <hr>     -->
@@ -133,7 +130,6 @@
 <!-- </div> -->
 
 {% block javascript %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
   document.getElementById('profilePictureInput').addEventListener('change', function () {
