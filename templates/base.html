@@ -79,50 +79,42 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- <script>
-      let myChart = document.getElementById("myChart").getContext("2d");
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-      let medChart = new Chart(myChart, {
-        type: "doughnut", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-        data: {
-          labels: ["Days admitted", "Days confined", "Training"],
-          datasets: [
-            {
-              label: "Days",
-              data: [],
-            },
-          ],
-          backgroundColor: ["green", "blue", "red"],
-          borderWidth: 4,
-          borderColor: "",
-          hoverBorderWidth: 3,
-          hoverBorderColor: "#000",
-        },
-        options: {
-          title: {
-            display: true,
-            text: "Period involved in Training",
-            fontSize: 20,
-          },
-          legend: {
-            display: true,
-            position: "right",
-            labels: {
-              fontColor: "black",
-            },
-          },
-          layout: {
-            left: 50,
-            right: 0,
-            bottom: 0,
-            top: 0,
-          },
-        },
-        tooltips: {
-          enabled: true,
-        },
-      });
-    </script> -->
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+            fetch('/api/sick_reports')
+                .then(response => response.json())
+                .then(data => {
+                    // Prepare data for Chart.js
+                    const labels = data.map(item => item.month);
+                    const counts = data.map(item => item.count);
+
+                    // Create the chart
+                    const ctx = document.getElementById('sickReportChart').getContext('2d');
+                    const sickReportChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Sick Reports Per Month',
+                                data: counts,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+        });
+    </script>
 
     <script>
       function autocompleteSearch() {

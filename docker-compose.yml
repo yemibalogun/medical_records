@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: medical_record
+      POSTGRES_USER: yemibalogun
+      POSTGRES_PASSWORD: mocalate
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--", "python", "main.py"]
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

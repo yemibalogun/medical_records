@@ -1,128 +1,236 @@
 <!DOCTYPE html>
-{% extends "base.html" %} 
-{% block title %} dashboard {% endblock %} 
-{% block content %}
+{% extends "base.html" %} {% block title %} dashboard {% endblock %} {% block
+content %}
 
 <div style="height: 1100px" class="container-fluid">
   <div
     style="display: flex; flex-wrap: wrap; justify-content: space-between"
     class="row"
   >
-    <div class="col">
-      <div class="card" style="width: 18rem;">
-        
-            <div class="card-body">
-              <h5 style="color: rgb(0, 68, 171)" class="card-title">
-                {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name
-                + ' ' + selected_cadet.last_name }}
-                <a
-                  href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
-                  style="color: #f90b3f"
-                  >({{ selected_cadet.regular_course.course_no }}RC)</a
-                >
-              </h5>
-              <p class="card-subtitle mb-2 text-body-secondary">
-                {{selected_cadet.bn.bn.capitalize() }} ({{
-                selected_cadet.service.service_type.upper() }})
-              </p>
+    <div class="col" style="max-width: 18rem">
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h5 style="color: rgb(0, 68, 171)" class="card-title">
+            {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name + '
+            ' + selected_cadet.last_name }}
+            <a
+              href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
+              style="color: #f90b3f"
+              >({{ selected_cadet.regular_course.course_no }}RC)</a
+            >
+          </h5>
+          <p class="card-subtitle mb-2 text-body-secondary">
+            {{selected_cadet.bn.bn.capitalize() }} ({{
+            selected_cadet.service.service_type.upper() }})
+          </p>
 
-              <p style="font-size: smaller" class="card-text">
-                Gender |
-                <b style="color: rgb(0, 68, 171)"
-                  >{{ selected_cadet.gender.gender_type.capitalize() }}</b
-                >
-              </p>
-              <p style="font-size: smaller" class="card-text">
-                Age |
-                <b style="color: rgb(0, 68, 171)">{{ cadet_age }}</b>
-              </p>
-            </div>
-            
-      </div>
-      <br>
-    </div>
+          <p style="font-size: smaller" class="card-text">
+            Department |
+            <b style="color: rgb(0, 68, 171)"
+              >{{ selected_cadet.department.department_name.capitalize() }}</b
+            >
+          </p>
 
-    <!-- <div class="col">
-      <canvas id="myChart"></canvas>
-    </div> -->
+          <p style="font-size: smaller" class="card-text">
+            Gender |
+            <b style="color: rgb(0, 68, 171)"
+              >{{ selected_cadet.gender.gender_type.capitalize() }}</b
+            >
+          </p>
+          <p style="font-size: smaller" class="card-text">
+            Age |
+            <b style="color: rgb(0, 68, 171)">{{ cadet_age }}</b>
+          </p>
 
-    <div class="col" style="max-width: 150px; font-size: small">
-      <p class="text-body-secondary">Days Admitted: <span style="color: #f90b3f; font-weight: 500;">{{ days_admitted }}</span></p>
-      <p class="text-body-secondary">Days Confined: <span style="color: #f90b3f; font-weight: 500;">{{ days_confined }}</span></p>
-    </div>
+          <p style="font-size: smaller;" class="card-text">
+            Days Admitted:
+            <span style="color: #f90b3f;"
+              >{{ days_admitted }}</span
+            >
+          </p>
     
-    <div class="col" style="max-width: 150px; font-size: small">
+          <p style="font-size: smaller;" class="card-text">
+            Days Confined:
+            <span style="color: #f90b3f;"
+              >{{ days_confined }}</span
+            >
+          </p>
+        </div>
+      </div>
+      <br />
+    </div>
+
+    <div style="padding: 0; margin: 0; max-width: 400px; max-height: 250px;" class="col card card-body">
+      <div style="max-width: 400px; margin: 20px 0;" class="container">
+        <div style="max-width: 400px;" class="container-body">
+        <canvas id="sickReportChart" width="350" height="150"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" style="max-width: 200px; max-height: 250px; font-size: small; padding: 1rem;">
+      
+      {% if current_user.role == 'doctor' %}
       <a
         type="btn"
         href="{{ url_for('add_medical_record', id=selected_cadet.id) }}"
         class="card-link"
         >Add Medical Records</a
       >
+      {% endif %}
+      <br>
       <a
         type="btn"
+        style="margin: 0"
         href="{{ url_for('select_course', id=selected_cadet.regular_course.id)}}"
         class="card-link"
         >Course list</a
       >
     </div>
+
+    <!-- <div class="col" style="max-width: 150px; font-size: small">
+      
+    </div> -->
   </div>
   <!-- <hr>     -->
-  
-  <div style="margin: 0;" class="container-fluid">
-    
-    <div style="margin: 0;" id="autocomplete-suggestions" class="autocomplete-suggestions">
-      <p>Medical History:</p>
-      <div style="margin: 0; padding: 0;" class="">
-        <table style="margin: 0;" class="custom-table table-sm table-hover table-borderless">
-          <thead style="font-size: smaller;">
-            <tr>
-              <th style="width: 10%" scope="col">Date</th>
-              <th style="width: 20%" scope="col">History</th>
-              <th style="width: 20%" scope="col">Examination</th>
-              <th style="width: 20%" scope="col">Diagnosis</th>
-              <th style="width: 20%" scope="col">Plan</th>
-              <th style="width: 20%" scope="col">Prescription</th>
-              <th style="width: 20%" scope="col">Excuse Duty</th>
-              <th style="width: 20%" scope="col">Days</th>
-            </tr>
-          </thead>
-          <tbody style="font-size: small" id="cadet-table-body">
-            {% for row in rows %}
-            <!-- Initial row for data entry -->
-            <tr class="active-row">
-              
-              <td data-cell="date">{{ row.date_reported_sick.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ') }}</td>
-              <td data-cell="history" class="head-center">
-                {{ row.history }}
-              </td>
-              <td data-cell="examination" class="head-center">
-                {{ row.examination }}
-              </td>
-              <td data-cell="diagnosis" class="head-center">
-                {{ row.diagnosis }}
-              </td>
-              <td data-cell="plan" class="head-center">
-                {{ row.plan }}
-              </td>
-              <td data-cell="prescription" class="head-center">
-                {{ row.prescription }}
-              </td>
-              <td data-cell="excuse_duty" class="head-center">
-                {{ row.excuse_duty.title() }}
-              </td>
-              <td data-cell="days" class="head-center">
-                {{ row.excuse_duty_days }}
-              </td>
-              
-            </tr>
-  
-            {% endfor %}
-            <!-- Additional rows will be dynamically added here -->
-          </tbody>
-        </table>
-      </div>
 
-      
+  <div style="margin: 0" class="row">
+    <div style="width: 80%" class="col">
+      <div
+        style="margin: 0"
+        id="autocomplete-suggestions"
+        class="autocomplete-suggestions"
+      >
+        <div style="margin: 0; padding: 0; width: 90%;" class="scrollable-table">
+          {% if current_user.is_authenticated %}
+          {% if current_user.role == 'doctor' %}
+          <table
+            style="margin: 0"
+            class="custom-table table-sm table-hover table-borderless card-body"
+          >
+            <!-- <p>Medical History:</p> -->
+            <thead style="font-size: smaller">
+              <tr>
+                <th style="width: 20%" scope="col">Date</th>
+                <th style="width: 20%" scope="col">History</th>
+                <th style="width: 20%" scope="col">Examination</th>
+                <th style="width: 20%" scope="col">Diagnosis</th>
+                <th style="width: 20%" scope="col">Plan</th>
+                <th style="width: 20%" scope="col">Prescription</th>
+                <th style="width: 20%" scope="col">Excuse Duty</th>
+                <th style="width: 10%" scope="col">Days</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: small; text-justify: auto;" id="cadet-table-body">
+              {% for row in rows %}
+              <!-- Initial row for data entry -->
+              <tr class="active-row">
+                <td data-cell="date">
+                  {{ row.date_reported_sick.strftime('%d %B
+                  %Y').lstrip('0').replace(' 0', ' ') }}
+                </td>
+                <td data-cell="history" class="head-center">
+                  {{ row.history }}
+                </td>
+                <td data-cell="examination" class="head-center">
+                  {{ row.examination }}
+                </td>
+                <td data-cell="diagnosis" class="head-center">
+                  {{ row.diagnosis }}
+                </td>
+                <td data-cell="plan" class="head-center">{{ row.plan }}</td>
+                <td data-cell="prescription" class="head-center">
+                  {{ row.prescription }}
+                </td>
+                <td data-cell="excuse_duty" class="head-center">
+                  {{ row.excuse_duty.title() }}
+                </td>
+                <td data-cell="days" class="head-center">
+                  {{ row.excuse_duty_days }}
+                </td>
+              </tr>
+
+              {% endfor %}
+              <!-- Additional rows will be dynamically added here -->
+            </tbody>
+          </table>
+
+          {% elif current_user.role == 'cadets_brigade' %}
+          
+          {% else %}
+          {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width: fit-content" class="col right-sidebar">
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h6
+            style="background-color: #f3f3f3; margin: 0; padding: 1rem"
+            class="card-title mb-2 text-body-secondary"
+          >
+            Admitted cadets ({{ admitted_cadets_count }}) <br><span style="font-size: small;">{{ today }}</span>
+          </h6>
+          {% for cadet in admitted_cadets %}
+          <ul style="padding-left: 0.5rem">
+            <li
+              style="
+                font-size: smaller;
+                color: rgb(0, 68, 171);
+                text-align: left;
+              "
+              class="card-text"
+            >
+              <a
+                style="text-decoration: none; color: rgb(0, 68, 171)"
+                href="{{ url_for('student_info', id=cadet.id) }}"
+                ><b
+                  >{{ cadet.first_name }} {{ cadet.middle_name }} {{
+                  cadet.last_name }}</b
+                ></a
+              >
+              {{ cadet.bn.bn[:3].upper() }} {{ cadet.regular_course.course_no
+              }}RC
+            </li>
+          </ul>
+          {% endfor %}
+        </div>
+      </div>
+      <br />
+
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h6
+            style="background-color: #f3f3f3; margin: 0; padding: 1rem"
+            class="card-title mb-2 text-body-secondary"
+          >
+            Sick reports ({{ sick_report_count }}) <br><span style="font-size: small;">{{ today }}</span>
+          </h6>
+          {% for cadet in sick_report %}
+          <ul style="padding-left: 0.5rem">
+            <li
+              style="
+                font-size: smaller;
+                color: rgb(0, 68, 171);
+                text-align: left;
+              "
+              class="card-text"
+            >
+              <a
+                style="text-decoration: none; color: rgb(0, 68, 171)"
+                href="{{ url_for('student_info', id=cadet.id) }}"
+                ><b>{{ cadet.cadet.first_name }} {{ cadet.cadet.middle_name }} {{
+                cadet.cadet.last_name }}</b></a
+              >
+              {{ cadet.cadet.bn.bn[:3].title() }} {{
+              cadet.cadet.regular_course.course_no }}RC
+            </li>
+          </ul>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -132,28 +240,30 @@
 {% block javascript %}
 
 <script>
-  document.getElementById('profilePictureInput').addEventListener('change', function () {
+  document
+    .getElementById("profilePictureInput")
+    .addEventListener("change", function () {
       const file = this.files[0];
       const formData = new FormData();
-      formData.append('id', document.getElementById('cadetId').value);
-      formData.append('file', file);
+      formData.append("id", document.getElementById("cadetId").value);
+      formData.append("file", file);
 
-      fetch('/upload', {
-          method: 'POST',
-          body: formData
+      fetch("/upload", {
+        method: "POST",
+        body: formData,
       })
-      .then(response => response.json())
-      .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           if (data.success) {
-              const imageUrl = `/uploads/${data.filename}`;
-              document.getElementById('profilePicture').src = imageUrl;
+            const imageUrl = `/uploads/${data.filename}`;
+            document.getElementById("profilePicture").src = imageUrl;
           } else if (data.error) {
-              console.error('Error uploading profile picture:', data.error);
+            console.error("Error uploading profile picture:", data.error);
           }
-      })
-      .catch(error => {
-          console.error('Error uploading profile picture:', error);
-      });
-  });
+        })
+        .catch((error) => {
+          console.error("Error uploading profile picture:", error);
+        });
+    });
 </script>
 {% endblock %} {% endblock %}

@@ -12,13 +12,17 @@
 
   <!-- <h1>{{ course }} RC</h1> -->
   <div style="margin: 0 auto" class="container" style="font-size: 1rem">
-    {% with messages = get_flashed_messages(with_categories=true) %} 
-    {% if messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
     <ul class="flashes">
       {% for category, message in messages %}
-      <div style="text-align: center; margin: 0; padding: 1rem;" class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+      <div
+        style="text-align: center; margin: 0; padding: 1rem"
+        class="alert alert-{{ category }} alert-dismissible fade show"
+        role="alert"
+      >
         <li>{{ message }}</li>
-      </div> 
+      </div>
       {% endfor %}
     </ul>
     {% endif %} {% endwith %}
@@ -28,48 +32,48 @@
         id="autocomplete-suggestions"
         class="autocomplete-suggestions custom-container"
       >
-      <div style="margin: 0; padding: 0;" class="scrollable-table">
-        <table class="custom-table table-sm table-hover">
-          <thead>
-            <tr>
-              <th style="width: 5%" scope="col">Serial</th>
-              <th style="width: 10%" scope="col">Cadet Number</th>
-              <th style="width: 30%" scope="col">Name</th>
-              <th style="width: 10%" scope="col">Service</th>
-              <th style="width: 10%" scope="col">Battalion</th>
-              <th style="width: 30%" scope="col">Department</th>
-            </tr>
-          </thead>
+        <div style="margin: 0; padding: 0" class="scrollable-table">
+          <table style="font-size: smaller;" class="custom-table table-sm table-hover">
+            <thead>
+              <tr>
+                <th style="width: 5%" scope="col">Serial</th>
+                <th style="width: 10%" scope="col">Cadet Number</th>
+                <th style="width: 30%" scope="col">Name</th>
+                <th style="width: 10%" scope="col">Service</th>
+                <th style="width: 10%" scope="col">Battalion</th>
+                <th style="width: 30%" scope="col">Department</th>
+              </tr>
+            </thead>
 
-          <tbody id="cadet-table-body">
-            {% for row in rows %}
-            <tr class="active-row">
-              <th class="card-heading-text" scope="row">
-                {{ (page - 1) * per_page + loop.index }}
-              </th>
+            <tbody id="cadet-table-body">
+              {% for row in rows %}
+              <tr class="active-row">
+                <th class="card-heading-text" scope="row">
+                  {{ (page - 1) * per_page + loop.index }}
+                </th>
 
-              <td data-cell="Cadet No">{{ row.cadet_no }}</td>
-              <td data-cell="Name">
-                <a
-                  style="text-decoration: none; color: rgb(0, 68, 171)"
-                  href="{{ url_for('student_info', id=row.id) }}"
-                  >{{ row.first_name }} {{ row.middle_name }} {{ row.last_name
-                  }}</a
-                >
-              </td>
-              <td data-cell="Service">
-                {{ row.service.service_type.capitalize() }}
-              </td>
-              <td data-cell="Battalion">{{ row.bn.bn.capitalize() }}</td>
-              <td data-cell="Department">
-                {{ row.department.department_name.title() }}
-              </td>
-            </tr>
+                <td data-cell="Cadet No">{{ row.cadet_no }}</td>
+                <td data-cell="Name">
+                  <a
+                    style="text-decoration: none; color: rgb(0, 68, 171)"
+                    href="{{ url_for('student_info', id=row.id) }}"
+                    >{{ row.first_name }} {{ row.middle_name }} {{ row.last_name
+                    }}</a
+                  >
+                </td>
+                <td data-cell="Service">
+                  {{ row.service.service_type.capitalize() }}
+                </td>
+                <td data-cell="Battalion">{{ row.bn.bn.capitalize() }}</td>
+                <td data-cell="Department">
+                  {{ row.department.department_name.title() }}
+                </td>
+              </tr>
 
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 

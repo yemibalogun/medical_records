@@ -1,11 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, DateField, RadioField, SelectField, IntegerField, FloatField, TextAreaField, EmailField, TelField
-from wtforms.validators import DataRequired, InputRequired, ValidationError, EqualTo, Optional
-from course_code import choices
-from config import db
+from wtforms import StringField, SubmitField, PasswordField, DateField, RadioField, SelectField, IntegerField, TextAreaField, EmailField, TelField
+from wtforms.validators import DataRequired, InputRequired, EqualTo, Optional
 import datetime
 
-session = db.session
 
 class EditForm(FlaskForm):
     cadet_no = StringField('Cadet Number', validators=[DataRequired()])
@@ -95,29 +92,6 @@ class AddCadetForm(FlaskForm):
     bn = SelectField('Battalion', choices=[('mogadishu', 'Mogadishu'), ('dalet', 'Dalet'), ('abyssinia', 'Abyssinia'), ('burma', 'Burma')], validators=[InputRequired()])
     service = SelectField('Arm of Service', choices=[('army', 'Army'), ('navy', 'Navy'), ('airforce', 'Airforce')], validators=[DataRequired()])
     regular_course = IntegerField('Course', validators=[DataRequired()])
-    
-    submit = SubmitField('Submit')
-
-# Define a custom validator to check if the score is not more than 100
-def validate_score(form, field):
-    if field.data > 100:
-        raise ValidationError('Score should not be more than 100.')
-
-
-class ScoreForm(FlaskForm):
-    course = SelectField('Course', choices=sorted(choices), validators=[InputRequired()])
-    first_semester_score = FloatField('First Semester Score', validators=[DataRequired(), validate_score])
-    second_semester_score = FloatField('First Semester Score', validators=[DataRequired(), validate_score])
-    academic_year = SelectField('Academic Year', choices=[('first', 'First'), ('second', 'Second'), ('third', 'Third'), ('fourth', 'Fourth')], validators=[InputRequired()])
-    
-    submit = SubmitField('Submit')
-
-
-class MilScoreForm(FlaskForm):
-    subject = SelectField('Subject', validators=[InputRequired()])
-    first_term_score = FloatField('First Term Score', validators=[DataRequired(), validate_score])
-    second_term_score = FloatField('First Term Score', validators=[DataRequired(), validate_score])
-    service_year = SelectField('Academic Year', choices=[('first', 'First'), ('second', 'Second'), ('third', 'Third'), ('fourth', 'Fourth'), ('fifth', 'fifth')], validators=[InputRequired()])
     
     submit = SubmitField('Submit')
 

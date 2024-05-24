@@ -1,26 +1,20 @@
-from flask import render_template, redirect, url_for, send_file, request, jsonify, session, flash, send_from_directory
+from flask import render_template, redirect, url_for, request, jsonify, session, flash
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user 
 from flask_bcrypt import Bcrypt
-from forms import EditForm, SearchForm, AddCadetForm, ScoreForm, MilScoreForm, MedicalRecordForm, AdmissionForm, StaffRegisterForm, LoginForm, CheckInForm
+from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm,StaffRegisterForm, LoginForm, CheckInForm
 from config import app, db
-from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash, check_password_hash
-from models import  Cadet, RegularCourse, Department, Course, Gender, Battalion, Service, ServiceSubject, Score, ServiceScore, Medical, ProfilePicture, Staff, Visit
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import declarative_base, relationship, aliased, joinedload, Session
+from models import  Cadet, RegularCourse, Department, Gender, Battalion, Service, Medical, Staff, Visit
+from sqlalchemy.orm import joinedload, Session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_, func, event
 from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 from flask_apscheduler import APScheduler
-from concurrent.futures import ThreadPoolExecutor
-from PIL import Image
-import csv, io, os, time, json, sys
-import uuid
+import csv, os,json
 from datetime import datetime, date
-from utils import regular_courses, filtered_subjects, get_total_first_term_score, get_total_second_term_score, log_score_change, calculate_gpa_cpga
+from utils import regular_courses
 
     
 year = datetime.now().year
@@ -68,7 +62,6 @@ def after_commit_update_board_status(session):
             for cadet in updated_cadets:
                 session.add(cadet)
             session.commit()
-
 
 # Get the current working directory
 current_directory = os.getcwd()
@@ -375,12 +368,20 @@ def student_info(id):
     page = request.args.get("page", 1, type=int)
     per_page = 20
     
-    if current_user.role != 'doctor':
+    if current_user.role not in ['doctor', 'cadets_brigade']:
         flash("Access denied!", 'danger')
         return redirect(url_for('home'))
     
+    today = date.today()
+    
     cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
+    admitted_cadets = session.query(Cadet).filter(Cadet.admission_date==today).all()
+    admitted_cadets_count = session.query(Cadet).filter(Cadet.admission_date==today).count()
+    sick_report = session.query(Visit).filter(Visit.check_in_time==today).all()
+    sick_report_count = session.query(Visit).filter(Visit.check_in_time==today).count()
     cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
+
+    # course_cadets = session.query(Cadet).filter(Cadet.regular_id == id).all()
     
     days_confined = session.query(func.sum(Medical.excuse_duty_days)).filter(
         Medical.cadet_id==id, 
@@ -400,6 +401,7 @@ def student_info(id):
         
         formatted_dob = dob_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
         formatted_doe = doe_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
+        formatted_date = today.strftime("%d %b %y")
         
     except NoResultFound:
         return "Cadet not found", 404
@@ -415,6 +417,11 @@ def student_info(id):
                                rows=cadet_medical_records,
                                days_admitted=days_admitted,
                                days_confined=days_confined,
+                               admitted_cadets=admitted_cadets,
+                               admitted_cadets_count=admitted_cadets_count,
+                               sick_report=sick_report,
+                               sick_report_count=sick_report_count,
+                               today=formatted_date,
                                training_days=training_days,
                                cadet_records=cadet_records,
                                cadet_age=cadet_age,
@@ -423,6 +430,20 @@ def student_info(id):
                                page=page,
                                per_page=per_page
                                )
+
+
+@app.route('/api/sick_reports', methods=['GET'])
+def get_sick_reports():
+    # Query the database to count sick reports per month
+    reports = session.query(
+        func.date_trunc('month', Visit.check_in_time).label('month'),
+        func.count(Visit.id).label('count')
+    ).group_by('month').order_by('month').all()
+    
+    # Format the results into a list of dictionaries
+    data = [{'month': report.month.strftime('%Y-%m'), 'count': report.count} for report in reports]
+    
+    return jsonify(data)
 
 @app.route('/medical_history/<int:id>')
 @login_required
@@ -805,7 +826,16 @@ def remove_medical_record(id, cadet_id):
         flash('Record not found')
 
     # Redirect to a page after deleton
-    return redirect(url_for('add_medical_record', id=cadet_id))
+    return redirect(url_for('add_medical_record', 
+                            id=cadet_id,
+                            search_form=search_form, 
+                            year=year,
+                            page=page,
+                            per_page=per_page,
+                            medical_record_form=medical_record_form,
+                            selected_cadet=selected_cadet,
+                            cadet_medical_record=cadet_medical_record
+                            ))
    
 @app.route("/add_cadet", methods=['GET', 'POST'])
 def add_cadet():
@@ -879,371 +909,6 @@ def add_cadet():
         return redirect(url_for('add_cadet'))
     return render_template('add_cadet.html', add_cadet_form=add_cadet_form, search_form=search_form, year=year)
 
-@app.route('/upload', methods=['POST'])
-def upload_profile_picture():
-    cadet_id = request.form.get('id')
-    
-    if not cadet_id:
-        return jsonify({'error': 'Cadet ID is required'})
-    
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'})
-    
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'})
-    
-    if not allowed_file(file.filename):
-        return jsonify({'error': 'File type not allowed'})
-
-    try:
-        # Check if a profile picture already exists for the cadet_id
-        existing_picture = ProfilePicture.query.filter_by(cadet_id=cadet_id).first()
-        if existing_picture:
-            # Update the existing picture's filename
-            filename = existing_picture.filename
-        else:
-            # Generate a unique filename for the uploaded picture
-            filename = str(uuid.uuid4()) + '_' + file.filename
-
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        
-        # Resize and save the image to the upload folder
-        with Image.open(file) as img:
-            # Resize the image to a smaller size (e.g., 200x200)
-            resized_img = img.resize((200, 200))
-            resized_img.save(file_path)
-        
-        # Save or update the profile picture in the database
-        if existing_picture:
-            existing_picture.filename = filename
-        else:
-            new_picture = ProfilePicture(filename=filename, cadet_id=cadet_id)
-            db.session.add(new_picture)
-        
-        db.session.commit()
-
-        return jsonify({'success': 'File uploaded successfully', 'filename': filename})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'An error occurred while saving the file'})
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-
-# @app.route("/course/<int:id>/<int:bn_id>", methods=["GET"])  
-# def select_course_bn(id, bn_id):
-#     search_form = SearchForm()
-#     page = request.args.get("page", 1, type=int)
-#     per_page = 20
-
-#     course_cadets = session.query(Cadet).filter(Cadet.regular_id == id, Cadet.bn_id == bn_id).all()
-#     course_no = session.query(RegularCourse).filter(RegularCourse.id == id).first()
-#     battalion = session.query(Battalion).filter(Battalion.id == bn_id).first()
-#     other_bn = session.query(Battalion).filter(Battalion.id != bn_id).all()
-    
-#     start = (page - 1) * per_page
-#     end = start + per_page
-#     paginated_cadets = course_cadets[start:end]
-    
-#     course = session.query(RegularCourse).all()
-#     course_dict = {}
-
-#     for course_object in course:
-#         key = course_object.id
-#         cse_count = session.query(Cadet).filter(Cadet.regular_id == key).count() 
-#         course_dict[key] = [course_object.course_no, cse_count]   
-
-#     course_cadets_count = session.query(Cadet).filter(Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-    
-#     army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     army_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.service_id == 1, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     army_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.service_id == 1, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-    
-#     navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     navy_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.service_id == 2, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     navy_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.service_id == 2, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-    
-#     airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     airforce_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.service_id == 3, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     airforce_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.service_id == 3, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-    
-#     return render_template("bn.html",
-#                            search_form=search_form, 
-#                            cadets=paginated_cadets,
-#                            battalion=battalion,
-#                            other_bn=other_bn,
-#                            page=page,
-#                            per_page=per_page,
-#                            total=len(course_cadets),
-#                            rows=course_cadets, 
-#                            bn_id=bn_id,
-#                            course=id,
-#                            course_no=course_no,
-#                            course_dict=course_dict,
-#                            course_cadets_count=course_cadets_count,
-#                            army_cdts_count=army_cdts_count,
-#                            navy_cdts_count=navy_cdts_count, 
-#                            airforce_cdts_count=airforce_cdts_count,
-#                            male_cdts_count=male_cdts_count,
-#                            female_cdts_count=female_cdts_count,
-#                            army_male_cdts_count=army_male_cdts_count,
-#                            army_female_cdts_count=army_female_cdts_count,
-#                            navy_male_cdts_count=navy_male_cdts_count,
-#                            navy_female_cdts_count=navy_female_cdts_count,
-#                            airforce_male_cdts_count=airforce_male_cdts_count,
-#                            airforce_female_cdts_count=airforce_female_cdts_count,
-#                            year=year
-#                            )
-
-# @app.route("/course/<int:id>/<int:bn_id>/<int:service_id>", methods=["GET"])  
-# def select_course_bn_service(id, bn_id, service_id):
-#     search_form = SearchForm()
-#     page = request.args.get("page", 1, type=int)
-#     per_page = 20
-
-#     course_cadets = session.query(Cadet).filter(Cadet.regular_id == id, Cadet.bn_id == bn_id, Cadet.service_id == service_id).all()
-#     course_no = session.query(RegularCourse).filter(RegularCourse.id == id).first()
-#     battalion = session.query(Battalion).filter(Battalion.id == bn_id).first()
-#     service = session.query(Service).filter(Service.id == service_id).first()
-#     other_bn = session.query(Battalion).filter(Battalion.id != bn_id).all()
-    
-#     start = (page - 1) * per_page
-#     end = start + per_page
-#     paginated_cadets = course_cadets[start:end]
-    
-#     course = session.query(RegularCourse).all()
-#     course_dict = {}
-
-#     for course_object in course:
-#         key = course_object.id
-#         cse_count = session.query(Cadet).filter(Cadet.regular_id == key).count() 
-#         course_dict[key] = [course_object.course_no, cse_count]   
-
-#     course_cadets_count = session.query(Cadet).filter(Cadet.regular_id == id, Cadet.bn_id == bn_id, Cadet.service_id == service_id).count()
-#     army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-#     airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.regular_id == id, Cadet.bn_id == bn_id).count()
-
-#     return render_template("service.html",
-#                            search_form=search_form, 
-#                            cadets=paginated_cadets,
-#                            battalion=battalion,
-#                            service=service,
-#                            other_bn=other_bn,
-#                            page=page,
-#                            per_page=per_page,
-#                            total=len(course_cadets),
-#                            rows=course_cadets, 
-#                            bn_id=bn_id,
-#                            course=id,
-#                            course_no=course_no,
-#                            course_dict=course_dict,
-#                            course_cadets_count=course_cadets_count,
-#                            army_cdts_count=army_cdts_count,
-#                            navy_cdts_count=navy_cdts_count, 
-#                            airforce_cdts_count=airforce_cdts_count,
-#                            year=year
-#                            )
-
-
-
-# @app.route('/cadet/results/<int:id>', methods=['GET','POST'])
-# def add_academic_score(id):
-#     search_form = SearchForm()
-#     academic_score_form = ScoreForm()
-
-#     page = request.args.get("page", 1, type=int)
-#     per_page = 20
-
-#     cadet_scores = session.query(Score).filter(Score.cadet_id==id).all()
-#     selected_cadet = session.query(Cadet).filter(Cadet.id==id).first()
-#     if academic_score_form.validate_on_submit():
-#         course_code = (academic_score_form.course.data).lower()
-#         first_semester_score = academic_score_form.first_semester_score.data
-#         second_semester_score = academic_score_form.second_semester_score.data
-
-#         selected_record =  session.query(Course).filter(Course.course_code==course_code).first()
-#         selected_course_id = selected_record.id
-#         academic_year = academic_score_form.academic_year.data
-        
-
-#         # Create a new AcademicScore object and add it to the database
-#         new_score = Score(
-#             first_semester_score=first_semester_score,
-#             second_semester_score=second_semester_score,
-#             academic_year=academic_year,
-#             course_id=selected_course_id,
-#             cadet_id=selected_cadet.id,
-#         )
-#         session.add(new_score)
-#         session.commit()
-#         flash(f"{selected_record.course_code.upper()} was added successfully.")
-#         return redirect(url_for('add_academic_score', id=id))
-#     return render_template('add_academic_score.html',
-#                            search_form=search_form,
-#                            cadet=selected_cadet,
-#                            rows=cadet_scores,
-#                            id=id,
-#                            academic_score_form=academic_score_form,
-#                            year=year,
-#                            page=page,
-#                            per_page=per_page
-#                            )
-
-
-
-# @app.route('/cadet/military/<int:id>', methods=['GET','POST'])
-# def add_military_score(id):
-#     search_form = SearchForm()
-#     military_score_form = MilScoreForm()
-
-#     page = request.args.get("page", 1, type=int)
-#     per_page = 20
-#     selected_cadet = session.query(Cadet).filter(Cadet.id==id).first()
-#     cadet_scores = session.query(ServiceScore).filter(ServiceScore.cadet_id==id).all()
-
-#     subject_title = (military_score_form.subject.data)
-#     first_term_score = military_score_form.first_term_score.data
-#     second_term_score = military_score_form.second_term_score.data
-#     service_subject = session.query(ServiceSubject).filter(ServiceSubject.subject_title==subject_title).first()
-       
-#     service_year = military_score_form.service_year.data 
-#     # Filter choices based on arm of service (assuming 'arm_of_service' is a variable)
-#     filtered_choices = [(choice_value, choice_label) for choice_value, choice_label in filtered_subjects(id)]
-        
-#     # Assign the filtered choices to the form's subject field
-#     military_score_form.subject.choices = sorted(filtered_choices)
-    
-#     # Get total first_term_scores and use the round function to approximate
-#     total_first_term_score = round(get_total_first_term_score(id) or 0, 2)
-#     total_second_term_score = round(get_total_second_term_score(id)or 0, 2)
-
-#     if military_score_form.validate_on_submit():
-#         # Create a new ServiceScore object and add it to the database
-#         new_service_score = ServiceScore(
-#             first_term_score=first_term_score,
-#             second_term_score=second_term_score,
-#             service_year=service_year,
-#             service_subject_id=service_subject.id,
-#             cadet_id=selected_cadet.id,
-#         )
-
-#         session.add(new_service_score)
-#         session.commit()
-#         flash(f"{service_subject.subject_title.title()} was added successfully.")
-#         log_score_change(new_service_score, timestamp=None, filename='score_log.txt')
-#         return redirect(url_for('add_military_score', id=id))
-    
-#     return render_template('add_military_score.html',
-#                            search_form=search_form,
-#                            cadet=selected_cadet,
-#                            rows=cadet_scores,
-#                            id=id,
-#                            military_score_form=military_score_form,
-#                            total_first_term_score=total_first_term_score,
-#                            total_second_term_score=total_second_term_score,
-#                            year=year,
-#                            page=page,
-#                            per_page=per_page
-#                            )
-
-
-
-
-
-# @app.route('/remove_course/<int:id>/<int:cadet_id>', methods=['GET'])
-# def remove_course(id, cadet_id):
-#     # Remove a Course from the database.
-#     search_form=SearchForm()
-#     academic_score_form = ScoreForm()
-
-#     page = request.args.get("page", 1, type=int)
-#     per_page = 20
-#     # Begin a new session
-#     with db.session.begin():
-#         # Retrieve the score to be deleted from the database
-#         course_to_delete = session.query(Score).filter(Score.id==id).first()
-#         # Query the cadet and scores 
-    
-#         selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
-#         cadet_scores = session.query(Score).filter(Score.cadet_id==cadet_id).all()
-    
-#         if course_to_delete:
-#             # Delete the cadet from the database
-#             db.session.delete(course_to_delete)
-#             db.session.commit()
-#             flash('Course deleted successfully.')
-#         else:
-#             flash('Course not found')
-#             # Redirect to a page after deleton
-#             return redirect(url_for('add_academic_score', id=cadet_id))
-    
-#     # Render the template with updated data
-#     return render_template('add_academic_score.html', 
-#                            id=selected_cadet.id, 
-#                            search_form=search_form,
-#                            rows=cadet_scores, 
-#                            cadet=selected_cadet,
-#                            academic_score_form=academic_score_form,
-#                            year=year,
-#                            page=page,
-#                            per_page=per_page
-#                            )
-
-
-# @app.route('/remove_subject/<int:id>/<int:cadet_id>', methods=['GET'])
-# def remove_service_subject(id, cadet_id):
-#     # Remove a Course from the database.
-#     search_form=SearchForm()
-#     military_score_form = MilScoreForm()
-
-#     page = request.args.get("page", 1, type=int)
-#     per_page = 20
-#     # Begin a new session
-#     with db.session.begin():
-#         # Retrieve the score to be deleted from the database
-#         subject_to_delete = session.query(ServiceScore).filter(ServiceScore.id==id).first()
-#         # Query the cadet and scores 
-    
-#         selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
-#         cadet_scores = session.query(Score).filter(Score.cadet_id==cadet_id).all()
-    
-#         if subject_to_delete:
-#             # Delete the cadet from the database
-#             db.session.delete(subject_to_delete)
-#             db.session.commit()
-#             flash('Subject deleted successfully.')
-#         else:
-#             flash('Subject not found')
-#         # Redirect to a page after deleton
-#             return redirect(url_for('add_military_score', id=cadet_id))
-        
-#     # Render the template with updated data
-#     return render_template('add_military_score.html', 
-#                            id=selected_cadet.id, 
-#                            search_form=search_form,
-#                            rows=cadet_scores, 
-#                            cadet=selected_cadet,
-#                            military_score_form=military_score_form,
-#                            year=year,
-#                            page=page,
-#                            per_page=per_page
-#                            )
-
-    
-#     # with open("cadets_nom.csv", 'r') as file:
-#     #     csv_reader = csv.reader(file)
-
-#     #     # Use ThreadPoolExecutor to insert records concurrently
-#     #     with ThreadPoolExecutor(max_workers=5) as executor:
-#     #         executor.map(insert_cadet, csv_reader)     
-
-
 @app.route("/department")
 def add_department():
     try:
@@ -1269,70 +934,7 @@ def add_department():
     except Exception as e:
         db.session.rollback()
         return f"An error occurred: {e}"
-    
-@app.route("/allcourse")
-def add_course():
-    try:
-        with open("courses.csv", 'r') as file:
-            csv_reader = csv.reader(file)
-            for row in csv_reader:
-                course_id = int(row[0])
-                course_code = row[1]
-                course_title = row[2]
-                units = int(row[3])
-                status = row[4]
-                department_id = int(row[5])
 
-                new_course = Course(
-                    id=course_id,
-                    course_code=course_code,
-                    course_title=course_title,
-                    units=units,
-                    status=status,
-                    department_id=department_id
-                )
-                    
-                session.add(new_course)
-                session.commit()
-
-        return redirect(url_for('home'))
-    except FileNotFoundError:
-        return "csv file not found"
-    except Exception as e:
-        db.session.rollback()
-        return f"An error occurred: {e}"
-
-
-# @app.route("/all_military_subject")
-# def add_service_subject():
-#     try:
-#         with open("service_subjects.csv", 'r') as file:
-#             csv_reader = csv.reader(file)
-#             for row in csv_reader:
-#                 subject_id = int(row[0])
-#                 status = row[1]
-#                 service_id = int(row[2])
-#                 subject_code = row[3]
-#                 subject_title = row[4].lower()
-
-#                 new_subject = ServiceSubject(
-#                     id=subject_id,
-#                     status=status,
-#                     service_id=service_id,
-#                     subject_code=subject_code,
-#                     subject_title=subject_title
-#                 )
-                    
-#                 session.add(new_subject)
-#                 session.commit()
-
-#         return redirect(url_for('home'))
-#     except FileNotFoundError:
-#         return "csv file not found"
-#     except Exception as e:
-#         db.session.rollback()
-#         return f"An error occurred: {e}"
-    
     
 @app.route("/addallcadets")
 def add_all_cadets():
@@ -1402,4 +1004,4 @@ def add_all_cadets():
 #     return render_template("confirm_delete.html", cadet=cadet_to_delete, cadet_id=cadet_to_delete.id, search_form=search_form)
 
 if __name__=="__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)

@@ -302,7 +302,7 @@ nav {
 .card-body:hover {
   padding: 1em;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-  transition: 0.5s;
+  transition: 0.3s;
 }
 
 .card-link {
@@ -364,7 +364,6 @@ footer {
   width: 100%;
   background-color: #fafafa;
   text-align: center;
-  /* padding: 5px; */
   font-size: small;
   color: rgb(97, 97, 97);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
