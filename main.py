@@ -612,6 +612,7 @@ def pharmacy_dashboard():
                            per_page=per_page,
                            )
 
+
 @app.route('/cadets_brigade')
 @login_required
 def cadets_brigade():
@@ -623,45 +624,12 @@ def cadets_brigade():
         flash("Access denied!", 'danger')
         return redirect(url_for('login'))
     
-    # cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
     admitted_cadets = session.query(Cadet).filter(Cadet.admission_date==today).all()
     admitted_cadets_count = session.query(Cadet).filter(Cadet.admission_date==today).count()
     sick_report = session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
     sick_report_count = session.query(Visit).filter(Visit.check_in_time==today).count()
-
     formatted_date = today.strftime("%d %b %y")
-    # cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
 
-    # course_cadets = session.query(Cadet).filter(Cadet.regular_id == id).all()
-    
-    # days_confined = session.query(func.sum(Medical.excuse_duty_days)).filter(
-    #     Medical.cadet_id==id, 
-    #     Medical.excuse_duty=="confinement"
-    #     ).scalar()
-    
-    # try:
-    #     selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id == id, Cadet.bn_id == Battalion.id).first()
-    #     days_admitted=selected_cadet.admission_count
-        
-    #     dob_obj = selected_cadet.date_of_birth
-    #     doe_obj = selected_cadet.date_of_enlistment
-
-    #     dob_year = dob_obj.year
-    #     current_year = datetime.now().year
-    #     cadet_age = current_year - dob_year
-        
-    #     formatted_dob = dob_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
-    #     formatted_doe = doe_obj.strftime('%d %B %Y').lstrip('0').replace(' 0', ' ')
-          
-        
-    # except NoResultFound:
-    #     return "Cadet not found", 404
-    # except ValueError as e:
-    #     return f"Error: {e}", 500
-    # if days_confined is None:
-    #     days_confined = 0
-
-    # training_days = 365 - days_confined + days_admitted
     return render_template('cadets_brigade_dashboard.html', 
                            admitted_cadets=admitted_cadets,
                            admitted_cadets_count=admitted_cadets_count,
