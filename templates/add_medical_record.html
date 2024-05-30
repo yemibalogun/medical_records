@@ -43,9 +43,7 @@
     </div>
   </div>
   <br>
-
-  <div class="row">
-    {% with messages = get_flashed_messages(with_categories=true) %} 
+  {% with messages = get_flashed_messages(with_categories=true) %} 
     {% if messages %}
     <ul class="flashes">
       {% for category, message in messages %}
@@ -55,6 +53,7 @@
       {% endfor %}
     </ul>
     {% endif %} {% endwith %}
+  <div class="row">
     <div
       style="padding: 2em; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15)"
       class="col"

@@ -95,6 +95,8 @@ content %}
   <!-- <hr>     -->
 
   <div style="margin: 0" class="row">
+    {% if current_user.is_authenticated %}
+    {% if current_user.role == 'doctor' %}
     <div style="width: 80%" class="col">
       <div
         style="margin: 0"
@@ -102,8 +104,7 @@ content %}
         class="autocomplete-suggestions"
       >
         <div style="margin: 0; padding: 0; width: 90%;" class="scrollable-table">
-          {% if current_user.is_authenticated %}
-          {% if current_user.role == 'doctor' %}
+          
           <table
             style="margin: 0"
             class="custom-table table-sm table-hover table-borderless card-body"
@@ -154,15 +155,13 @@ content %}
               <!-- Additional rows will be dynamically added here -->
             </tbody>
           </table>
-
-          {% elif current_user.role == 'cadets_brigade' %}
-          
-          {% else %}
-          {% endif %}
-          {% endif %}
         </div>
       </div>
     </div>
+    {% elif current_user.role == 'cadets_brigade' %}
+    {% else %}
+    {% endif %}
+    {% endif %}
 
     <div style="max-width: fit-content" class="col right-sidebar">
       <div class="card" style="width: 18rem">

@@ -7,7 +7,7 @@ from models import  Cadet, RegularCourse, Department, Gender, Battalion, Service
 from sqlalchemy.orm import joinedload, Session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import or_, func, event
+from sqlalchemy import or_, func, event, distinct
 from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
 from flask_socketio import SocketIO
@@ -377,7 +377,7 @@ def student_info(id):
     cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
     admitted_cadets = session.query(Cadet).filter(Cadet.admission_date==today).all()
     admitted_cadets_count = session.query(Cadet).filter(Cadet.admission_date==today).count()
-    sick_report = session.query(Visit).filter(Visit.check_in_time==today).all()
+    sick_report = session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
     sick_report_count = session.query(Visit).filter(Visit.check_in_time==today).count()
     cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
 
@@ -517,15 +517,27 @@ def check_in():
     check_in_form = CheckInForm(doctors=doctors)
 
     if check_in_form.validate_on_submit():
-        cadet_id = check_in_form.cadet_id.data
+        cadet_id = (check_in_form.cadet_id.data).upper()
         check_in_time = check_in_form.check_in_time.data
         reason = check_in_form.reason.data
         doctor_id = check_in_form.doctor_id.data
         status = check_in_form.status.data
 
+        selected_cadet = db.session.query(Cadet).filter_by(cadet_no=cadet_id).first()
+        today = date.today()
+        print(today)
+        if selected_cadet is None:
+            flash("Patient records not in database", 'info')
+            return redirect(url_for('add_cadet'))
+
+        reported_sick_cadet = db.session.query(Visit).filter(Visit.check_in_time==today, Visit.cadet_id==selected_cadet.id, Visit.status=='waiting').first()
+
+        if reported_sick_cadet:
+            flash(f'{selected_cadet.first_name} has already been checked in', 'info')
+            return redirect(url_for('check_in'))
         # Create a new Visit record
         visit = Visit(
-            cadet_id=cadet_id,
+            cadet_id=selected_cadet.id,
             check_in_time=check_in_time,
             reason=reason,
             doctor_id=doctor_id,
@@ -843,7 +855,7 @@ def add_cadet():
     search_form = SearchForm()
     
     if add_cadet_form.validate_on_submit():
-        cadet_no = add_cadet_form.cadet_no.data
+        cadet_no = (add_cadet_form.cadet_no.data).upper()
         first_name = add_cadet_form.first_name.data
         middle_name = add_cadet_form.middle_name.data
         last_name = add_cadet_form.last_name.data
@@ -1004,4 +1016,4 @@ def add_all_cadets():
 #     return render_template("confirm_delete.html", cadet=cadet_to_delete, cadet_id=cadet_to_delete.id, search_form=search_form)
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True, port=5001)
