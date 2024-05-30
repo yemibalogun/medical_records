@@ -65,9 +65,9 @@
             </td>
             <td data-cell="Check-In time">{{ visit.check_in_time }}</td>
 
-            <td data-cell="Reason">{{ visit.reason }}</td>
+            <td data-cell="Reason">{{ visit.reason.title() }}</td>
 
-            <td data-cell="Status">{{ visit.status }}</td>
+            <td data-cell="Status">{{ visit.status.title() }}</td>
 
             <td data-cell="Action">
               {% if visit.status == 'waiting' %}

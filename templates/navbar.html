@@ -185,7 +185,7 @@
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% elif current_user.role == 'cadets_brigade' %}
-          <a href="{{ url_for('home') }}"
+          <a href="{{ url_for('cadets_brigade') }}"
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% endif %}

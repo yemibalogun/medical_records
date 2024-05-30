@@ -7,8 +7,8 @@ content %}
     style="display: flex; flex-wrap: wrap; justify-content: space-between"
     class="row"
   >
-    <div class="col" style="max-width: 18rem">
-      <div class="card" style="width: 18rem">
+    <div class="col" style="max-width: 18rem;">
+      <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 style="color: rgb(0, 68, 171)" class="card-title">
             {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name + '
@@ -77,8 +77,8 @@ content %}
         class="card-link"
         >Add Medical Records</a
       >
-      {% endif %}
       <br>
+      {% endif %}
       <a
         type="btn"
         style="margin: 0"
@@ -159,6 +159,11 @@ content %}
       </div>
     </div>
     {% elif current_user.role == 'cadets_brigade' %}
+    <div style="margin: 0; padding: 0;" class="col card">
+      <div class="container card-body">
+        Some charts should come here
+      </div>
+    </div>
     {% else %}
     {% endif %}
     {% endif %}
