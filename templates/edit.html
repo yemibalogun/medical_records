@@ -14,7 +14,8 @@
       </div> 
       {% endfor %}
     </ul>
-    {% endif %} {% endwith %}
+    {% endif %} 
+    {% endwith %}
   <form method="POST" action="{{ url_for('edit_cadet', id=row.id) }}">
     {{ edit_form.csrf_token() }}
 

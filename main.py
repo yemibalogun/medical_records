@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, jsonify, session, flash
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user 
 from flask_bcrypt import Bcrypt
-from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm,StaffRegisterForm, LoginForm, CheckInForm
+from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm,StaffRegisterForm, LoginForm, CheckInForm, EditMedicalRecordForm
 from config import app, db
 from models import  Cadet, RegularCourse, Department, Gender, Battalion, Service, Medical, Staff, Visit
 from sqlalchemy.orm import joinedload, Session
@@ -14,7 +14,7 @@ from flask_socketio import SocketIO
 from flask_apscheduler import APScheduler
 import csv, os,json
 from datetime import datetime, date
-from utils import regular_courses
+from utils import regular_courses, roles
 
     
 year = datetime.now().year
@@ -87,10 +87,11 @@ def allowed_file(filename):
 def base():
     form = SearchForm()
     course = regular_courses() # Assuming this returns a dictionary
-      
+    role = roles()  
     return {
         'form_dict': dict(form=form),
         'course_dict': course,
+        'role_dict': role
         }
 
 # Create a session
@@ -389,7 +390,7 @@ def student_info(id):
         ).scalar()
     
     try:
-        selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id == id, Cadet.bn_id == Battalion.id).first()
+        selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id==id, Cadet.bn_id==Battalion.id).first()
         days_admitted=selected_cadet.admission_count
         
         dob_obj = selected_cadet.date_of_birth
@@ -428,9 +429,59 @@ def student_info(id):
                                formatted_dob=formatted_dob,
                                formatted_doe=formatted_doe,
                                page=page,
+                               year=year,
                                per_page=per_page
                                )
 
+@app.route("/edit_medical_record/<int:id>/<int:cadet_id>", methods=["GET", "POST"])
+@login_required
+def edit_medical_record(id, cadet_id):
+    search_form = SearchForm()
+    edit_medical_record_form = EditMedicalRecordForm()
+
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+    
+    selected_record = session.query(Medical).filter_by(id=id).first()
+    selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
+    
+    if request.method == 'POST':
+        if edit_medical_record_form.validate_on_submit():
+            # Update record with form data
+            edit_medical_record_form.populate_obj(selected_record)
+
+            # You might need to convert the date format based on your form and database structure
+            selected_record.date_reported_sick = edit_medical_record_form.date_reported_sick.data.strftime('%Y-%m-%d')
+            selected_record.history = edit_medical_record_form.history.data
+            selected_record.examination = edit_medical_record_form.examination.data
+            selected_record.diagnosis = edit_medical_record_form.diagnosis.data
+            selected_record.plan = edit_medical_record_form.plan.data
+            selected_record.prescription = edit_medical_record_form.prescription.data
+            selected_record.prescription_status = edit_medical_record_form.prescription_status.data
+            selected_record.excuse_duty = edit_medical_record_form.excuse_duty.data
+            selected_record.excuse_duty_days = edit_medical_record_form.excuse_duty_days.data
+            selected_record.admission_count = edit_medical_record_form.admission_count.data
+
+            session.commit()
+            flash("Medical record updated successfully!", 'success')
+            return redirect(url_for('home'))
+    
+        else:
+            flash('Form validation failed. Please check your inputs.', 'error')
+        
+    # Process the form to populate form fields with selected_record data
+    if request.method == 'GET':
+        edit_medical_record_form.process(obj=selected_record)
+
+    return render_template("edit_medical_record.html", 
+                           row=selected_record, 
+                           cadet=selected_cadet, 
+                           edit_medical_record_form=edit_medical_record_form, 
+                           year=year,
+                           page=page,
+                           per_page=per_page, 
+                           search_form=search_form
+                           )
 
 @app.route('/api/sick_reports', methods=['GET'])
 def get_sick_reports():
@@ -445,12 +496,6 @@ def get_sick_reports():
     
     return jsonify(data)
 
-@app.route('/medical_history/<int:id>')
-@login_required
-def medical_history(id):
-    search_form = SearchForm()
-    
-    return render_template('medical_history.html', search_form=search_form)
 
 @app.route('/register_staff', methods=['GET', 'POST'])
 def register_staff():
@@ -508,7 +553,7 @@ def register_staff():
 
 @app.route('/check_in', methods=['GET', 'POST'])
 @login_required
-def check_in():
+def front_desk_dashboard():
     search_form = SearchForm()
     check_in_form = CheckInForm()
 
@@ -590,11 +635,12 @@ def doctor_dashboard():
 
 @app.route('/pharmacy_dashboard')
 @login_required
-def pharmacy_dashboard():
+def pharmacist_dashboard():
     page = request.args.get("page", 1, type=int)
     per_page = 20
     search_form = SearchForm()
     today = date.today()
+    formatted_date = today.strftime("%d %b %y")
     if current_user.role != 'pharmacist':
         flash("Access denied!", 'danger')
         return redirect(url_for('login'))
@@ -606,7 +652,7 @@ def pharmacy_dashboard():
                            waiting_patients=waiting_patients, 
                            current_user=current_user, 
                            search_form=search_form,
-                           today=today,
+                           today=formatted_date,
                            year=year,
                            page=page,
                            per_page=per_page,
@@ -615,7 +661,7 @@ def pharmacy_dashboard():
 
 @app.route('/cadets_brigade')
 @login_required
-def cadets_brigade():
+def cadets_brigade_dashboard():
     page = request.args.get("page", 1, type=int)
     per_page = 20
     search_form = SearchForm()
@@ -682,7 +728,7 @@ def update_prescription_status(id):
     if new_status not in ['waiting', 'in progress', 'completed']:
         print(new_status)
         flash('Invalid status update.', 'warning')
-        return redirect(url_for('pharmacy_dashboard'))
+        return redirect(url_for('pharmacist_dashboard'))
     
     prescription.prescription_status = new_status
 
@@ -694,7 +740,7 @@ def update_prescription_status(id):
         db.session.rollback()  # Rollback transaction on error
         flash(f'Error updating status: {str(e)}', 'danger')
 
-    return redirect(url_for('pharmacy_dashboard'))
+    return redirect(url_for('pharmacist_dashboard'))
 
 
 @app.route('/cadet/medical/<int:id>', methods=['GET', 'POST'])

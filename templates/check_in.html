@@ -23,7 +23,7 @@
     </ul>
     {% endif %} 
     {% endwith %}
-    <form method="POST" action="{{ url_for('check_in') }}">
+    <form method="POST" action="{{ url_for('front_desk_dashboard') }}">
       {{ check_in_form.csrf_token() }}
 
       <div class="row">

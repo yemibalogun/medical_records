@@ -1,4 +1,4 @@
-from models import Cadet, RegularCourse
+from models import Cadet, RegularCourse, Staff
 from config import app, db
 import time
 from models import Cadet
@@ -79,3 +79,9 @@ def regular_courses():
         course_dict[key] = [course_object.course_no]  
     return course_dict
 
+def roles():
+    roles = db.session.query(Staff.role).all()
+    unique_roles = list(set(role for (role,) in roles))  # Use a set to ensure uniqueness and then convert back to list
+    role_dict = {index: role for index, role in enumerate(unique_roles)}
+    
+    return role_dict

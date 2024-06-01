@@ -48,6 +48,28 @@ class EditForm(FlaskForm):
     regular_course = IntegerField('Course', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+class EditMedicalRecordForm(FlaskForm):
+    date_reported_sick = DateField('Date Reported Sick', 
+                                   default=lambda: datetime.date.today(), 
+                                   validators=[DataRequired()])
+    history = TextAreaField('History', validators=[DataRequired()])
+    examination = TextAreaField('Examination', validators=[DataRequired()])
+    diagnosis = TextAreaField('Diagnosis', validators=[DataRequired()])
+    plan = TextAreaField('Plan', validators=[DataRequired()])
+    prescription = TextAreaField('Prescription', validators=[DataRequired()])
+    prescription_status = SelectField('Status', choices=[('waiting', 'Waiting'), ('in progress', 'In Progress'), ('completed', 'Completed')], default='waiting', validators=[DataRequired()])
+    excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), 
+                                                      ('excused boot', 'Excused Boot'), 
+                                                      ('excused all parades', 'Excused all Parades'), 
+                                                      ('excused marching', 'Excused Marching'), 
+                                                      ('confinement', 'Confinement')], 
+                                                      validators=[InputRequired()])
+    excuse_duty_days = IntegerField('Days')
+    admission_count = RadioField('Admit', choices=[('1', 'Yes'), ('0', 'No')], validators=[InputRequired()])
+
+    submit = SubmitField('Submit')
+
+
 class SearchForm(FlaskForm):
     searched = StringField('Searched', validators=[DataRequired() ])
     submit = SubmitField('Search')

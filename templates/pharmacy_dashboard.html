@@ -31,7 +31,8 @@
   <div class="container">
     <!-- <h1>Doctor Dashboard</h1> -->
     <h3 class="card-subtitle mb-2 text-body-secondary">
-      Prescriptions <h5 style="font-size: small; color: grey">{{ today }}</h5>
+      Prescriptions
+      <h5 style="font-size: small; color: grey">{{ today }}</h5>
     </h3>
     <div style="margin: 0; padding: 0" class="scrollable-table">
       <table id="visits-table" class="custom-table table-sm table-hover">
@@ -47,32 +48,36 @@
         </thead>
 
         <tbody style="text-align: left" id="cadet-table-body">
-        {% for medical in waiting_patients %}
+          {% for medical in waiting_patients %}
           <tr id="medical-{{ medical.id }}" class="active-row">
             <th class="card-heading-text" scope="row">
               {{ (page - 1) * per_page + loop.index }}
             </th>
 
-            <td data-cell="Cadet No">{{ medical.cadet.cadet_no }}</td>
+            <td data-cell="Cadet No">{{ medical.cadet.cadet_no.upper() }}</td>
             <td data-cell="Name">
               <a
                 style="text-decoration: none; color: rgb(0, 68, 171)"
                 href="{{ url_for('student_info', id=medical.cadet_id) }}"
-                >{{ medical.cadet.first_name }} {{ medical.cadet.middle_name }} {{
-                medical.cadet.last_name }}
+                >{{ medical.cadet.first_name }} {{ medical.cadet.middle_name }}
+                {{ medical.cadet.last_name }}
               </a>
             </td>
             <td data-cell="Check-In time">{{ medical.date_reported_sick }}</td>
 
-            <td data-cell="Prescriptions">{{ medical.prescription }}</td>
+            <td data-cell="Prescriptions">{{ medical.prescription.title() }}</td>
 
             <td data-cell="Action">
-            {% if medical.prescription_status == 'waiting' %}
+              {% if medical.prescription_status == 'waiting' %}
               <form
                 action="{{ url_for('update_prescription_status', id=medical.id) }}"
                 method="post"
               >
-                <input type="hidden" name="prescription_status" value="completed" />
+                <input
+                  type="hidden"
+                  name="prescription_status"
+                  value="completed"
+                />
                 <button
                   style="font-size: small"
                   class="btn btn-primary btn-sm"
@@ -81,7 +86,7 @@
                   Mark as Completed
                 </button>
               </form>
-            {% endif %}
+              {% endif %}
             </td>
           </tr>
           {% endfor %}

@@ -127,8 +127,10 @@ content %}
               <!-- Initial row for data entry -->
               <tr class="active-row">
                 <td data-cell="date">
-                  {{ row.date_reported_sick.strftime('%d %B
+                  <a href="{{ url_for('edit_medical_record', id=row.id, cadet_id=row.cadet_id) }}">
+                    {{ row.date_reported_sick.strftime('%d %B
                   %Y').lstrip('0').replace(' 0', ' ') }}
+                  </a>
                 </td>
                 <td data-cell="history" class="head-center">
                   {{ row.history }}
@@ -141,7 +143,7 @@ content %}
                 </td>
                 <td data-cell="plan" class="head-center">{{ row.plan }}</td>
                 <td data-cell="prescription" class="head-center">
-                  {{ row.prescription }}
+                  {{ row.prescription.title() }}
                 </td>
                 <td data-cell="excuse_duty" class="head-center">
                   {{ row.excuse_duty.title() }}

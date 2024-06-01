@@ -21,9 +21,9 @@
         {{ cadet.bn.bn.capitalize() }} ({{ cadet.service.service_type.upper()
         }})
       </p>
-      <p class="card-text" style="font-size: small;">
+      <p class="card-text" style="font-size: small">
         Department |
-        <b style="color: rgb(0, 68, 171); font-size: small;"
+        <b style="color: rgb(0, 68, 171); font-size: small"
           >{{ cadet.department.department_name.title() }}</b
         >
       </p>
@@ -42,17 +42,21 @@
       </span>
     </div>
   </div>
-  <br>
-  {% with messages = get_flashed_messages(with_categories=true) %} 
-    {% if messages %}
-    <ul class="flashes">
-      {% for category, message in messages %}
-      <div style="text-align: center; margin: 0; padding: 1rem;" class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        <li>{{ message }}</li>
-      </div> 
-      {% endfor %}
-    </ul>
-    {% endif %} {% endwith %}
+  <br />
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %}
+  <ul class="flashes">
+    {% for category, message in messages %}
+    <div
+      style="text-align: center; margin: 0; padding: 1rem"
+      class="alert alert-{{ category }} alert-dismissible fade show"
+      role="alert"
+    >
+      <li>{{ message }}</li>
+    </div>
+    {% endfor %}
+  </ul>
+  {% endif %} {% endwith %}
   <div class="row">
     <div
       style="padding: 2em; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15)"
@@ -60,7 +64,7 @@
     >
       <!-- Form for entering academic scores -->
       <form
-        style="font-size: smaller;"
+        style="font-size: smaller"
         id="medial-record-form"
         method="POST"
         action="{{ url_for('add_medical_record', id=cadet.id) }}"
@@ -122,42 +126,43 @@
 
         <div class="row">
           <div class="col">
-            {{ medical_record_form.excuse_duty.label(class="form-label") }} 
-            {{ medical_record_form.excuse_duty(class="form-control",
-              placeholder="days") }} {% if medical_record_form.excuse_duty.errors %}
-              <ul class="errors">
-                {% for error in medical_record_form.excuse_duty.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-              </ul>
-              {% endif %}
-          </div>
-          
-          <div class="col">
-            {{ medical_record_form.excuse_duty_days.label(class="form-label") }} 
-            {{ medical_record_form.excuse_duty_days(class="form-control",
-            placeholder="days") }} {% if medical_record_form.excuse_duty_days.errors
+            {{ medical_record_form.excuse_duty.label(class="form-label") }} {{
+            medical_record_form.excuse_duty(class="form-control",
+            placeholder="days") }} {% if medical_record_form.excuse_duty.errors
             %}
+            <ul class="errors">
+              {% for error in medical_record_form.excuse_duty.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+
+          <div class="col">
+            {{ medical_record_form.excuse_duty_days.label(class="form-label") }}
+            {{ medical_record_form.excuse_duty_days(class="form-control",
+            placeholder="days") }} {% if
+            medical_record_form.excuse_duty_days.errors %}
             <ul class="errors">
               {% for error in medical_record_form.excuse_duty_days.errors %}
               <li>{{ error }}</li>
               {% endfor %}
             </ul>
             {% endif %}
-            <br>
+            <br />
           </div>
 
           <div class="col">
-            {{ medical_record_form.admission_count.label(class="form-label") }} <br>
-            {% for subfield in medical_record_form.admission_count %} 
-            {{ subfield }} 
-            {{ subfield.label }}
+            {{ medical_record_form.admission_count.label(class="form-label") }}
+            <br />
+            {% for subfield in medical_record_form.admission_count %} {{
+            subfield }} {{ subfield.label }}
             <br />
             {% endfor %}
-            <br>
+            <br />
           </div>
         </div>
-    
+
         <br />
         <div class="form-group" style="text-align: center">
           {{ medical_record_form.submit( class="btn btn-primary") }}
@@ -166,54 +171,57 @@
     </div>
 
     <div class="col">
-      <p style="font-size: small;">Medical Records:</p>
-      <div style="margin: 0; padding: 0;" class="scrollable-table">
-      <table class="custom-table table-sm table-hover table-borderless">
-        <thead style="font-size: small; text-align: center">
-          <tr>
-            <th style="width: 1%" scope="col">Ser</th>
-            <th style="width: 10%" scope="col">Date</th>
-            <th style="width: 20%" scope="col">Diagnosis</th>
-            <th style="width: 5%" scope="col">Excuse Duty</th>
-            <th style="width: 5%" scope="col">Days</th>
-            <th style="width: 1%" scope="col"></th>
-          </tr>
-        </thead>
-        <tbody style="font-size: small" id="cadet-table-body">
-          {% for row in rows %}
-          <!-- Initial row for data entry -->
-          <tr class="active-row">
-            <th class="card-heading-text" scope="row">
-              {{ (page - 1) * per_page + loop.index }}
-            </th>
-            <td data-cell="date">
-              {{ row.date_reported_sick.strftime('%d %B
-              %Y').lstrip('0').replace(' 0', ' ') }}
-            </td>
-            <td data-cell="diagnosis" class="head-center">
-              {{ row.diagnosis.title() }}
-            </td>
-            <td data-cell="excuse_duty_type" class="head-center">
-              {{row.excuse_duty.title() }}
-            </td>
-            <td data-cell="excuse_duty_days" class="head-center">
-              {{row.excuse_duty_days }}
-            </td>
+      <p style="font-size: small">Medical Records:</p>
+      <div style="margin: 0; padding: 0" class="scrollable-table">
+        <table class="custom-table table-sm table-hover table-borderless">
+          <thead style="font-size: small; text-align: center">
+            <tr>
+              <th style="width: 1%" scope="col">Ser</th>
+              <th style="width: 10%" scope="col">Date</th>
+              <th style="width: 20%" scope="col">Diagnosis</th>
+              <th style="width: 5%" scope="col">Excuse Duty</th>
+              <th style="width: 5%" scope="col">Days</th>
+              <th style="width: 1%" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody style="font-size: small" id="cadet-table-body">
+            {% for row in rows %}
+            <!-- Initial row for data entry -->
+            <tr class="active-row">
+              <th class="card-heading-text" scope="row">
+                {{ (page - 1) * per_page + loop.index }}
+              </th>
+              <td data-cell="date">
+                {{ row.date_reported_sick.strftime('%d %B
+                %Y').lstrip('0').replace(' 0', ' ') }}
+              </td>
+              <td data-cell="diagnosis" class="head-center">
+                {{ row.diagnosis.title() }}
+              </td>
+              <td data-cell="excuse_duty_type" class="head-center">
+                {{row.excuse_duty.title() }}
+              </td>
+              <td data-cell="excuse_duty_days" class="head-center">
+                {{row.excuse_duty_days }}
+              </td>
 
-            <td data-cell="remove record" class="head-center">
-              <a
-                href="#"
-                onclick="confirmDelete('{{ url_for('remove_medical_record', id=row.id, cadet_id=row.cadet_id) }}')"
-                ><i style="color: #f90b31" class="fas fa-minus-circle fa-md"></i
-              ></a>
-            </td>
-          </tr>
+              <td data-cell="remove record" class="head-center">
+                <a
+                  href="#"
+                  onclick="confirmDelete('{{ url_for('remove_medical_record', id=row.id, cadet_id=row.cadet_id) }}')"
+                  ><i
+                    style="color: #f90b31"
+                    class="fas fa-minus-circle fa-md"
+                  ></i
+                ></a>
+              </td>
+            </tr>
 
-          {% endfor %}
-          <!-- Additional rows will be dynamically added here -->
-        </tbody>
-      </table>
-    </div>
+            {% endfor %}
+            <!-- Additional rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

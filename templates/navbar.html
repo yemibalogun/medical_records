@@ -43,7 +43,7 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Admission
+            Patients
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -62,7 +62,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item" href="{{ url_for('check_in') }}"
+              <a class="dropdown-item" href="{{ url_for('front_desk_dashboard') }}"
                 >Check-In patient</a
               >
             </li>
@@ -70,7 +70,7 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{{ url_for('pharmacy_dashboard') }}"
+                href="{{ url_for('pharmacist_dashboard') }}"
                 >Pharmacy</a
               >
             </li>
@@ -99,6 +99,31 @@
                 href="{{ url_for('select_course', id=key) }}"
               >
                 {{ value[0] }} RC</a
+              >
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Dashboards
+          </a>
+
+          <ul class="dropdown-menu">
+            {% for key, value in role_dict.items() %}
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for(value + '_dashboard') }}"
+              >
+                {{ value.title() }}</a
               >
             </li>
             {% endfor %}
@@ -177,15 +202,15 @@
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% elif current_user.role == 'pharmacist' %}
-          <a href="{{ url_for('pharmacy_dashboard') }}"
+          <a href="{{ url_for('pharmacist_dashboard') }}"
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% elif current_user.role == 'front_desk' %}
-          <a href="{{ url_for('check_in') }}"
+          <a href="{{ url_for('front_desk_dashboard') }}"
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% elif current_user.role == 'cadets_brigade' %}
-          <a href="{{ url_for('cadets_brigade') }}"
+          <a href="{{ url_for('cadets_brigade_dashboard') }}"
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% endif %}
