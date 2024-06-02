@@ -7,8 +7,8 @@ content %}
     style="display: flex; flex-wrap: wrap; justify-content: space-between"
     class="row"
   >
-    <div class="col" style="max-width: 18rem;">
-      <div class="card" style="width: 18rem;">
+    <div class="col" style="max-width: 18rem">
+      <div class="card" style="width: 18rem">
         <div class="card-body">
           <h5 style="color: rgb(0, 68, 171)" class="card-title">
             {{ selected_cadet.first_name + ' ' + selected_cadet.middle_name + '
@@ -42,34 +42,40 @@ content %}
             <b style="color: rgb(0, 68, 171)">{{ cadet_age }}</b>
           </p>
 
-          <p style="font-size: smaller;" class="card-text">
+          <p style="font-size: smaller" class="card-text">
             Days Admitted:
-            <span style="color: #f90b3f;"
-              >{{ days_admitted }}</span
-            >
+            <span style="color: #f90b3f; font-weight: 600;">{{ days_admitted }}</span>
           </p>
-    
-          <p style="font-size: smaller;" class="card-text">
+
+          <p style="font-size: smaller" class="card-text">
             Days Confined:
-            <span style="color: #f90b3f;"
-              >{{ days_confined }}</span
-            >
+            <span style="color: #f90b3f; font-weight: 600;">{{ days_confined }}</span>
           </p>
         </div>
       </div>
       <br />
     </div>
 
-    <div style="padding: 0; margin: 0; max-width: 400px; max-height: 250px;" class="col card card-body">
-      <div style="max-width: 400px; margin: 20px 0;" class="container">
-        <div style="max-width: 400px;" class="container-body">
-        <canvas id="sickReportChart" width="350" height="150"></canvas>
+    <div
+      style="padding: 0; margin: 0; max-width: 400px; max-height: 250px"
+      class="col card card-body"
+    >
+      <div style="max-width: 400px; margin: 20px 0" class="container">
+        <div style="max-width: 400px" class="container-body">
+          <canvas id="sickReportChart" width="350" height="150"></canvas>
         </div>
       </div>
     </div>
 
-    <div class="col" style="max-width: 200px; max-height: 250px; font-size: small; padding: 1rem;">
-      
+    <div
+      class="col"
+      style="
+        max-width: 200px;
+        max-height: 250px;
+        font-size: small;
+        padding: 1rem;
+      "
+    >
       {% if current_user.role == 'doctor' %}
       <a
         type="btn"
@@ -77,7 +83,7 @@ content %}
         class="card-link"
         >Add Medical Records</a
       >
-      <br>
+      <br />
       {% endif %}
       <a
         type="btn"
@@ -95,16 +101,15 @@ content %}
   <!-- <hr>     -->
 
   <div style="margin: 0" class="row">
-    {% if current_user.is_authenticated %}
-    {% if current_user.role == 'doctor' %}
+    {% if current_user.is_authenticated %} {% if current_user.role == 'doctor'
+    %}
     <div style="width: 80%" class="col">
       <div
         style="margin: 0"
         id="autocomplete-suggestions"
         class="autocomplete-suggestions"
       >
-        <div style="margin: 0; padding: 0; width: 90%;" class="scrollable-table">
-          
+        <div style="margin: 0; padding: 0; width: 90%" class="scrollable-table">
           <table
             style="margin: 0"
             class="custom-table table-sm table-hover table-borderless card-body"
@@ -122,14 +127,19 @@ content %}
                 <th style="width: 10%" scope="col">Days</th>
               </tr>
             </thead>
-            <tbody style="font-size: small; text-justify: auto;" id="cadet-table-body">
+            <tbody
+              style="font-size: small; text-justify: auto"
+              id="cadet-table-body"
+            >
               {% for row in rows %}
               <!-- Initial row for data entry -->
               <tr class="active-row">
                 <td data-cell="date">
-                  <a href="{{ url_for('edit_medical_record', id=row.id, cadet_id=row.cadet_id) }}">
+                  <a
+                    href="{{ url_for('edit_medical_record', id=row.id, cadet_id=row.cadet_id) }}"
+                  >
                     {{ row.date_reported_sick.strftime('%d %B
-                  %Y').lstrip('0').replace(' 0', ' ') }}
+                    %Y').lstrip('0').replace(' 0', ' ') }}
                   </a>
                 </td>
                 <td data-cell="history" class="head-center">
@@ -161,14 +171,10 @@ content %}
       </div>
     </div>
     {% elif current_user.role == 'cadets_brigade' %}
-    <div style="margin: 0; padding: 0;" class="col card">
-      <div class="container card-body">
-        Some charts should come here
-      </div>
+    <div style="margin: 0; padding: 0" class="col card">
+      <div class="container card-body">Some charts should come here</div>
     </div>
-    {% else %}
-    {% endif %}
-    {% endif %}
+    {% else %} {% endif %} {% endif %}
 
     <div style="max-width: fit-content" class="col right-sidebar">
       <div class="card" style="width: 18rem">
@@ -177,7 +183,10 @@ content %}
             style="background-color: #f3f3f3; margin: 0; padding: 1rem"
             class="card-title mb-2 text-body-secondary"
           >
-            Admitted cadets ({{ admitted_cadets_count }}) <br><span style="font-size: small;">{{ today }}</span>
+            Admitted cadets ({{ admitted_cadets_count }}) <br /><span
+              style="font-size: small"
+              >{{ today }}</span
+            >
           </h6>
           {% for cadet in admitted_cadets %}
           <ul style="padding-left: 0.5rem">
@@ -212,7 +221,10 @@ content %}
             style="background-color: #f3f3f3; margin: 0; padding: 1rem"
             class="card-title mb-2 text-body-secondary"
           >
-            Sick reports ({{ sick_report_count }}) <br><span style="font-size: small;">{{ today }}</span>
+            Sick reports ({{ sick_report_count }}) <br /><span
+              style="font-size: small"
+              >{{ today }}</span
+            >
           </h6>
           {% for cadet in sick_report %}
           <ul style="padding-left: 0.5rem">
@@ -226,9 +238,11 @@ content %}
             >
               <a
                 style="text-decoration: none; color: rgb(0, 68, 171)"
-                href="{{ url_for('student_info', id=cadet.id) }}"
-                ><b>{{ cadet.cadet.first_name }} {{ cadet.cadet.middle_name }} {{
-                cadet.cadet.last_name }}</b></a
+                href="{{ url_for('student_info', id=cadet.cadet_id) }}"
+                ><b
+                  >{{ cadet.cadet.first_name }} {{ cadet.cadet.middle_name }} {{
+                  cadet.cadet.last_name }}</b
+                ></a
               >
               {{ cadet.cadet.bn.bn[:3].title() }} {{
               cadet.cadet.regular_course.course_no }}RC

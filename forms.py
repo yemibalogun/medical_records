@@ -56,7 +56,7 @@ class EditMedicalRecordForm(FlaskForm):
     examination = TextAreaField('Examination', validators=[DataRequired()])
     diagnosis = TextAreaField('Diagnosis', validators=[DataRequired()])
     plan = TextAreaField('Plan', validators=[DataRequired()])
-    prescription = TextAreaField('Prescription', validators=[DataRequired()])
+    prescription = TextAreaField('Prescription')
     prescription_status = SelectField('Status', choices=[('waiting', 'Waiting'), ('in progress', 'In Progress'), ('completed', 'Completed')], default='waiting', validators=[DataRequired()])
     excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), 
                                                       ('excused boot', 'Excused Boot'), 
@@ -125,7 +125,7 @@ class MedicalRecordForm(FlaskForm):
     examination = TextAreaField('Examination', validators=[DataRequired()])
     diagnosis = TextAreaField('Diagnosis', validators=[DataRequired()])
     plan = TextAreaField('Plan', validators=[DataRequired()])
-    prescription = TextAreaField('Prescription', validators=[DataRequired()])
+    prescription = TextAreaField('Prescription')
     prescription_status = SelectField('Status', choices=[('waiting', 'Waiting'), ('in progress', 'In Progress'), ('completed', 'Completed')], default='waiting', validators=[DataRequired()])
     excuse_duty = SelectField('Excuse Duty', choices=[('nil', 'Nil'), 
                                                       ('excused boot', 'Excused Boot'), 
@@ -164,7 +164,7 @@ class StaffRegisterForm(FlaskForm):
     
     status = SelectField('Status', choices=[('active', 'Active'), 
                                             ('inactive', 'Inactive')
-                                            ], validators=[DataRequired()])
+                                            ], default='inactive', validators=[DataRequired()])
     
     appointment = StringField('Appointment', validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth', validators=[DataRequired()])

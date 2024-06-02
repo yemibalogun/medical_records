@@ -45,6 +45,7 @@
                 <th style="width: 10%" scope="col">Service</th>
                 <th style="width: 10%" scope="col">Battalion</th>
                 <th style="width: 30%" scope="col">Department</th>
+                <th style="width: 5%" scope="col">Edit</th>
               </tr>
             </thead>
 
@@ -70,6 +71,11 @@
                 <td data-cell="Battalion">{{ row.bn.bn.capitalize() }}</td>
                 <td data-cell="Department">
                   {{ row.department.department_name.title() }}
+                </td>
+                <td data-cell="Edit">
+                  <a href="{{ url_for('edit_cadet', id=row.id)}}"><span style="color: #f90b3f; font-size: 1rem;" class="material-symbols-outlined">
+                    edit
+                    </span></a>
                 </td>
               </tr>
 

@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, jsonify, session, flash
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user 
 from flask_bcrypt import Bcrypt
-from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm,StaffRegisterForm, LoginForm, CheckInForm, EditMedicalRecordForm
+from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm, StaffRegisterForm, LoginForm, CheckInForm, EditMedicalRecordForm
 from config import app, db
 from models import  Cadet, RegularCourse, Department, Gender, Battalion, Service, Medical, Staff, Visit
 from sqlalchemy.orm import joinedload, Session
@@ -12,7 +12,7 @@ from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from flask_apscheduler import APScheduler
-import csv, os,json
+import csv, os, json
 from datetime import datetime, date
 from utils import regular_courses, roles
 
@@ -192,6 +192,10 @@ def login():
                 return redirect(url_for('login'))
         else:
             login_user(staff)
+            
+            # Update status to 'active'
+            staff.status = 'active'
+            db.session.commit()
             flash('You have been logged in successfully!', 'success')
             next_page = request.args.get('next')
 
@@ -201,7 +205,9 @@ def login():
                 if staff.role == "doctor":
                     return redirect(url_for('doctor_dashboard'))
                 elif staff.role == "front_desk":
-                    return redirect(url_for('check_in'))
+                    return redirect(url_for('front_desk_dashboard'))
+                elif staff.role == 'nurse':
+                    return redirect(url_for('nurse_dashboard'))
                 else:
                     return redirect(url_for('home'))
                 
@@ -210,7 +216,13 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    # Update status to 'inactive'
+    current_user.status = 'inactive'
+    print(current_user)
+    db.session.commit()
+
     logout_user()
+
     flash("You have been logged out!", 'success')
     return redirect(url_for('login'))
 
@@ -340,26 +352,52 @@ def edit_cadet(id):
     edit_form=EditForm()
     
     selected_cadet = session.query(Cadet).filter_by(id=id).first()
-    # form = AddCadetForm(obj=selected_cadet)
-    if edit_form.validate_on_submit():
-        edit_form.populate_obj(selected_cadet)
-        
-        # Handlng date fields
-        # You might need to convert the date format based on your form and database structure
-        selected_cadet.doe = edit_form.doe.data.strftime('%Y-%m-%d')
-        selected_cadet.dob = edit_form.dob.data.strftime('%Y-%m-%d')
-        
-        # Handling radio buttons 
-        selected_cadet.religion_id = edit_form.religion.data
-        selected_cadet.gender_id = edit_form.gender.data
 
-        session.commit()
-        return redirect(url_for('home'))
+    if request.method == 'POST':
+        if edit_form.validate_on_submit():
+            # Populate simple fields directly from the form
+            selected_cadet.cadet_no = edit_form.cadet_no.data
+            selected_cadet.first_name = edit_form.first_name.data
+            selected_cadet.middle_name = edit_form.middle_name.data
+            selected_cadet.last_name = edit_form.last_name.data
+            selected_cadet.state = edit_form.state.data
+            selected_cadet.lga = edit_form.lga.data
+            selected_cadet.doe = edit_form.doe.data
+            selected_cadet.dob = edit_form.dob.data
+            selected_cadet.religion = edit_form.religion.data
+
+            # Fetch the related instances
+            selected_cadet.department = db.session.query(Department).filter_by(department_name=edit_form.department.data).first()
+            selected_cadet.bn = db.session.query(Battalion).filter_by(bn=edit_form.bn.data).first()
+            selected_cadet.service = db.session.query(Service).filter_by(service_type=edit_form.service.data).first()
+            selected_cadet.gender = db.session.query(Gender).filter_by(gender_type=edit_form.gender.data).first()
+
+            # Handle RegularCourse
+            regular_course = db.session.query(RegularCourse).filter_by(course_no=edit_form.regular_course.data).first()
+            if not regular_course:
+                # If regular_course is None, create a new RegularCourse instance
+                regular_course = RegularCourse(course_no=edit_form.regular_course.data)
+                db.session.add(regular_course)
+                db.session.commit()  # Commit to get the ID for the new regular_course
+            
+            selected_cadet.regular_course = regular_course
+            session.commit()
+            flash("Cadet record updated successfully!", 'success')
+            return redirect(url_for('home'))
     
-    # Process the form to populate form fields with selected_Cadet data
-    edit_form.process(obj=selected_cadet)
+        else:
+            flash('Form validation failed. Please check your inputs.', 'error')
+        
+    # Process the form to populate form fields with selected_record data
+    if request.method == 'GET':
+        edit_form.process(obj=selected_cadet)
 
-    return render_template("edit.html", row=selected_cadet, edit_form=edit_form, year=year, search_form=search_form)
+    return render_template("edit.html", 
+                           row=selected_cadet, 
+                           edit_form=edit_form, 
+                           year=year, 
+                           search_form=search_form
+                           )
 
 @app.route("/dashboard/<int:id>", methods=["GET","POST"])
 @login_required
@@ -464,7 +502,7 @@ def edit_medical_record(id, cadet_id):
 
             session.commit()
             flash("Medical record updated successfully!", 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('student_info', id=cadet_id))
     
         else:
             flash('Form validation failed. Please check your inputs.', 'error')
@@ -526,7 +564,7 @@ def register_staff():
                 address=staff_register_form.address.data.title(),
                 gender = gender_instance,
                 role=staff_register_form.role.data,
-                status=staff_register_form.status.data,
+                status='active',
                 appointment=staff_register_form.appointment.data,
                 date_of_birth=staff_register_form.date_of_birth.data,
                 date_tos=staff_register_form.date_tos.data,
@@ -545,7 +583,7 @@ def register_staff():
                 if new_staff.role == "doctor":
                     return redirect(url_for('doctor_dashboard'))
                 elif new_staff.role == "front_desk":
-                    return redirect(url_for('check_in'))
+                    return redirect(url_for('front_desk_dashboard'))
                 else:
                     return redirect(url_for('home'))
 
@@ -564,7 +602,7 @@ def front_desk_dashboard():
     if check_in_form.validate_on_submit():
         cadet_id = (check_in_form.cadet_id.data).upper()
         check_in_time = check_in_form.check_in_time.data
-        reason = check_in_form.reason.data
+        reason = check_in_form.reason.data.title()
         doctor_id = check_in_form.doctor_id.data
         status = check_in_form.status.data
 
@@ -579,7 +617,7 @@ def front_desk_dashboard():
 
         if reported_sick_cadet:
             flash(f'{selected_cadet.first_name} has already been checked in', 'info')
-            return redirect(url_for('check_in'))
+            return redirect(url_for('front_desk_dashboard'))
         # Create a new Visit record
         visit = Visit(
             cadet_id=selected_cadet.id,
@@ -602,7 +640,7 @@ def front_desk_dashboard():
         })
         
         flash('Patient checked in successfully!', 'success')
-        return redirect(url_for('check_in'))
+        return redirect(url_for('front_desk_dashboard'))
     
     return render_template('check_in.html', 
                            check_in_form=check_in_form,
@@ -670,6 +708,7 @@ def cadets_brigade_dashboard():
         flash("Access denied!", 'danger')
         return redirect(url_for('login'))
     
+    logged_in = session.query(Staff).filter(Staff.status=='active').all()
     admitted_cadets = session.query(Cadet).filter(Cadet.admission_date==today).all()
     admitted_cadets_count = session.query(Cadet).filter(Cadet.admission_date==today).count()
     sick_report = session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
@@ -682,7 +721,8 @@ def cadets_brigade_dashboard():
                            sick_report=sick_report,
                            sick_report_count=sick_report_count,
                            today=formatted_date,
-                           current_user=current_user, 
+                           current_user=current_user,
+                           logged_in=logged_in, 
                            search_form=search_form,
                            year=year,
                            page=page,
@@ -831,14 +871,14 @@ def add_medical_record(id):
 
 @app.route('/admit_cadet', methods=['GET', 'POST'])
 @login_required
-def admit_cadet():
+def nurse_dashboard():
     search_form = SearchForm()  # Assuming you have a SearchForm defined
 
     if request.method == 'POST':
         selected_cadets_json = request.json.get('selectedCadets')
         if selected_cadets_json is None:
             flash("Error: No data received or invalid JSON format.")
-            return redirect(url_for('admit_cadet'))
+            return redirect(url_for('nurse_dashboard'))
 
         # Convert each string in cadet_list to a list of strings separated by spaces
         selected_cadets_list = [cadet_string.split(" ") for cadet_string in selected_cadets_json]

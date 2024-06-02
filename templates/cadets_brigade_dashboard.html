@@ -11,13 +11,18 @@ content %}
       <h5 style="color: rgb(0, 68, 171)" class="card-title">
         Cadets Brigade Dashboard
       </h5>
-      <p class="card-subtitle mb-2 text-body-secondary">{{ current_user.appointment }}</p>
-    </div>  
+      <p class="card-subtitle mb-2 text-body-secondary">
+        {{ current_user.appointment }}
+      </p>
+    </div>
 
-    <div style="padding: 0; margin: 0; max-width: fit-content; max-height: 250px;" class="col card card-body">
-      <div style="max-width: 400px; margin: 20px 0;" class="container">
-        <div style="max-width: 400px;" class="container-body">
-        <canvas id="sickReportChart" width="350" height="150"></canvas>
+    <div
+      style="padding: 0; margin: 0; max-width: fit-content; max-height: 250px"
+      class="col card card-body"
+    >
+      <div style="max-width: 400px; margin: 20px 0" class="container">
+        <div style="max-width: 400px" class="container-body">
+          <canvas id="sickReportChart" width="350" height="150"></canvas>
         </div>
       </div>
     </div>
@@ -25,18 +30,43 @@ content %}
   <!-- <hr>     -->
 
   <div style="margin: 0" class="row">
-    <div style="margin: 0; padding: 0;" class="col card">
       <div
-          style="margin: 0 auto; padding: 0; width: 100%;"
-          id="autocomplete-suggestions"
-          class="autocomplete-suggestions custom-container"
-        >
-      </div>
-      
-        <div class="container card-body">
-          
+        style="margin: 0; padding: 0;"
+        id="autocomplete-suggestions"
+        class="card autocomplete-suggestions custom-container"
+      >
+        <div class="col card-body">
+          <h6
+              style="background-color: #f3f3f3; margin: 0; padding: 1rem"
+              class="card-title mb-2 text-body-secondary"
+            >
+              Online 
+              <span  style="color: rgb(0, 189, 0); font-size: .7rem;" class="material-symbols-outlined">
+                radio_button_checked
+              </span>
+            </h6>
+            {% for doctor in logged_in %}
+            <ul style="padding-left: 0.5rem">
+              <li
+                style="
+                  font-size: smaller;
+                  color: rgb(0, 68, 171);
+                  text-align: left;
+                "
+                class="card-text"
+              >
+                <span style="font-weight: 600;">{{ doctor.firstname }} {{ doctor.lastname }}</span>  ({{ doctor.appointment.title() }}) 
+              </li>
+            </ul>
+            {% endfor %}
         </div>
+
+        <div class="col">
+          some list
+        </div>
+
       </div>
+    </div>
 
     <div style="max-width: fit-content" class="col right-sidebar">
       <div class="card" style="width: 18rem">
@@ -45,7 +75,10 @@ content %}
             style="background-color: #f3f3f3; margin: 0; padding: 1rem"
             class="card-title mb-2 text-body-secondary"
           >
-            Admitted cadets ({{ admitted_cadets_count }}) <br><span style="font-size: small;">{{ today }}</span>
+            Admitted cadets ({{ admitted_cadets_count }}) <br /><span
+              style="font-size: small"
+              >{{ today }}</span
+            >
           </h6>
           {% for cadet in admitted_cadets %}
           <ul style="padding-left: 0.5rem">
@@ -80,7 +113,10 @@ content %}
             style="background-color: #f3f3f3; margin: 0; padding: 1rem"
             class="card-title mb-2 text-body-secondary"
           >
-            Sick reports ({{ sick_report_count }}) <br><span style="font-size: small;">{{ today }}</span>
+            Sick reports ({{ sick_report_count }}) <br /><span
+              style="font-size: small"
+              >{{ today }}</span
+            >
           </h6>
           {% for cadet in sick_report %}
           <ul style="padding-left: 0.5rem">
@@ -95,8 +131,10 @@ content %}
               <a
                 style="text-decoration: none; color: rgb(0, 68, 171)"
                 href="{{ url_for('student_info', id=cadet.id) }}"
-                ><b>{{ cadet.cadet.first_name }} {{ cadet.cadet.middle_name }} {{
-                cadet.cadet.last_name }}</b></a
+                ><b
+                  >{{ cadet.cadet.first_name }} {{ cadet.cadet.middle_name }} {{
+                  cadet.cadet.last_name }}</b
+                ></a
               >
               {{ cadet.cadet.bn.bn[:3].title() }} {{
               cadet.cadet.regular_course.course_no }}RC

@@ -58,14 +58,14 @@ class Battalion(db.Model):
 
 class Medical(db.Model):
     __tablename__ = "medicals"
-
+    
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     date_reported_sick = Column(Date, nullable=False, default=func.now())
     history = Column(String, nullable=False)
     examination = Column(String, nullable=False)
     diagnosis = Column(String, nullable=False)
     plan = Column(String, nullable=False)
-    prescription = Column(String, nullable=False)
+    prescription = Column(String, nullable=False, default="")
     prescription_status = Column(String(50), nullable=False, default='waiting') 
     excuse_duty = Column(String, nullable=True)
     excuse_duty_days = Column(Integer, nullable=False, default=0)
@@ -148,7 +148,7 @@ class Staff(db.Model, UserMixin):
     gender_id = Column("gender_id", ForeignKey('genders.id'), nullable=False)
     gender = relationship('Gender', back_populates='staff')
     role = Column('role', String(50), nullable=False) 
-    status = Column('status', String(20), nullable=False) 
+    status = Column('status', String(20), nullable=False, default='inactive') 
     appointment = Column("appointment", String(255), nullable=False)
     date_of_birth = Column("date_of_birth", Date, nullable=False)
     date_tos = Column("date_tos", Date, nullable=False)

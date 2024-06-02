@@ -50,7 +50,7 @@
               <a
                 class="dropdown-item"
                 aria-current="page"
-                href="{{ url_for('admit_cadet') }}"
+                href="{{ url_for('nurse_dashboard') }}"
                 >Admit patient</a
               >
             </li>
@@ -132,6 +132,7 @@
 
         <li class="nav-item">
           <a
+            style="color: #f90b3f; font-weight: 600;"
             class="nav-link active"
             aria-current="page"
             href="{{ url_for('logout') }}"
@@ -211,6 +212,10 @@
           >
           {% elif current_user.role == 'cadets_brigade' %}
           <a href="{{ url_for('cadets_brigade_dashboard') }}"
+            >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
+          >
+          {% elif current_user.role == 'nurse' %}
+          <a href="{{ url_for('nurse_dashboard') }}"
             >Welcome, {{ current_user.firstname.title() }} ({{ current_user.role.title() }})</a
           >
           {% endif %}
