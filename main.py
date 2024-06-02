@@ -216,15 +216,26 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    # Update status to 'inactive'
-    current_user.status = 'inactive'
-    print(current_user)
-    db.session.commit()
+    try:
+        # Update status to 'inactive'
+        current_user.status = 'inactive'
+        print(f"Logging out: {current_user.email}, Status before commit: {current_user.status}")
+        
+        db.session.commit()
+        print(f"Status after commit: {current_user.status}")
 
-    logout_user()
+        logout_user()
 
-    flash("You have been logged out!", 'success')
+        flash("You have been logged out!", 'success')
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error during logout: {e}")
+        flash("An error occurred during logout.", 'error')
+    finally:
+        db.session.close()
+
     return redirect(url_for('login'))
+
 
 @app.route("/")
 @login_required
