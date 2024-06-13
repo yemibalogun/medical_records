@@ -35,8 +35,8 @@ content %}
       <br />
       <br />
       <div style="font-size: small; text-align: center">
-        {% with messages = get_flashed_messages(with_categories=true) %} 
-        {% if messages %}
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %}
         <ul class="flashes">
           {% for category, message in messages %}
           <div
@@ -48,8 +48,7 @@ content %}
           </div>
           {% endfor %}
         </ul>
-        {% endif %} 
-        {% endwith %}
+        {% endif %} {% endwith %}
       </div>
 
       <form
@@ -57,6 +56,11 @@ content %}
         method="POST"
         action="{{ url_for('login') }}"
       >
+        <input
+        type="hidden"
+        name="status"
+        value="active"
+      />
         {{ login_form.csrf_token() }}
 
         <div>

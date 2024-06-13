@@ -191,11 +191,16 @@ def login():
                 flash('Incorrect credentials!, please try again.', 'warning')
                 return redirect(url_for('login'))
         else:
+            # Update status to 'active'
+            new_status = request.form.get('status')
+            if new_status not in ['active', 'inactive']:
+                flash('Invalid status.', 'warning')
+                return redirect(url_for('login'))
+        
+            staff.status = new_status
+            db.session.commit()
             login_user(staff)
             
-            # Update status to 'active'
-            staff.status = 'active'
-            db.session.commit()
             flash('You have been logged in successfully!', 'success')
             next_page = request.args.get('next')
 
@@ -218,14 +223,13 @@ def login():
 def logout():
     try:
         # Update status to 'inactive'
-        current_user.status = 'inactive'
-        print(f"Logging out: {current_user.email}, Status before commit: {current_user.status}")
-        
+        new_status = request.args.get('status', 'inactive')
+        print(new_status)
+        current_user.status = new_status
         db.session.commit()
         print(f"Status after commit: {current_user.status}")
 
         logout_user()
-
         flash("You have been logged out!", 'success')
     except Exception as e:
         db.session.rollback()
@@ -777,7 +781,6 @@ def update_prescription_status(id):
 
     new_status = request.form.get('prescription_status')
     if new_status not in ['waiting', 'in progress', 'completed']:
-        print(new_status)
         flash('Invalid status update.', 'warning')
         return redirect(url_for('pharmacist_dashboard'))
     

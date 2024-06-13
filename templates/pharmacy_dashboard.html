@@ -65,7 +65,9 @@
             </td>
             <td data-cell="Check-In time">{{ medical.date_reported_sick }}</td>
 
-            <td data-cell="Prescriptions">{{ medical.prescription.title() }}</td>
+            <td data-cell="Prescriptions">
+              {{ medical.prescription.title() }}
+            </td>
 
             <td data-cell="Action">
               {% if medical.prescription_status == 'waiting' %}
