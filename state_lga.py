@@ -260,7 +260,7 @@ state_lga_data = {
         "Enugu Eas",
         "Aninri",
         "Nkanu East",
-        "Udenu."
+        "Udenu"
     ],
     "Edo": [
         "Esan North-East",

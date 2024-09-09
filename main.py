@@ -152,9 +152,7 @@ def get_lgas():
     state = request.args.get('state')  # Get the selected state from the query string
     if state:
         state = state.strip().replace('_', ' ').title()  # Replace underscores with spaces and capitalize
-        print(f"Received state: {state}")  # Debugging log to see the state
         lgas = state_lga_data.get(state, [])  # Fetch LGAs for the given state
-        print(f"Returning LGAs: {lgas}")  # Debugging log
         return jsonify(lgas)
     else:
         return jsonify([])  # Return an empty list if no state found
@@ -1006,6 +1004,17 @@ def add_cadet():
     add_cadet_form = AddCadetForm()
     search_form = SearchForm()
     
+    # Get the selected state from the form submission
+    selected_state = add_cadet_form.state.data
+
+    # Dynamically populate the LGA choices based on the selected state
+    if selected_state:
+        # Fetch the LGAs based on the selected state from your `state_lga_data`
+        lgas = state_lga_data.get(selected_state, [])
+        
+        print(f"Returning LGAs: {lgas}")  # Debugging log
+        add_cadet_form.lga.choices = [(lga, lga) for lga in lgas]
+
     if add_cadet_form.validate_on_submit():
         cadet_no = (add_cadet_form.cadet_no.data).upper()
         first_name = add_cadet_form.first_name.data
