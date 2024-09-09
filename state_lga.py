@@ -95,7 +95,7 @@ state_lga_data = {
         "Udung Uko",
         "Ukanafun",
         "Uruan",
-        "Urue-Offong/Oruko ",
+        "Urue-Offong/Oruko",
         "Uyo"
     ],
     "Bauchi": [
@@ -295,7 +295,7 @@ state_lga_data = {
         "Gbonyin",
         "Efon",
         "Ise/Orun",
-        "Ilejemeje."
+        "Ilejemeje"
     ],
     "FCT": [
         "Abaji",
@@ -316,7 +316,7 @@ state_lga_data = {
         "Funakaye",
         "Gombe",
         "Nafada/Bajoga",
-        "Yamaltu/Delta."
+        "Yamaltu/Delta"
     ],
     "Imo": [
         "Aboh-Mbaise",
