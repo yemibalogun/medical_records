@@ -79,7 +79,9 @@
           subfield.label }}
           <br />
           {% endfor %}
+          <br>
         </div>
+        
         <div class="col">
           {% for subfield in add_cadet_form.gender %} {{ subfield }} {{
           subfield.label }}
@@ -90,17 +92,18 @@
 
       <div class="row">
         <div class="col">
-          {{ add_cadet_form.state(class="form-control", placeholder="State of Origin") }} {% if add_cadet_form.state.errors %}
+          {{ add_cadet_form.state(class="form-control", id='state', placeholder="State of Origin") }} {% if add_cadet_form.state.errors %}
           <ul class="errors">
             {% for error in add_cadet_form.state.errors %}
             <li>{{ error }}</li>
             {% endfor %}
           </ul>
           {% endif %}
+          <br>
         </div>
 
         <div class="col">
-          {{ add_cadet_form.lga(class="form-control", placeholder="LGA") }} {%
+          {{ add_cadet_form.lga(class="form-control ", id='lga', placeholder="LGA") }} {%
           if add_cadet_form.lga.errors %}
           <ul class="errors">
             {% for error in add_cadet_form.lga.errors %}

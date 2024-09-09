@@ -40,6 +40,10 @@ p {
   padding: 0;
 }
 
+.nav-link {
+  font-weight: 400;
+}
+
 .toggler-icon {
   display: block;
   position: absolute;
@@ -393,7 +397,6 @@ footer {
 .dropdown-item {
   color: rgb(0, 68, 171);
   font-size: small;
-  font-weight: bold;
 }
 
 .back-to-top {

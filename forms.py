@@ -83,8 +83,22 @@ class AddCadetForm(FlaskForm):
                                                ('islam', 'Islam')], 
                                                validators=[InputRequired()])
     gender = RadioField('Gender', choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired()])
-    state = StringField('State of Origin', validators=[DataRequired()])
-    lga = StringField('LGA', validators=[DataRequired()])
+    state = SelectField('State of Origin', choices=[
+        ('abia', 'Abia'), ('adamawa', 'Adamawa'), ('akwa_ibom', 'Akwa Ibom'), 
+        ('anambra', 'Anambra'), ('bauchi', 'Bauchi'), ('bayelsa', 'Bayelsa'), 
+        ('benue', 'Benue'), ('borno', 'Borno'), ('cross_river', 'Cross River'),
+        ('delta', 'Delta'), ('ebonyi', 'Ebonyi'), ('edo', 'Edo'), 
+        ('ekiti', 'Ekiti'), ('enugu', 'Enugu'), ('gombe', 'Gombe'), 
+        ('imo', 'Imo'), ('jigawa', 'Jigawa'), ('kaduna', 'Kaduna'), 
+        ('kano', 'Kano'), ('katsina', 'Katsina'), ('kebbi', 'Kebbi'), 
+        ('kogi', 'Kogi'), ('kwara', 'Kwara'), ('lagos', 'Lagos'), 
+        ('nasarawa', 'Nasarawa'), ('niger', 'Niger'), ('ogun', 'Ogun'), 
+        ('ondo', 'Ondo'), ('osun', 'Osun'), ('oyo', 'Oyo'), 
+        ('plateau', 'Plateau'), ('rivers', 'Rivers'), ('sokoto', 'Sokoto'), 
+        ('taraba', 'Taraba'), ('yobe', 'Yobe'), ('zamfara', 'Zamfara'), 
+        ('fct', 'FCT')
+    ], validators=[DataRequired()])
+    lga = SelectField('LGA', choices=[], validators=[DataRequired()])
     doe = DateField('Date of Enlistment', validators=[DataRequired()])
     dob = DateField('Date of Birth', validators=[DataRequired()])
     department = SelectField('Department', choices=[('defence and security studies', 'Defence and Security Studies'), 

@@ -3,7 +3,7 @@ from flask_login import login_user, LoginManager, login_required, current_user, 
 from flask_bcrypt import Bcrypt
 from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm, StaffRegisterForm, LoginForm, CheckInForm, EditMedicalRecordForm
 from config import app, db
-from models import  Cadet, RegularCourse, Department, Gender, Battalion, Service, Medical, Staff, Visit
+from models import Cadet, RegularCourse, Department, Gender, Battalion, Service, Medical, Staff, Visit
 from sqlalchemy.orm import joinedload, Session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -15,6 +15,7 @@ from flask_apscheduler import APScheduler
 import csv, os, json
 from datetime import datetime, date
 from utils import regular_courses, roles
+from state_lga import state_lga_data
 
     
 year = datetime.now().year
@@ -145,6 +146,18 @@ def autocomplete():
     else:
         # Return an empty array if no results found
         return jsonify([]) 
+
+@app.route('/get_lgas')
+def get_lgas():
+    state = request.args.get('state')  # Get the selected state from the query string
+    if state:
+        state = state.strip().replace('_', ' ').title()  # Replace underscores with spaces and capitalize
+        print(f"Received state: {state}")  # Debugging log to see the state
+        lgas = state_lga_data.get(state, [])  # Fetch LGAs for the given state
+        print(f"Returning LGAs: {lgas}")  # Debugging log
+        return jsonify(lgas)
+    else:
+        return jsonify([])  # Return an empty list if no state found
 
 # Create Search Function
 @app.route('/search', methods=["GET", "POST"])
@@ -448,6 +461,13 @@ def student_info(id):
         
         dob_obj = selected_cadet.date_of_birth
         doe_obj = selected_cadet.date_of_enlistment
+        
+        # Convert if they are strings
+        if isinstance(dob_obj, str):
+            dob_obj = datetime.strptime(dob_obj, '%Y-%m-%d')  # Adjust format if needed
+        if isinstance(doe_obj, str):
+            doe_obj = datetime.strptime(doe_obj, '%Y-%m-%d')  # Adjust format if needed
+
 
         dob_year = dob_obj.year
         current_year = datetime.now().year
