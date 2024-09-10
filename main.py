@@ -1005,11 +1005,13 @@ def add_cadet():
     search_form = SearchForm()
     
     # Get the selected state from the form submission
-    selected_state = add_cadet_form.state.data.capitalize() # Convert state name to lowercase
+    selected_state = add_cadet_form.state.data # Convert state name to lowercase
+    
     print(f"Selected state: {selected_state}") # Debugging log
 
     # Dynamically populate the LGA choices based on the selected state
     if selected_state:
+        selected_state = selected_state.capitalize()
         # Fetch the LGAs based on the selected state from your `state_lga_data`
         lgas = state_lga_data.get(selected_state, [])
         
