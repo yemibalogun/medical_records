@@ -1198,4 +1198,4 @@ def add_all_cadets():
 #     return render_template("confirm_delete.html", cadet=cadet_to_delete, cadet_id=cadet_to_delete.id, search_form=search_form)
 
 if __name__=="__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)

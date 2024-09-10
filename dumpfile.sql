@@ -1,5 +1,5 @@
 CREATE TABLE regular_courses (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	course_no INTEGER NOT NULL, 
 	PRIMARY KEY (id)
 );
@@ -10,14 +10,14 @@ INSERT INTO regular_courses VALUES(4,74);
 INSERT INTO regular_courses VALUES(5,75);
 INSERT INTO regular_courses VALUES(6,78);
 CREATE TABLE genders (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	gender_type VARCHAR NOT NULL, 
 	PRIMARY KEY (id)
 );
 INSERT INTO genders VALUES(1,'male');
 INSERT INTO genders VALUES(2,'female');
 CREATE TABLE battalions (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	bn VARCHAR NOT NULL, 
 	PRIMARY KEY (id)
 );
@@ -26,7 +26,7 @@ INSERT INTO battalions VALUES(2,'dalet');
 INSERT INTO battalions VALUES(3,'abyssinia');
 INSERT INTO battalions VALUES(4,'burma');
 CREATE TABLE services (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	service_type VARCHAR NOT NULL, 
 	PRIMARY KEY (id)
 );
@@ -34,7 +34,7 @@ INSERT INTO services VALUES(1,'army');
 INSERT INTO services VALUES(2,'navy');
 INSERT INTO services VALUES(3,'airforce');
 CREATE TABLE visits (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	cadet_id INTEGER NOT NULL, 
 	check_in_time DATE NOT NULL, 
 	status VARCHAR(50) NOT NULL, 
@@ -50,7 +50,7 @@ INSERT INTO visits VALUES(3,9,'2024-05-21','waiting','dentist appointment',1);
 INSERT INTO visits VALUES(4,10,'2024-05-21','completed','gynae',1);
 INSERT INTO visits VALUES(5,11,'2024-05-21','completed','orthopaedic appointment',1);
 CREATE TABLE staffs (
-	staff_id INTEGER NOT NULL, 
+	staff_id SERIAL NOT NULL, 
 	firstname VARCHAR(255) NOT NULL, 
 	middlename VARCHAR(255), 
 	lastname VARCHAR(255) NOT NULL, 
@@ -75,7 +75,7 @@ CREATE TABLE staffs (
 INSERT INTO staffs VALUES(1,'Yemi','Rasheed','Balogun','slickact2006@gmail.com','$2b$12$PLtm6iYK6I/Lv.uNf83bG.Ws3elXGwypsCpKT1ih6Zll4zN4LBue.','08069190791','Barnawa High Cost Kaduna',1,'doctor','active','Doctor','1986-10-16','2024-05-20','2024-05-20',NULL);
 INSERT INTO staffs VALUES(2,'Joan','Kash','Balogun','mssjoanne@gmail.com','$2b$12$ek9NA92.xnfWL9MZf6G6wO2ROu7FjWuKue991bP52nu6UmfYrAXuy','08137838967','Nbte Quarters Highcost',2,'doctor','active','doctor','1993-09-30','2024-05-21','2024-05-21',NULL);
 CREATE TABLE faculties (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	faculty_name VARCHAR NOT NULL, 
 	PRIMARY KEY (id)
 );
@@ -85,7 +85,7 @@ INSERT INTO faculties VALUES(3,'Management Sciences');
 INSERT INTO faculties VALUES(4,'Military Science and Interdisciplinary Studies');
 INSERT INTO faculties VALUES(5,'Sciences');
 CREATE TABLE departments (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	department_name VARCHAR NOT NULL, 
 	faculty_id INTEGER NOT NULL, 
 	PRIMARY KEY (id), 
@@ -115,7 +115,7 @@ INSERT INTO departments VALUES(21,'chemistry',5);
 INSERT INTO departments VALUES(22,'mathematical sciences',5);
 INSERT INTO departments VALUES(23,'physics',5);
 CREATE TABLE service_subjects (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	subject_code VARCHAR(10), 
 	subject_title VARCHAR(255) NOT NULL, 
 	status VARCHAR(5) NOT NULL, 
@@ -124,7 +124,7 @@ CREATE TABLE service_subjects (
 	FOREIGN KEY(service_id) REFERENCES services (id)
 );
 CREATE TABLE cadets (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	cadet_no VARCHAR NOT NULL, 
 	first_name VARCHAR NOT NULL, 
 	middle_name VARCHAR, 
@@ -692,7 +692,7 @@ INSERT INTO cadets VALUES(539,'13114','Steven','Sharp','Frank','Christianity','Z
 INSERT INTO cadets VALUES(540,'13257','Evan','Welch','Christian','Christianity','Zamfara','Ikeduru','2019-09-17','2001-01-01',11,4,1,3,5,0,'',NULL);
 INSERT INTO cadets VALUES(541,'13397','Cameron','Kelly','Dylan','Christianity','Zamfara','Kazaure','2024-01-27','2010-11-27',12,1,1,3,1,0,'',NULL);
 CREATE TABLE medicals (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	date_reported_sick DATE NOT NULL, 
 	history VARCHAR NOT NULL, 
 	examination VARCHAR NOT NULL, 
@@ -709,7 +709,7 @@ CREATE TABLE medicals (
 INSERT INTO medicals VALUES(1,'2024-05-20','rutrum odio pretium. Phasellus pulvinar ex lacus','non euismod ligula vestibulum vitae. ','In hac habitasse platea dictumst. Mauris lobortis facilisis tellus a condimentum. Praesent euismod blandit lacinia. Maecenas massa orci, luctus eget lectus id, faucibus luctus massa. Nullam a tortor tristique, euismod ligula efficitur, mattis lacus. Etiam pellentesque condimentum cursus. Vivamus porttitor justo in ligula aliquet maximus. Morbi nec mi fermentum, ultrices est quis, accumsan tellus. ','Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.','Nam egestas euismod lorem, sit amet varius leo ultrices ut. ','confinement',43,1,1);
 INSERT INTO medicals VALUES(2,'2024-05-21','fever, headache, stomach ache','bP 90/130','Possible malaria','run tests','paracetamol','nil',0,2,1);
 CREATE TABLE courses (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	course_code VARCHAR(10), 
 	course_title VARCHAR(255) NOT NULL, 
 	units INTEGER NOT NULL, 
@@ -1254,7 +1254,7 @@ CREATE TABLE profile_pictures (
 	FOREIGN KEY(cadet_id) REFERENCES cadets (id)
 );
 CREATE TABLE service_scores (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	first_term_score FLOAT, 
 	second_term_score FLOAT, 
 	service_year INTEGER, 
@@ -1265,7 +1265,7 @@ CREATE TABLE service_scores (
 	FOREIGN KEY(cadet_id) REFERENCES cadets (id)
 );
 CREATE TABLE scores (
-	id INTEGER NOT NULL, 
+	id SERIAL NOT NULL, 
 	first_semester_score FLOAT, 
 	second_semester_score FLOAT, 
 	academic_year INTEGER, 
