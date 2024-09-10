@@ -128,18 +128,36 @@ def autocomplete():
                 'first_name': cadet.first_name,
                 'middle_name': cadet.middle_name,
                 'last_name': cadet.last_name,
-                'bn': cadet.bn.bn.capitalize(),
-                'service': cadet.service.service_type.capitalize(),
-                'gender': cadet.gender.gender_type,
+                'bn': cadet.bn.bn.capitalize() if cadet.bn else '',
+                'service': cadet.service.service_type.capitalize() if cadet.service else '',
+                'gender': cadet.gender.gender_type if cadet.gender else '',
                 'religion': cadet.religion,
                 'state': cadet.state,
                 'lga': cadet.lga,
-                'enlistment_date': cadet.date_of_enlistment.isoformat(),
-                'dob': cadet.date_of_birth.isoformat(),
-                'department': cadet.department.department_name.title(),
-                'course': cadet.regular_course.course_no,
+                'enlistment_date': None,
+                'dob': None,
+                'department': cadet.department.department_name.title() if cadet.department else '',
+                'course': cadet.regular_course.course_no if cadet.regular_course else '',
                 'student_info_url':  url_for('student_info',  id=cadet.id)
             }
+            
+            # Handle date fields
+            try: 
+                if isinstance(cadet.date_of_enlistment, datetime):
+                    cadet_dict['enlistment_date'] = cadet.date_of_enlistment.isoformat()
+                elif isinstance(cadet.date_of_enlistment, str):
+                    cadet_dict['enlistment_date'] = datetime.strptime(cadet.date_of_enlistment, '%Y-%m-%d').isoformat()
+            except (ValueError, TypeError):
+                cadet_dict['enlistment_date'] = None
+            
+            try:
+                if isinstance(cadet.date_of_birth, datetime):
+                    cadet_dict['dob'] = cadet.date_of_birth.isoformat()
+                elif isinstance(cadet.date_of_birth, str):
+                    cadet_dict['dob'] = datetime.strptime(cadet.date_of_birth, '%Y-%m-%d').isoformat()
+            except (ValueError, TypeError):
+                cadet_dict['dob'] = None
+            
             results.append(cadet_dict)
         cadets_json = json.dumps(results)
         return cadets_json
