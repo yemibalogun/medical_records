@@ -1005,7 +1005,8 @@ def add_cadet():
     search_form = SearchForm()
     
     # Get the selected state from the form submission
-    selected_state = add_cadet_form.state.data
+    selected_state = add_cadet_form.state.data.capitalize() # Convert state name to lowercase
+    print(f"Selected state: {selected_state}") # Debugging log
 
     # Dynamically populate the LGA choices based on the selected state
     if selected_state:

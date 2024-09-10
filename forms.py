@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, DateField, RadioField, SelectField, IntegerField, TextAreaField, EmailField, TelField
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Optional
+from state_lga import state_lga_data
 import datetime
 
 
@@ -47,6 +48,7 @@ class EditForm(FlaskForm):
     service = SelectField('Arm of Service', choices=[('army', 'Army'), ('navy', 'Navy'), ('airforce', 'Airforce')], validators=[DataRequired()])
     regular_course = IntegerField('Course', validators=[DataRequired()])
     submit = SubmitField('Submit')
+    
 
 class EditMedicalRecordForm(FlaskForm):
     date_reported_sick = DateField('Date Reported Sick', 
@@ -130,6 +132,18 @@ class AddCadetForm(FlaskForm):
     regular_course = IntegerField('Course', validators=[DataRequired()])
     
     submit = SubmitField('Submit')
+    
+    def __init__(self, *args, **kwargs):
+        super(AddCadetForm, self).__init__(*args, **kwargs)
+        
+        # Dynamically populate the LGA choices based on the selected state
+        if self.state.data:
+            selected_state = self.state.data
+            lgas = state_lga_data.get(selected_state, [])
+            self.lga.choices = [(lga, lga) for lga in lgas]
+        else:
+            self.lga.choices = []
+            
 
 class MedicalRecordForm(FlaskForm):
     date_reported_sick = DateField('Date Reported Sick', 
