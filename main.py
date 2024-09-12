@@ -396,6 +396,17 @@ def edit_cadet(id):
     edit_form=EditForm()
     
     selected_cadet = session.query(Cadet).filter_by(id=id).first()
+    
+    # Get the selected state from the form submission
+    selected_state = edit_form.state.data # Convert state name to lowercase
+    
+    # Dynamically populate the LGA choices based on the selected state
+    if selected_state:
+        selected_state = selected_state.capitalize()
+        # Fetch the LGAs based on the selected state from your `state_lga_data`
+        lgas = state_lga_data.get(selected_state, [])
+        
+        edit_form.lga.choices = [(lga, lga) for lga in lgas]
 
     if request.method == 'POST':
         if edit_form.validate_on_submit():
