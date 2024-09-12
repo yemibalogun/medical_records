@@ -1025,15 +1025,12 @@ def add_cadet():
     # Get the selected state from the form submission
     selected_state = add_cadet_form.state.data # Convert state name to lowercase
     
-    print(f"Selected state: {selected_state}") # Debugging log
-
     # Dynamically populate the LGA choices based on the selected state
     if selected_state:
         selected_state = selected_state.capitalize()
         # Fetch the LGAs based on the selected state from your `state_lga_data`
         lgas = state_lga_data.get(selected_state, [])
         
-        print(f"Returning LGAs: {lgas}")  # Debugging log
         add_cadet_form.lga.choices = [(lga, lga) for lga in lgas]
 
     if add_cadet_form.validate_on_submit():
@@ -1066,18 +1063,14 @@ def add_cadet():
         bn_instance = Battalion.query.filter_by(bn=bn).first()
         gender_instance = Gender.query.filter_by(gender_type=gender).first()
         service_instance = Service.query.filter_by(service_type=service).first()
-        regular_course_instance = RegularCourse.query.filter_by(course_no=regular_course_name)
         
         # Check the regular_course table to see if regular_course_name is in database
-        existing_regular_course = RegularCourse.query.filter_by(course_no=regular_course_name).first()
+        regular_course_instance = RegularCourse.query.filter_by(course_no=regular_course_name).first()
         
         # If the regular course exists, use the existing instance
-        if existing_regular_course:
-            regular_course_instance = existing_regular_course
-        else:
-            # Otherwise, create a new RegularCourse instance and add it to the database
-            regular_course = RegularCourse(course_no=regular_course_name)
-            session.add(regular_course)
+        if not regular_course_instance:
+            regular_course_instance = RegularCourse(course_no=regular_course_name)
+            session.add(regular_course_instance)
             session.commit()
         
         # Create a new instance and enter into the database   
