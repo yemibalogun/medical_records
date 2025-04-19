@@ -5,7 +5,7 @@ from forms import EditForm, SearchForm, AddCadetForm,  MedicalRecordForm, StaffR
 from config import app, db
 from models import Cadet, RegularCourse, Department, Gender, Battalion, Service, Medical, Staff, Visit
 from sqlalchemy.orm import joinedload, Session
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_, func, event, distinct
 from flask_bootstrap import Bootstrap
@@ -16,6 +16,7 @@ import csv, os, json
 from datetime import datetime, date
 from utils import regular_courses, roles
 from state_lga import state_lga_data
+import requests
 
     
 year = datetime.now().year
@@ -24,7 +25,7 @@ Bootstrap(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login' # type: ignore
 login_manager.login_message_category = 'info'
 socketio = SocketIO(app)
 scheduler = APScheduler()
@@ -101,7 +102,7 @@ session = db.session
 @login_manager.user_loader
 def load_user(staff_id):
     staff = session.get(Staff, int(staff_id))
-    session.close() # Close the session after use
+    db.session.close() # Close the session after use
     return staff
 
 @app.route('/autocomplete', methods=['GET'])
@@ -109,7 +110,7 @@ def autocomplete():
     query = request.args.get('query', '').upper()
 
     # Perform a query on the Cadet table based on the search query
-    cadets = session.query(Cadet).filter(
+    cadets = db.session.query(Cadet).filter(
             or_(
                 Cadet.first_name.ilike(f'%{query}%'),
                 Cadet.middle_name.ilike(f'%{query}%'),
@@ -182,10 +183,10 @@ def search():
     name_search = []  # Initialize an empty list for name search results
     
     if search_form.validate_on_submit():
-        searched = search_form.searched.data.strip().lower()
+        searched = (search_form.searched.data or "").strip().lower()
         
         # Query the database for matching results
-        name_search = session.query(Cadet).filter(
+        name_search = db.session.query(Cadet).filter(
             or_(
                 Cadet.first_name.ilike(f'%{searched}%'),
                 Cadet.middle_name.ilike(f'%{searched}%'),
@@ -274,14 +275,14 @@ def logout():
 @login_required
 def home():
     search_form = SearchForm()
-    cadets = session.query(Cadet).all()          
+    cadets = db.session.query(Cadet).all()          
         
-    course = session.query(RegularCourse).all()
+    course = db.session.query(RegularCourse).all()
     course_dict = {}
 
     for course_object in course:
         key = course_object.id
-        cse_count = session.query(Cadet).filter(Cadet.regular_id == key).count() 
+        cse_count = db.session.query(Cadet).filter(Cadet.regular_id == key).count() 
         course_dict[key] = [course_object.course_no, cse_count]   
     
     academy_count = len(cadets)
@@ -295,56 +296,56 @@ def select_course(id):
     page = request.args.get("page", 1, type=int)
     per_page = 20
 
-    course_cadets = session.query(Cadet).filter(Cadet.regular_id == id).all()
-    course_no = session.query(RegularCourse).filter(RegularCourse.id == id).first()
+    course_cadets = db.session.query(Cadet).filter(Cadet.regular_id == id).all()
+    course_no = db.session.query(RegularCourse).filter(RegularCourse.id == id).first()
 
     start = (page - 1) * per_page
     end = start + per_page
     paginated_cadets = course_cadets[start:end]
     
-    course = session.query(RegularCourse).all()
+    course = db.session.query(RegularCourse).all()
     course_dict = {}
 
     for course_object in course:
         key = course_object.id
-        cse_count = session.query(Cadet).filter(Cadet.regular_id == key).count() 
+        cse_count = db.session.query(Cadet).filter(Cadet.regular_id == key).count() 
         course_dict[key] = [course_object.course_no, cse_count]  
 
-    course_cadets_count = session.query(Cadet).filter(Cadet.regular_id == id).count()
-    mog_cdts_count = session.query(Cadet).filter(Cadet.bn_id == 1, Cadet.regular_id == id).count()
-    dal_cdts_count = session.query(Cadet).filter(Cadet.bn_id == 2, Cadet.regular_id == id).count()
-    aby_cdts_count = session.query(Cadet).filter(Cadet.bn_id == 3, Cadet.regular_id == id).count()
-    bur_cdts_count = session.query(Cadet).filter(Cadet.bn_id == 4, Cadet.regular_id == id).count()
+    course_cadets_count = db.session.query(Cadet).filter(Cadet.regular_id == id).count()
+    mog_cdts_count = db.session.query(Cadet).filter(Cadet.bn_id == 1, Cadet.regular_id == id).count()
+    dal_cdts_count = db.session.query(Cadet).filter(Cadet.bn_id == 2, Cadet.regular_id == id).count()
+    aby_cdts_count = db.session.query(Cadet).filter(Cadet.bn_id == 3, Cadet.regular_id == id).count()
+    bur_cdts_count = db.session.query(Cadet).filter(Cadet.bn_id == 4, Cadet.regular_id == id).count()
     
-    army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.regular_id == id).count()
-    mog_army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 1, Cadet.regular_id == id).count()
-    dal_army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 2, Cadet.regular_id == id).count()
-    aby_army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 3, Cadet.regular_id == id).count()
-    bur_army_cdts_count = session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 4, Cadet.regular_id == id).count()
+    army_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 1, Cadet.regular_id == id).count()
+    mog_army_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 1, Cadet.regular_id == id).count()
+    dal_army_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 2, Cadet.regular_id == id).count()
+    aby_army_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 3, Cadet.regular_id == id).count()
+    bur_army_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 1, Cadet.bn_id == 4, Cadet.regular_id == id).count()
     
-    navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.regular_id == id).count()
-    mog_navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 1, Cadet.regular_id == id).count()
-    dal_navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 2, Cadet.regular_id == id).count()
-    aby_navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 3, Cadet.regular_id == id).count()
-    bur_navy_cdts_count = session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 4, Cadet.regular_id == id).count()
+    navy_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 2, Cadet.regular_id == id).count()
+    mog_navy_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 1, Cadet.regular_id == id).count()
+    dal_navy_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 2, Cadet.regular_id == id).count()
+    aby_navy_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 3, Cadet.regular_id == id).count()
+    bur_navy_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 2, Cadet.bn_id == 4, Cadet.regular_id == id).count()
     
-    airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.regular_id == id).count()
-    mog_airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 1, Cadet.regular_id == id).count()
-    dal_airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 2, Cadet.regular_id == id).count()
-    aby_airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 3, Cadet.regular_id == id).count()
-    bur_airforce_cdts_count = session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 4, Cadet.regular_id == id).count()
+    airforce_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 3, Cadet.regular_id == id).count()
+    mog_airforce_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 1, Cadet.regular_id == id).count()
+    dal_airforce_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 2, Cadet.regular_id == id).count()
+    aby_airforce_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 3, Cadet.regular_id == id).count()
+    bur_airforce_cdts_count = db.session.query(Cadet).filter(Cadet.service_id == 3, Cadet.bn_id == 4, Cadet.regular_id == id).count()
     
-    male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.regular_id == id).count()
-    mog_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 1, Cadet.regular_id == id).count()
-    dal_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 2, Cadet.regular_id == id).count()
-    aby_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 3, Cadet.regular_id == id).count()
-    bur_male_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 4, Cadet.regular_id == id).count()
+    male_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.regular_id == id).count()
+    mog_male_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 1, Cadet.regular_id == id).count()
+    dal_male_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 2, Cadet.regular_id == id).count()
+    aby_male_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 3, Cadet.regular_id == id).count()
+    bur_male_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 1, Cadet.bn_id == 4, Cadet.regular_id == id).count()
     
-    female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.regular_id == id).count()
-    mog_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 1, Cadet.regular_id == id).count()
-    dal_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 2, Cadet.regular_id == id).count()
-    aby_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 3, Cadet.regular_id == id).count()
-    bur_female_cdts_count = session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 4, Cadet.regular_id == id).count()
+    female_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.regular_id == id).count()
+    mog_female_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 1, Cadet.regular_id == id).count()
+    dal_female_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 2, Cadet.regular_id == id).count()
+    aby_female_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 3, Cadet.regular_id == id).count()
+    bur_female_cdts_count = db.session.query(Cadet).filter(Cadet.gender_id == 2, Cadet.bn_id == 4, Cadet.regular_id == id).count()
     
     return render_template("course-list.html",
                            search_form=search_form, 
@@ -395,7 +396,7 @@ def edit_cadet(id):
     search_form=SearchForm()
     edit_form=EditForm()
     
-    selected_cadet = session.query(Cadet).filter_by(id=id).first()
+    selected_cadet = db.session.query(Cadet).filter_by(id=id).first()
     
     # Get the selected state from the form submission
     selected_state = edit_form.state.data # Convert state name to lowercase
@@ -411,32 +412,32 @@ def edit_cadet(id):
     if request.method == 'POST':
         if edit_form.validate_on_submit():
             # Populate simple fields directly from the form
-            selected_cadet.cadet_no = edit_form.cadet_no.data
-            selected_cadet.first_name = edit_form.first_name.data
-            selected_cadet.middle_name = edit_form.middle_name.data
-            selected_cadet.last_name = edit_form.last_name.data
-            selected_cadet.state = edit_form.state.data
-            selected_cadet.lga = edit_form.lga.data
-            selected_cadet.doe = edit_form.doe.data
-            selected_cadet.dob = edit_form.dob.data
-            selected_cadet.religion = edit_form.religion.data
+            selected_cadet.cadet_no = edit_form.cadet_no.data # type: ignore
+            selected_cadet.first_name = edit_form.first_name.data   # type: ignore
+            selected_cadet.middle_name = edit_form.middle_name.data # type: ignore
+            selected_cadet.last_name = edit_form.last_name.data # type: ignore
+            selected_cadet.state = edit_form.state.data # type: ignore
+            selected_cadet.lga = edit_form.lga.data # type: ignore
+            selected_cadet.doe = edit_form.doe.data # type: ignore
+            selected_cadet.dob = edit_form.dob.data # type: ignore
+            selected_cadet.religion = edit_form.religion.data   # type: ignore
 
             # Fetch the related instances
-            selected_cadet.department = db.session.query(Department).filter_by(department_name=edit_form.department.data).first()
-            selected_cadet.bn = db.session.query(Battalion).filter_by(bn=edit_form.bn.data).first()
-            selected_cadet.service = db.session.query(Service).filter_by(service_type=edit_form.service.data).first()
-            selected_cadet.gender = db.session.query(Gender).filter_by(gender_type=edit_form.gender.data).first()
+            selected_cadet.department = db.session.query(Department).filter_by(department_name=edit_form.department.data).first()   # type: ignore
+            selected_cadet.bn = db.session.query(Battalion).filter_by(bn=edit_form.bn.data).first() # type: ignore
+            selected_cadet.service = db.session.query(Service).filter_by(service_type=edit_form.service.data).first()   # type: ignore
+            selected_cadet.gender = db.session.query(Gender).filter_by(gender_type=edit_form.gender.data).first()   # type: ignore
 
             # Handle RegularCourse
             regular_course = db.session.query(RegularCourse).filter_by(course_no=edit_form.regular_course.data).first()
             if not regular_course:
                 # If regular_course is None, create a new RegularCourse instance
-                regular_course = RegularCourse(course_no=edit_form.regular_course.data)
+                regular_course = RegularCourse(course_no=edit_form.regular_course.data) # type: ignore
                 db.session.add(regular_course)
                 db.session.commit()  # Commit to get the ID for the new regular_course
             
-            selected_cadet.regular_course = regular_course
-            session.commit()
+            selected_cadet.regular_course = regular_course  # type: ignore
+            db.session.commit()
             flash("Cadet record updated successfully!", 'success')
             return redirect(url_for('home'))
     
@@ -468,26 +469,26 @@ def student_info(id):
     
     today = date.today()
     
-    cadet_medical_records = session.query(Medical).filter(Medical.cadet_id==id).all()
-    admitted_cadets = session.query(Cadet).filter(Cadet.admission_date==today).all()
-    admitted_cadets_count = session.query(Cadet).filter(Cadet.admission_date==today).count()
-    sick_report = session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
-    sick_report_count = session.query(Visit).filter(Visit.check_in_time==today).count()
-    cadet_records = session.query(Cadet).filter(Cadet.id==id).first()
+    cadet_medical_records = db.session.query(Medical).filter(Medical.cadet_id==id).all()
+    admitted_cadets = db.session.query(Cadet).filter(Cadet.admission_date==today).all()
+    admitted_cadets_count = db.session.query(Cadet).filter(Cadet.admission_date==today).count()
+    sick_report = db.session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
+    sick_report_count = db.session.query(Visit).filter(Visit.check_in_time==today).count()
+    cadet_records = db.session.query(Cadet).filter(Cadet.id==id).first()
 
     # course_cadets = session.query(Cadet).filter(Cadet.regular_id == id).all()
     
-    days_confined = session.query(func.sum(Medical.excuse_duty_days)).filter(
+    days_confined = db.session.query(func.sum(Medical.excuse_duty_days)).filter(
         Medical.cadet_id==id, 
         Medical.excuse_duty=="confinement"
         ).scalar()
     
     try:
-        selected_cadet = session.query(Cadet).join(Battalion).filter(Cadet.id==id, Cadet.bn_id==Battalion.id).first()
-        days_admitted=selected_cadet.admission_count
+        selected_cadet = db.session.query(Cadet).join(Battalion).filter(Cadet.id==id, Cadet.bn_id==Battalion.id).first()
+        days_admitted=selected_cadet.admission_count        # type: ignore
         
-        dob_obj = selected_cadet.date_of_birth
-        doe_obj = selected_cadet.date_of_enlistment
+        dob_obj = selected_cadet.date_of_birth  # type: ignore
+        doe_obj = selected_cadet.date_of_enlistment # type: ignore
         
         # Convert if they are strings
         if isinstance(dob_obj, str):
@@ -542,8 +543,8 @@ def edit_medical_record(id, cadet_id):
     page = request.args.get("page", 1, type=int)
     per_page = 20
     
-    selected_record = session.query(Medical).filter_by(id=id).first()
-    selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
+    selected_record = db.session.query(Medical).filter_by(id=id).first()
+    selected_cadet = db.session.query(Cadet).filter(Cadet.id==cadet_id).first()
     
     if request.method == 'POST':
         if edit_medical_record_form.validate_on_submit():
@@ -551,18 +552,18 @@ def edit_medical_record(id, cadet_id):
             edit_medical_record_form.populate_obj(selected_record)
 
             # You might need to convert the date format based on your form and database structure
-            selected_record.date_reported_sick = edit_medical_record_form.date_reported_sick.data.strftime('%Y-%m-%d')
-            selected_record.history = edit_medical_record_form.history.data
-            selected_record.examination = edit_medical_record_form.examination.data
-            selected_record.diagnosis = edit_medical_record_form.diagnosis.data
-            selected_record.plan = edit_medical_record_form.plan.data
-            selected_record.prescription = edit_medical_record_form.prescription.data
-            selected_record.prescription_status = edit_medical_record_form.prescription_status.data
-            selected_record.excuse_duty = edit_medical_record_form.excuse_duty.data
-            selected_record.excuse_duty_days = edit_medical_record_form.excuse_duty_days.data
-            selected_record.admission_count = edit_medical_record_form.admission_count.data
+            selected_record.date_reported_sick = edit_medical_record_form.date_reported_sick.data.strftime('%Y-%m-%d')  # type: ignore
+            selected_record.history = edit_medical_record_form.history.data # type: ignore
+            selected_record.examination = edit_medical_record_form.examination.data # type: ignore
+            selected_record.diagnosis = edit_medical_record_form.diagnosis.data # type: ignore
+            selected_record.plan = edit_medical_record_form.plan.data   # type: ignore
+            selected_record.prescription = edit_medical_record_form.prescription.data   # type: ignore
+            selected_record.prescription_status = edit_medical_record_form.prescription_status.data # type: ignore
+            selected_record.excuse_duty = edit_medical_record_form.excuse_duty.data # type: ignore
+            selected_record.excuse_duty_days = edit_medical_record_form.excuse_duty_days.data   # type: ignore
+            selected_record.admission_count = edit_medical_record_form.admission_count.data # type: ignore
 
-            session.commit()
+            db.session.commit()
             flash("Medical record updated successfully!", 'success')
             return redirect(url_for('student_info', id=cadet_id))
     
@@ -586,7 +587,7 @@ def edit_medical_record(id, cadet_id):
 @app.route('/api/sick_reports', methods=['GET'])
 def get_sick_reports():
     # Query the database to count sick reports per month
-    reports = session.query(
+    reports = db.session.query(
         func.date_trunc('month', Visit.check_in_time).label('month'),
         func.count(Visit.id).label('count')
     ).group_by('month').order_by('month').all()
@@ -617,22 +618,30 @@ def register_staff():
             gender_instance = Gender.query.filter_by(gender_type=gender).first()
             
             new_staff = Staff(
-                firstname=(staff_register_form.firstname.data).title(),
-                middlename=staff_register_form.middlename.data.title(),
-                lastname=staff_register_form.lastname.data.title(),
-                email=staff_register_form.email.data,
-                password=hashed_password,
-                phone=staff_register_form.phone.data,
-                address=staff_register_form.address.data.title(),
-                gender = gender_instance,
-                role=staff_register_form.role.data,
-                status='active',
-                appointment=staff_register_form.appointment.data,
-                date_of_birth=staff_register_form.date_of_birth.data,
-                date_tos=staff_register_form.date_tos.data,
+                firstname=staff_register_form.firstname.data.title(),   # type: ignore
+                middlename=staff_register_form.middlename.data.title(), # type: ignore
+                lastname=staff_register_form.lastname.data.title(), # type: ignore
+                email=staff_register_form.email.data,   # type: ignore
+                password=hashed_password,   # type: ignore
+                phone=staff_register_form.phone.data,   # type: ignore 
+                address=staff_register_form.address.data.title(),   # type: ignore
+                gender = gender_instance,   # type: ignore
+                role=staff_register_form.role.data, # type: ignore
+                status='active',    # type: ignore  
+                appointment=staff_register_form.appointment.data,   # type: ignore
+                date_of_birth=staff_register_form.date_of_birth.data,   # type: ignore
+                date_tos=staff_register_form.date_tos.data, # type: ignore
                 )
-            session.add(new_staff)
-            session.commit()
+            
+            # Send data to Make.com webhook
+            # webhook_url = 'https://hook.eu2.make.com/7mvd7293jibkh8x7gw4u7ld7n1f4djy7'
+            # response = requests.post(webhook_url, json)
+            # if response.status_code == 200:
+                # Proceed with your registration process
+            flash('Registration successful!')
+            
+            db.session.add(new_staff)
+            db.session.commit()
         
             # This next line will authenticate the user with Flask-Login
             login_user(new_staff)
@@ -642,9 +651,9 @@ def register_staff():
             if next_page:
                 return redirect(next_page)
             else:
-                if new_staff.role == "doctor":
+                if new_staff.role == "doctor":  # type: ignore
                     return redirect(url_for('doctor_dashboard'))
-                elif new_staff.role == "front_desk":
+                elif new_staff.role == "front_desk":    # type: ignore
                     return redirect(url_for('front_desk_dashboard'))
                 else:
                     return redirect(url_for('home'))
@@ -662,9 +671,9 @@ def front_desk_dashboard():
     check_in_form = CheckInForm(doctors=doctors)
 
     if check_in_form.validate_on_submit():
-        cadet_id = (check_in_form.cadet_id.data).upper()
+        cadet_id = (check_in_form.cadet_id.data).upper()    # type: ignore
         check_in_time = check_in_form.check_in_time.data
-        reason = check_in_form.reason.data.title()
+        reason = check_in_form.reason.data.title()  # type: ignore
         doctor_id = check_in_form.doctor_id.data
         status = check_in_form.status.data
 
@@ -682,11 +691,11 @@ def front_desk_dashboard():
             return redirect(url_for('front_desk_dashboard'))
         # Create a new Visit record
         visit = Visit(
-            cadet_id=selected_cadet.id,
-            check_in_time=check_in_time,
-            reason=reason,
-            doctor_id=doctor_id,
-            status=status
+            cadet_id=selected_cadet.id, # type: ignore
+            check_in_time=check_in_time,    # type: ignore
+            reason=reason,  # type: ignore
+            doctor_id=doctor_id,    # type: ignore
+            status=status   # type: ignore
         )
         # Add the new visit to the database
         db.session.add(visit)
@@ -770,11 +779,11 @@ def cadets_brigade_dashboard():
         flash("Access denied!", 'danger')
         return redirect(url_for('login'))
     
-    logged_in = session.query(Staff).filter(Staff.status=='active').all()
-    admitted_cadets = session.query(Cadet).filter(Cadet.admission_date==today).all()
-    admitted_cadets_count = session.query(Cadet).filter(Cadet.admission_date==today).count()
-    sick_report = session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
-    sick_report_count = session.query(Visit).filter(Visit.check_in_time==today).count()
+    logged_in = db.session.query(Staff).filter(Staff.status=='active').all()
+    admitted_cadets = db.session.query(Cadet).filter(Cadet.admission_date==today).all()
+    admitted_cadets_count = db.session.query(Cadet).filter(Cadet.admission_date==today).count()
+    sick_report = db.session.query(Visit).filter(Visit.check_in_time==today).distinct().all()
+    sick_report_count = db.session.query(Visit).filter(Visit.check_in_time==today).count()
     formatted_date = today.strftime("%d %b %y")
 
     return render_template('cadets_brigade_dashboard.html', 
@@ -852,8 +861,8 @@ def add_medical_record(id):
 
     page = request.args.get("page", 1, type=int)
     per_page = 20
-    selected_cadet = session.query(Cadet).filter(Cadet.id == id).first()
-    cadet_medical_records = session.query(Medical).filter(Medical.cadet_id == id).all()
+    selected_cadet = db.session.query(Cadet).filter(Cadet.id == id).first()
+    cadet_medical_records = db.session.query(Medical).filter(Medical.cadet_id == id).all()
 
     if medical_record_form.validate_on_submit():
         history = medical_record_form.history.data
@@ -894,27 +903,27 @@ def add_medical_record(id):
 
             # Create a new MedicalRecord object and add it to the database
             new_medical_record = Medical(
-                date_reported_sick=date_reported_sick,
-                history=history,
-                examination=examination,
-                diagnosis=diagnosis,
-                plan=plan,
-                prescription=prescription,
-                excuse_duty=excuse_duty,
-                excuse_duty_days=excuse_duty_days,
-                admission_count=admission_count_value,
-                cadet_id=id,
+                date_reported_sick=date_reported_sick,  # type: ignore
+                history=history,    # type: ignore
+                examination=examination,    # type: ignore
+                diagnosis=diagnosis,    # type: ignore
+                plan=plan,  # type: ignore
+                prescription=prescription,  # type: ignore
+                excuse_duty=excuse_duty,    # type: ignore
+                excuse_duty_days=excuse_duty_days,  # type: ignore
+                admission_count=admission_count_value,  # type: ignore
+                cadet_id=id,    # type: ignore
             )
 
             # If the cadet has not been admitted on the same day, increment admission count
             if not same_day_admission:
-                selected_cadet.admission_count += 1
-                selected_cadet.admission_date = datetime.now().date()
-                new_medical_record.admission_count = selected_cadet.admission_count
+                selected_cadet.admission_count += 1 # type: ignore
+                selected_cadet.admission_date = datetime.now().date()   # type: ignore
+                new_medical_record.admission_count = selected_cadet.admission_count # type: ignore
 
-            session.add(new_medical_record)
-            session.add(selected_cadet)  # Ensure cadet updates are included
-            session.commit()
+            db.session.add(new_medical_record)
+            db.session.add(selected_cadet)  # Ensure cadet updates are included
+            db.session.commit()
             flash('Medical record was added successfully.', 'success')
             return redirect(url_for('add_medical_record', id=id))
         
@@ -936,7 +945,7 @@ def nurse_dashboard():
     search_form = SearchForm()  # Assuming you have a SearchForm defined
 
     if request.method == 'POST':
-        selected_cadets_json = request.json.get('selectedCadets')
+        selected_cadets_json = request.json.get('selectedCadets')   # type: ignore
         if selected_cadets_json is None:
             flash("Error: No data received or invalid JSON format.")
             return redirect(url_for('nurse_dashboard'))
@@ -946,15 +955,15 @@ def nurse_dashboard():
         # Process the selected cadets JSON data as needed
         # For example, you can parse the JSON and access individual cadet details
         for cadet in selected_cadets_list:
-            admitted_cadet = session.query(Cadet).filter(Cadet.cadet_no == cadet[1]).first()
+            admitted_cadet = db.session.query(Cadet).filter(Cadet.cadet_no == cadet[1]).first()
             if admitted_cadet:
                 # Check if the cadet has already been admitted today
-                if admitted_cadet.admission_date == date.today():
+                if admitted_cadet.admission_date == date.today():   # type: ignore
                     flash(f"Cadet NDA/ {cadet[1]} has already been admitted today.", "info")
                 else:
                     admitted_cadet.admission_count += 1
-                    admitted_cadet.admission_date = date.today()  # Set admission date
-                    session.commit()
+                    admitted_cadet.admission_date = date.today()  # Set admission date  # type: ignore
+                    session.commit()    # type: ignore
                     flash(f"Cadet {cadet[1]} has been admitted successfully.", "success")
             else:
                 flash(f"Error: Cadet {cadet[1]} not found in the database.", "error")
@@ -1002,16 +1011,16 @@ def remove_medical_record(id, cadet_id):
     per_page = 20
 
     # Query the cadet and medical record 
-    selected_cadet = session.query(Cadet).filter(Cadet.id==cadet_id).first()
-    cadet_medical_record = session.query(Medical).filter(Medical.cadet_id==cadet_id).all()
+    selected_cadet = db.session.query(Cadet).filter(Cadet.id==cadet_id).first()
+    cadet_medical_record = db.session.query(Medical).filter(Medical.cadet_id==cadet_id).all()
     
     # Retrieve the score to be deleted from the database
-    record_to_delete = session.query(Medical).filter(Medical.id==id).first()
+    record_to_delete = db.session.query(Medical).filter(Medical.id==id).first()
     
     if record_to_delete:
         # Delete the record from the database
-        session.delete(record_to_delete)
-        session.commit()
+        db.session.delete(record_to_delete)
+        db.session.commit()
         flash('Medical record deleted successfully.')
     else:
         flash('Record not found')
@@ -1045,7 +1054,7 @@ def add_cadet():
         add_cadet_form.lga.choices = [(lga, lga) for lga in lgas]
 
     if add_cadet_form.validate_on_submit():
-        cadet_no = (add_cadet_form.cadet_no.data).upper()
+        cadet_no = (add_cadet_form.cadet_no.data).upper()   # type: ignore
         first_name = add_cadet_form.first_name.data
         middle_name = add_cadet_form.middle_name.data
         last_name = add_cadet_form.last_name.data
@@ -1062,7 +1071,7 @@ def add_cadet():
         regular_course_name = add_cadet_form.regular_course.data
         
         # Check if a cadet with the same cadet_no already exists.
-        existing_cadet = session.query(Cadet).filter_by(cadet_no=cadet_no).first()
+        existing_cadet = db.session.query(Cadet).filter_by(cadet_no=cadet_no).first()
 
         if existing_cadet:
             # Handle the case where a cadet with the same cadet_no already exists
@@ -1080,29 +1089,29 @@ def add_cadet():
         
         # If the regular course exists, use the existing instance
         if not regular_course_instance:
-            regular_course_instance = RegularCourse(course_no=regular_course_name)
-            session.add(regular_course_instance)
-            session.commit()
+            regular_course_instance = RegularCourse(course_no=regular_course_name)  # type: ignore
+            db.session.add(regular_course_instance)
+            db.session.commit()
         
         # Create a new instance and enter into the database   
         new_cadet = Cadet(
-            cadet_no=cadet_no, 
-            first_name=first_name, 
-            middle_name=middle_name,
-            last_name=last_name, 
-            religion=religion, 
-            state=state, 
-            lga=lga,
-            bn=bn_instance, 
-            date_of_enlistment=doe, 
-            date_of_birth=dob, 
-            department=department_instance, 
-            gender=gender_instance,
-            service=service_instance, 
-            regular_course=regular_course_instance
+            cadet_no=cadet_no,  # type: ignore
+            first_name=first_name,  # type: ignore
+            middle_name=middle_name,    # type: ignore
+            last_name=last_name,    # type: ignore
+            religion=religion,  # type: ignore
+            state=state,    # type: ignore
+            lga=lga,    # type: ignore
+            bn=bn_instance,     # type: ignore
+            date_of_enlistment=doe,     # type: ignore
+            date_of_birth=dob,  # type: ignore
+            department=department_instance,     # type: ignore
+            gender=gender_instance, # type: ignore
+            service=service_instance,   # type: ignore
+            regular_course=regular_course_instance  # type: ignore
             )
-        session.add(new_cadet)
-        session.commit()
+        db.session.add(new_cadet)
+        db.session.commit()
         flash("Cadet added successfully.", "success")
         return redirect(url_for('add_cadet'))
     return render_template('add_cadet.html', add_cadet_form=add_cadet_form, search_form=search_form, year=year)
@@ -1118,13 +1127,13 @@ def add_department():
                 faculty_id = int(row[2])
 
                 new_department = Department(
-                    id=department_id,
-                    department_name=department_name,
-                    faculty_id=faculty_id
+                    id=department_id,   # type: ignore
+                    department_name=department_name,    # type: ignore
+                    faculty_id=faculty_id   # type: ignore
                 )
                     
-                session.add(new_department)
-                session.commit()
+                db.session.add(new_department)
+                db.session.commit()
 
         return redirect(url_for('home'))
     except FileNotFoundError:
@@ -1157,25 +1166,25 @@ def add_all_cadets():
                 regular_id = int(row[14])
 
                 new_cadet = Cadet(
-                    id=cadet_id,
-                    cadet_no=cadet_no,
-                    first_name=first_name,
-                    middle_name=middle_name,
-                    last_name=last_name,
-                    religion=religion,
-                    state=state,
-                    lga=lga,
-                    date_of_enlistment=date_of_enlistment,
-                    date_of_birth=date_of_birth,
-                    department_id=department_id,
-                    bn_id=bn_id,
-                    gender_id=gender_id,
-                    service_id=service_id,
-                    regular_id=regular_id
+                    id=cadet_id,    # type: ignore
+                    cadet_no=cadet_no,  # type: ignore
+                    first_name=first_name,  # type: ignore
+                    middle_name=middle_name,    # type: ignore
+                    last_name=last_name,    # type: ignore
+                    religion=religion,  # type: ignore
+                    state=state,    # type: ignore
+                    lga=lga,    # type: ignore
+                    date_of_enlistment=date_of_enlistment,  # type: ignore
+                    date_of_birth=date_of_birth,    # type: ignore
+                    department_id=department_id,    # type: ignore
+                    bn_id=bn_id,    # type: ignore
+                    gender_id=gender_id,    # type: ignore
+                    service_id=service_id,  # type: ignore
+                    regular_id=regular_id   # type: ignore
                 )
                     
-                session.add(new_cadet)
-                session.commit()
+                db.session.add(new_cadet)
+                db.session.commit()
 
         return redirect(url_for('home'))
     except FileNotFoundError:
